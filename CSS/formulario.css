@@ -1,0 +1,91 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  fieldset {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 6px;
+  }
+  legend {
+    font-weight: bold;
+    color: #444;
+  }
+  .pregunta {
+    margin-top: 20px;
+  }
+  .pregunta label.titulo {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+  }
+  .opciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .opcion {
+    position: relative;
+    display: inline-block;
+  }
+  .opcion input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    border: 2px solid #999;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: border 0.3s, background 0.3s;
+    vertical-align: middle;
+  }
+  .opcion input[type="radio"]:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+  .opcion label {
+    margin-left: 6px;
+    cursor: pointer;
+    vertical-align: middle;
+    color: #333;
+  }
+  button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: block;
+    margin: 0 auto;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  .mensaje-exito {
+    text-align: center;
+    color: green;
+    margin-top: 20px;
+    display: none;
+    font-weight: bold;
+  }
+  

@@ -1,0 +1,36 @@
+body {
+  background-color: #e8e9e5;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  color: #5a514a;
+}
+
+h1 {
+  color: #8ca37c;
+}
+
+#canvas {
+  margin-top: 20px;
+}
+
+#spin {
+  background-color: #7c8c6c;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+#spin:hover {
+  background-color: #5a514a;
+}
+
+#resultado {
+  font-size: 1.5em;
+  color: #5a514a;
+  margin-top: 30px;
+}

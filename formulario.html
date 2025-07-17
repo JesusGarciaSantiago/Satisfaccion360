@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Encuesta de Satisfacción</title>
+  <link rel="stylesheet" href="./CSS/formulario.css" />   
+</head>
+
+<body>
+<div class="container">
+  <h1>Encuesta de Satisfacción</h1>
+  <form id="formulario">
+    <fieldset>
+      <legend>1. Productos y servicios</legend>
+
+      <div class="pregunta">
+        <label class="titulo">1.1 ¿Cómo calificarías el servicio y el trato del personal?</label>
+        <div class="opciones">
+          <div class="opcion">
+            <input type="radio" id="personal-excelente" name="personal" value="Excelente" required>
+            <label for="personal-excelente">Excelente</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="personal-bueno" name="personal" value="Bueno">
+            <label for="personal-bueno">Bueno</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="personal-regular" name="personal" value="Regular">
+            <label for="personal-regular">Regular</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="pregunta">
+        <label class="titulo">1.2 ¿Cómo calificarías la calidad de las bebidas?</label>
+        <div class="opciones">
+          <div class="opcion">
+            <input type="radio" id="bebidas-excelente" name="bebidas" value="Excelente" required>
+            <label for="bebidas-excelente">Excelente</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="bebidas-bueno" name="bebidas" value="Bueno">
+            <label for="bebidas-bueno">Bueno</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="bebidas-regular" name="bebidas" value="Regular">
+            <label for="bebidas-regular">Regular</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="pregunta">
+        <label class="titulo">1.3 ¿Cómo calificarías la calidad de los alimentos?</label>
+        <div class="opciones">
+          <div class="opcion">
+            <input type="radio" id="alimentos-excelente" name="alimentos" value="Excelente" required>
+            <label for="alimentos-excelente">Excelente</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="alimentos-bueno" name="alimentos" value="Bueno">
+            <label for="alimentos-bueno">Bueno</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="alimentos-regular" name="alimentos" value="Regular">
+            <label for="alimentos-regular">Regular</label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>2. Generales</legend>
+
+      <div class="pregunta">
+        <label class="titulo">2.1 ¿Cómo calificarías la limpieza del lugar?</label>
+        <div class="opciones">
+          <div class="opcion">
+            <input type="radio" id="limpieza-excelente" name="limpieza" value="Excelente" required>
+            <label for="limpieza-excelente">Excelente</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="limpieza-bueno" name="limpieza" value="Bueno">
+            <label for="limpieza-bueno">Bueno</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="limpieza-regular" name="limpieza" value="Regular">
+            <label for="limpieza-regular">Regular</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="pregunta">
+        <label class="titulo">2.2 ¿Cuál es tu percepción sobre los precios?</label>
+        <div class="opciones">
+          <div class="opcion">
+            <input type="radio" id="precios-excelente" name="precios" value="Excelente" required>
+            <label for="precios-excelente">Excelente</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="precios-bueno" name="precios" value="Bueno">
+            <label for="precios-bueno">Bueno</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="precios-regular" name="precios" value="Regular">
+            <label for="precios-regular">Regular</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="pregunta">
+        <label class="titulo">2.3 ¿Cómo te enteraste de nosotros?</label>
+        <div class="opciones">
+          <div class="opcion">
+            <input type="radio" id="conociste-redes" name="conociste" value="Redes Sociales" required>
+            <label for="conociste-redes">Redes Sociales</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="conociste-recomendacion" name="conociste" value="Recomendación">
+            <label for="conociste-recomendacion">Recomendación</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="conociste-paso" name="conociste" value="Paso por el lugar">
+            <label for="conociste-paso">Paso por el lugar</label>
+          </div>
+          <div class="opcion">
+            <input type="radio" id="conociste-otro" name="conociste" value="Otro">
+            <label for="conociste-otro">Otro</label>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <button  type="submit">Enviar encuesta</button>
+  </form>
+</div>
+
+    <script src="./JS/formulario.js"></script>
+</body>
+</html>

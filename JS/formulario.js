@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   formulario.addEventListener("submit", function (e) {
     e.preventDefault(); // Previene que el formulario se envíe por defecto
 
-    const url = "https://script.google.com/a/macros/massimple.com.mx/s/AKfycbxGKeIVCUnCuihGd-XXfgu22CRj1eVqssjTUj_knpXj2rYiN9sRNi6DsgfqqrlaQbAeQw/exec";
+    const url = "https://script.google.com/macros/s/AKfycbymIckFtg0sYJk_bfF5TyCbrw2vo4Fhpa9IDA55fQ45QC_10uv3WGaJgm2i6Nux1XC6Jw/exec";
     // Recolectar valores del formulario después de que el usuario lo envíe
     const data = {
       personal: document.querySelector('input[name="personal"]:checked')?.value || "",

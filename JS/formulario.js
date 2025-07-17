@@ -24,10 +24,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Enviar los datos a Google Sheets
     fetch(url, {
       method: "POST",
-      body: JSON.stringify(data),
+      mode: "no-cors", // esto evita el error de CORS
       headers: {
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify(data)
     })
       .then(response => response.text())
       .then(result => {

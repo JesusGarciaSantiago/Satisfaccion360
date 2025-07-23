@@ -10,28 +10,33 @@
 </head>
 
 <body>
+
   <div class="container">
+    <div class="logo-container">
+      <img src="./images/logo C50.jpg" alt="Carranza" class="logo">
+    </div>
     <h1>Encuesta de Satisfacción</h1>
     <form id="formulario">
       <fieldset>
-        <legend>Datos de Mesa</legend>
-        <div class="pregunta">
+        <legend>Datos de Ticket</legend>
+
+        <div class="campo">
           <label for="ticket">Folio del ticket:</label>
-          <input type="text" id="ticket" name="ticket" required>
+          <input type="number" id="ticket" name="ticket" required>
         </div>
-        <div class="pregunta">
-          <form action="#">
-            <label for="meseros">Nombre del Meser@</label>
-            <select name="meseros" id="meseros">
-              <option value="ROBERTO">ROBERTO</option>
-              <option value="ROMAN">ROMAN</option>
-              <option value="SERGIO">SERGIO</option>
-              <option value="RAMSES">RAMSES</option>
-              <option value="FERNANDO">FERNANDO</option>
-            </select>
-          </form>
+
+        <div class="campo">
+          <label for="mesero">Nombre del Meser@:</label>
+          <select id="mesero" name="mesero" required>
+            <option value="">Selecciona...</option>
+            <option value="ROBERTO">ROBERTO</option>
+            <option value="SERGIO">SERGIO</option>
+            <option value="RAMSES">RAMSES</option>
+            <option value="ROMAN">ROMAN</option>
+          </select>
         </div>
-        <div class="pregunta">
+
+        <div class="campo">
           <label for="mesa">Número de mesa:</label>
           <input type="number" id="mesa" name="mesa" required>
         </div>
@@ -137,22 +142,39 @@
           <label class="titulo">2.3 ¿Cómo te enteraste de nosotros?</label>
           <div class="opciones">
             <div class="opcion">
-              <input type="radio" id="conociste-redes" name="conociste" value="Redes Sociales" required>
+              <input type="radio" id="conociste-redes" name="conociste" value="REDES SOCIALES" required>
               <label for="conociste-redes">Redes Sociales</label>
             </div>
+             <div class="opcion">
+              <input type="radio" id="conociste-FB" name="conociste" value="FACEBOOK">
+              <label for="conociste-FB">Facebook</label>
+            </div>
+             <div class="opcion">
+              <input type="radio" id="conociste-IG" name="conociste" value="INSTAGRAM">
+              <label for="conociste-IG">Instagram</label>
+            </div>
+             <div class="opcion">
+              <input type="radio" id="conociste-TT" name="conociste" value="TIK TOK">
+              <label for="conociste-TT">Tik Tok</label>
+            </div>
             <div class="opcion">
-              <input type="radio" id="conociste-recomendacion" name="conociste" value="Recomendación">
+              <input type="radio" id="conociste-recomendacion" name="conociste" value="RECOMENDACION">
               <label for="conociste-recomendacion">Recomendación</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="conociste-paso" name="conociste" value="Paso por el lugar">
-              <label for="conociste-paso">Paso por el lugar</label>
+              <input type="radio" id="conociste-paso" name="conociste" value="DE PASO">
+              <label for="conociste-paso">De paso</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="conociste-otro" name="conociste" value="Otro">
+              <input type="radio" id="conociste-YaLos" name="conociste" value="YA LOS HABIA VISITADO">
+              <label for="conociste-YaLos">Ya los había visitado</label>
+            </div>
+           
+            <div class="opcion">
+              <input type="radio" id="conociste-otro" name="conociste" value= "">
               <label for="conociste-otro">Otro</label>
             </div>
-            <div id="otro-input-container" style="display: none; margin-top: 10px;">
+            <div class="campo" id="otro-input-container" style="display: none; margin-top: 10px;">
               <label for="otro">Especifica:</label>
               <input type="text" id="otro" name="otro" placeholder="Escribe cómo te enteraste">
             </div>

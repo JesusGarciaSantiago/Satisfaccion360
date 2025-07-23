@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.querySelectorAll('input[name="conociste"]').forEach(input => {
   input.addEventListener('change', function () {
     const otroContainer = document.getElementById("otro-input-container");
-    if (this.value === "Otro") {
+    if (this.value === "") {
       otroContainer.style.display = "block";
       document.getElementById("otro").required = true;
     } else {

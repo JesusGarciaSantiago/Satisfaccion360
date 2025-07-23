@@ -1,11 +1,11 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #f5f7fa;
+    font-family: 'Times New Roman', Times, serif;
+    background: #6666;
     margin: 0;
     padding: 0;
   }
   .container {
-    max-width: 700px;
+    max-width: 50%;
     margin: 40px auto;
     background: #ffffff;
     padding: 30px;
@@ -14,7 +14,7 @@ body {
   }
   h1 {
     text-align: center;
-    color: #333;
+    color: #8AA27E;
   }
   fieldset {
     border: 1px solid #ccc;
@@ -23,8 +23,9 @@ body {
     border-radius: 6px;
   }
   legend {
+    font-size: 18px;
     font-weight: bold;
-    color: #444;
+    color: #8AA27E;
   }
   .pregunta {
     margin-top: 20px;
@@ -33,7 +34,8 @@ body {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
-    color: #333;
+    color: #513b47;
+    font-weight: bold;
   }
   .opciones {
     display: flex;
@@ -57,17 +59,20 @@ body {
     vertical-align: middle;
   }
   .opcion input[type="radio"]:checked {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-image: url("../images/favicon.png") ;
+    border-color: #8AA27E;
   }
   .opcion label {
     margin-left: 6px;
     cursor: pointer;
     vertical-align: middle;
-    color: #333;
+    color: #0f0f0fb1;
+    font-weight: bold;
   }
   button {
-    background-color: #007bff;
+
+    position: relative;
+    background-color: #8AA27E;
     color: #fff;
     border: none;
     padding: 12px 20px;
@@ -77,9 +82,10 @@ body {
     transition: background 0.3s;
     display: block;
     margin: 0 auto;
+    margin-bottom: 2%;
   }
   button:hover {
-    background-color: #0056b3;
+    background-color: #878686b0;
   }
   .mensaje-exito {
     text-align: center;

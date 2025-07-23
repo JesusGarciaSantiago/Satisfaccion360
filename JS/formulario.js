@@ -47,3 +47,18 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 });
+
+document.querySelectorAll('input[name="conociste"]').forEach(input => {
+  input.addEventListener('change', function () {
+    const otroContainer = document.getElementById("otro-input-container");
+    if (this.value === "Otro") {
+      otroContainer.style.display = "block";
+      document.getElementById("otro").required = true;
+    } else {
+      otroContainer.style.display = "none";
+      document.getElementById("otro").required = false;
+      document.getElementById("otro").value = ""; // limpiar
+    }
+  });
+});
+

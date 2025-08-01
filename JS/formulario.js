@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         setTimeout(() => {
           window.location.href = "ruleta.html";
-        }, 10000);
+        }, 100);
       })
       .catch(error => {
         console.error("Error al enviar:", error);

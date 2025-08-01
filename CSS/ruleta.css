@@ -10,23 +10,32 @@ h1 {
   color: #8ca37c;
 }
 
-#canvas {
-  margin-top: 20px;
+.ruleta-container {
+  position: relative;
+  width: 90vw;
+  max-width: 500px;
+  margin: auto;
 }
 
-#spin {
-  background-color: #7c8c6c;
-  color: white;
-  border: none;
-  padding: 15px 30px;
-  font-size: 1.2em;
-  border-radius: 10px;
+canvas {
+  width: 90vw;
+  height: 90vw;
+  max-width: 500px;
+  max-height: 500px;
+}
+
+#boton-central {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16vw;
+  height: 16vw;
+  max-width: 80px;
+  max-height: 80px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
   cursor: pointer;
-  margin-top: 20px;
-}
-
-#spin:hover {
-  background-color: #5a514a;
+  z-index: 2;
 }
 
 #resultado {

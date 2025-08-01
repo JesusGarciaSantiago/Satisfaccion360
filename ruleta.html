@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ruleta de Premios</title>
-  <link rel="stylesheet" href="./CSS/ruleta.css">
+  <link rel="stylesheet" href="./CSS/ruleta.css" />
 </head>
 <body>
   <h1>¡Gracias por tu respuesta!</h1>
   <p>Haz girar la ruleta y gana un premio</p>
-  <canvas id="canvas" width="500" height="500"></canvas>
-  <br>
-  <button id="spin">Girar</button>
+
+  <div class="ruleta-container">
+    <canvas id="canvas" width="500" height="500"></canvas>
+    <img src="./IMG/logo.png" id="boton-central" alt="Girar" />
+  </div>
+
   <div id="resultado"></div>
+
+  <audio id="sonidoRuleta" src="./SOUND/ruleta.mp3" preload="auto"></audio>
 
   <script src="./JS/ruleta.js"></script>
 </body>

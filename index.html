@@ -106,15 +106,15 @@
           <label class="titulo">2.1 ¿Cómo calificarías la limpieza del lugar?</label>
           <div class="opciones">
             <div class="opcion">
-              <input type="radio" id="limpieza-excelente" name="limpieza" value="Excelente" required>
+              <input type="radio" id="limpieza-excelente" name="limpieza" value="EXCELENTE" required>
               <label for="limpieza-excelente">Excelente</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="limpieza-bueno" name="limpieza" value="Bueno">
+              <input type="radio" id="limpieza-bueno" name="limpieza" value="BUENO">
               <label for="limpieza-bueno">Bueno</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="limpieza-regular" name="limpieza" value="Regular">
+              <input type="radio" id="limpieza-regular" name="limpieza" value="REGULAR">
               <label for="limpieza-regular">Regular</label>
             </div>
           </div>
@@ -124,16 +124,16 @@
           <label class="titulo">2.2 ¿Cuál es tu percepción sobre los precios?</label>
           <div class="opciones">
             <div class="opcion">
-              <input type="radio" id="precios-excelente" name="precios" value="Excelente" required>
-              <label for="precios-excelente">Excelente</label>
+              <input type="radio" id="precios-excelente" name="precios" value="BARATO" required>
+              <label for="precios-excelente">Barato</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="precios-bueno" name="precios" value="Bueno">
-              <label for="precios-bueno">Bueno</label>
+              <input type="radio" id="precios-bueno" name="precios" value="JUSTO">
+              <label for="precios-bueno">Justo</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="precios-regular" name="precios" value="Regular">
-              <label for="precios-regular">Regular</label>
+              <input type="radio" id="precios-regular" name="precios" value="CARO">
+              <label for="precios-regular">Caro</label>
             </div>
           </div>
         </div>
@@ -145,15 +145,15 @@
               <input type="radio" id="conociste-redes" name="conociste" value="REDES SOCIALES" required>
               <label for="conociste-redes">Redes Sociales</label>
             </div>
-             <div class="opcion">
+            <div class="opcion">
               <input type="radio" id="conociste-FB" name="conociste" value="FACEBOOK">
               <label for="conociste-FB">Facebook</label>
             </div>
-             <div class="opcion">
+            <div class="opcion">
               <input type="radio" id="conociste-IG" name="conociste" value="INSTAGRAM">
               <label for="conociste-IG">Instagram</label>
             </div>
-             <div class="opcion">
+            <div class="opcion">
               <input type="radio" id="conociste-TT" name="conociste" value="TIK TOK">
               <label for="conociste-TT">Tik Tok</label>
             </div>
@@ -169,9 +169,9 @@
               <input type="radio" id="conociste-YaLos" name="conociste" value="YA LOS HABIA VISITADO">
               <label for="conociste-YaLos">Ya los había visitado</label>
             </div>
-           
+
             <div class="opcion">
-              <input type="radio" id="conociste-otro" name="conociste" value= "">
+              <input type="radio" id="conociste-otro" name="conociste" value="Otro">
               <label for="conociste-otro">Otro</label>
             </div>
             <div class="campo" id="otro-input-container" style="display: none; margin-top: 10px;">
@@ -179,9 +179,17 @@
               <input type="text" id="otro" name="otro" placeholder="Escribe cómo te enteraste">
             </div>
           </div>
+          <div class="pregunta">
+            <label class="titulo">Comentarios adicionales:</label>
+            <textarea type="text" id="comentarios" name="comentarios" placeholder="¿Algo más que quieras agregar?"></textarea> 
+          </div>
+
         </div>
   </div>
+
   </fieldset>
+
+
 
   <button type="submit">Enviar encuesta</button>
   </form>

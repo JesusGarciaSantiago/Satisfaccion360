@@ -145,3 +145,59 @@ body {
   width: 100%;
   max-width: 400px;
 }
+
+input, textarea{
+  border: 1px solid #ccc;
+  font-size: 15px;
+  border-radius: 8px;
+  field-sizing: content;
+}
+textarea{
+  width: 22%;
+  min-height: 50%;
+}
+
+@media screen and (max-width: 1024px) {
+  .container {
+    max-width: 85%;
+    padding: 20px;
+  }
+
+  .opciones {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  textarea {
+    width: 100%;
+  }
+
+  .logo {
+    max-width: 90%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .campo {
+    flex-direction: column;
+  }
+
+  .campo input,
+  .campo select {
+    width: 100%;
+  }
+
+  .opcion label {
+    display: inline-block;
+    margin-left: 8px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 480px) {
+  .logo {
+    max-width: 80%;
+  }
+}

@@ -1,54 +1,74 @@
 document.addEventListener("DOMContentLoaded", function () {
   const formulario = document.getElementById("formulario");
+  const otroContainer = document.getElementById("otro-input-container");
+  const otroInput = document.getElementById("otro");
 
+  // Mostrar/ocultar campo "otro"
+  document.querySelectorAll('input[name="conociste"]').forEach(input => {
+    input.addEventListener('change', function () {
+      if (this.labels[0]?.textContent.toUpperCase() === "OTRO") {
+        otroContainer.style.display = "block";
+        otroInput.required = true;
+      } else {
+        otroContainer.style.display = "none";
+        otroInput.required = false;
+        otroInput.value = "";
+      }
+    });
+  });
+
+  // Al enviar formulario
   formulario.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const url = "https://script.google.com/macros/s/AKfycbxgNaquQ3nBgZGX0dGl9zBKcT_dw5U9rs6lBxSLp966QAY-9f1ut9a_0MDGyAwMPsS-/exec";
+    const conocisteSeleccion = document.querySelector('input[name="conociste"]:checked')?.value || "";
+    const conocisteFinal = conocisteSeleccion === "Otro" ? otroInput.value.trim() : conocisteSeleccion;
 
     const data = {
-      f_ticket: document.getElementById("f_ticket")?.value || "",
-      mesero: document.getElementById("mesero")?.value || "",
-      mesa: document.getElementById("mesa")?.value || "",
+      ticket: document.getElementById("ticket")?.value.trim(),
+      mesero: document.getElementById("mesero")?.value.trim(),
+      mesa: document.getElementById("mesa")?.value.trim(),
       personal: document.querySelector('input[name="personal"]:checked')?.value || "",
-      alimentos: document.querySelector('input[name="alimentos"]:checked')?.value || "",
       bebidas: document.querySelector('input[name="bebidas"]:checked')?.value || "",
+      alimentos: document.querySelector('input[name="alimentos"]:checked')?.value || "",
       limpieza: document.querySelector('input[name="limpieza"]:checked')?.value || "",
       precios: document.querySelector('input[name="precios"]:checked')?.value || "",
-      conociste: document.querySelector('input[name="conociste"]:checked')?.value || "",
-      otro: document.getElementById("otro")?.value || "",
-      comentarios: document.getElementById("comentarios")?.value || ""
+      conociste: conocisteFinal,
+      otro: otroInput.value.trim(),
+      comentarios: document.getElementById("comentarios")?.value.trim() || ""
     };
+
+    // Validación
+    for (let campo in data) {
+      if (!data[campo] && campo !== "otro" && campo !== "comentarios") {
+        alert("Por favor responde todas las preguntas.");
+        return;
+      }
+    }
+
+    // Envío a Google Apps Script
+    const url = "https://script.google.com/macros/s/AKfycbwCMj9CaPewcaZ319oBLG5ldLDZTlul5qFDx7HY29lW9ntP17EsEMsouoDWKX1VetB6/exec";
 
     fetch(url, {
       method: "POST",
+      mode: "no-cors",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(data)
     })
-      .then(res => {
-        alert("¡Gracias por tu respuesta!");
+      .then(() => {
+        alert("¡Gracias por enviar la encuesta!");
         formulario.reset();
-        window.location.href = "ruleta.html";
-      })
-      .catch(err => {
-        alert("Error al enviar la encuesta.");
-        console.error(err);
-      });
-  });
-
-  document.querySelectorAll('input[name="conociste"]').forEach(input => {
-    input.addEventListener("change", function () {
-      const otroContainer = document.getElementById("otro-input-container");
-      if (this.value === "Otro") {
-        otroContainer.style.display = "block";
-        document.getElementById("otro").required = true;
-      } else {
         otroContainer.style.display = "none";
-        document.getElementById("otro").required = false;
-        document.getElementById("otro").value = "";
-      }
-    });
+
+        setTimeout(() => {
+          window.location.href = "ruleta.html";
+        }, 10000);
+      })
+      .catch(error => {
+        console.error("Error al enviar:", error);
+        alert("Hubo un problema al enviar la encuesta.");
+      });
   });
 });

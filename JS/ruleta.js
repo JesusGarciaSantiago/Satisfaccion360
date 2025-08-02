@@ -10,15 +10,19 @@ let colors = [];
 const sonidoRuleta = document.getElementById("sonidoRuleta");
 
 // Reemplaza esta URL con tu propia Web App URL de Google Sheets que entrega un JSON tipo ["Premio1", "Premio2", ...]
-const URL_GET = "https://script.google.com/macros/s/TU_SCRIPT_ID/exec";
-const URL_POST = "https://script.google.com/macros/s/TU_SCRIPT_ID/exec";
+const URL = 'https://script.google.com/macros/s/AKfycby34WI92Sv8szm_agBYXXDHdYkeK2QCEAjpupyQrJ7cx0nH7GO4bdzEvGLoNasL3z4/exec';
 
 // ======= FUNCIONES =======
 
 async function obtenerPremiosDesdeSheet() {
-  const res = await fetch(URL_GET);
-  const data = await res.json();
-  return data;
+  try {
+    const response = await fetch(`${URL}?action=get`);
+    const data = await response.json();
+    return data.premios;
+  } catch (error) {
+    console.error("Error al obtener premios:", error);
+    return [];
+  }
 }
 
 function dibujarRuleta() {
@@ -61,12 +65,12 @@ function mostrarAnuncio(premio, codigo) {
   alert(`🎉 ¡Ganaste: ${premio}!\n🎁 Código de canje: ${codigo}`);
 }
 
-function guardarGanador(premio, codigo) {
-  fetch(URL_POST, {
-    method: "POST",
-    body: JSON.stringify({ premio, codigo, fecha: new Date().toISOString() }),
-    headers: { "Content-Type": "application/json" }
-  });
+async function guardarGanador(premio, codigo) {
+  try {
+    await fetch(`${URL}?action=save&premio=${encodeURIComponent(premio)}&codigo=${encodeURIComponent(codigo)}`);
+  } catch (error) {
+    console.error("Error al guardar ganador:", error);
+  }
 }
 
 function girarRuleta() {

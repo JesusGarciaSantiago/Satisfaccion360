@@ -74,6 +74,13 @@ async function guardarGanador(premio, codigo) {
 }
 
 function girarRuleta() {
+  const audio = document.getElementById('sonidoRuleta');
+  if(audio){
+    audio.currentTime = 0;
+    audio.play().catch(e => {
+      console.error("No se pudo reproducir el audio", e);
+    });
+  }
   if (girando) return;
   girando = true;
 
@@ -88,8 +95,7 @@ function girarRuleta() {
     anguloInicial %= 2 * Math.PI;
     ctx.clearRect(0, 0, size, size);
     dibujarRuleta();
-    sonidoRuleta.currentTime = 0;
-    sonidoRuleta.play();
+   
 
     if (velocidad > 0.002) {
       requestAnimationFrame(animar);

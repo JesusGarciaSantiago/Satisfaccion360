@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ruleta de Premios</title>
   <link rel="stylesheet" href="./CSS/ruleta.css" />
 </head>
+
 <body>
   <h1>¡Gracias por tu respuesta!</h1>
   <p>Haz girar la ruleta y gana un premio</p>
@@ -16,9 +18,21 @@
   </div>
 
   <div id="resultado"></div>
+  <div id="popup-premio" class="popup hidden">
+    <div class="popup-content">
+      <h2>¡Ganaste!</h2>
+      <p id="mensaje-premio"></p>
+      <div class="botones-popup">
+        <button onclick="continuar()">Continuar</button>
+        <button onclick="cambiarUsuario()">Cambiar de usuario</button>
+      </div>
 
+    </div>
+
+  </div>
   <audio id="sonidoRuleta" src="./sounds/ruleta.mp3" preload="auto"></audio>
 
   <script src="./JS/ruleta.js"></script>
 </body>
+
 </html>

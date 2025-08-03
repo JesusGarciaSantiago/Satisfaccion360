@@ -8,8 +8,9 @@ let premios = [];
 let colors = [];
 
 const sonidoRuleta = document.getElementById("sonidoRuleta");
+const boton = document.getElementById("boton-central");
 
-// Reemplaza esta URL con tu propia Web App URL de Google Sheets que entrega un JSON tipo ["Premio1", "Premio2", ...]
+
 const URL = 'https://script.google.com/macros/s/AKfycby34WI92Sv8szm_agBYXXDHdYkeK2QCEAjpupyQrJ7cx0nH7GO4bdzEvGLoNasL3z4/exec';
 
 // ======= FUNCIONES =======
@@ -62,8 +63,12 @@ function generarCodigo() {
 }
 
 function mostrarAnuncio(premio, codigo) {
-  alert(`🎉 ¡Ganaste: ${premio}!\n🎁 Código de canje: ${codigo}`);
+  const popup = document.getElementById("popup-premio");
+  const mensaje = document.getElementById("mensaje-premio");
+  mensaje.innerHTML = `🎁 <strong>${premio}</strong><br>Código: <strong>${codigo}</strong>`;
+  popup.classList.remove("hidden");
 }
+
 
 async function guardarGanador(premio, codigo) {
   try {
@@ -75,7 +80,7 @@ async function guardarGanador(premio, codigo) {
 
 function girarRuleta() {
   const audio = document.getElementById('sonidoRuleta');
-  if(audio){
+  if (audio) {
     audio.currentTime = 0;
     audio.play().catch(e => {
       console.error("No se pudo reproducir el audio", e);
@@ -95,14 +100,18 @@ function girarRuleta() {
     anguloInicial %= 2 * Math.PI;
     ctx.clearRect(0, 0, size, size);
     dibujarRuleta();
-   
+
 
     if (velocidad > 0.002) {
       requestAnimationFrame(animar);
     } else {
-      const grados = anguloInicial * (180 / Math.PI);
-      const index = premios.length - Math.floor((grados % 360) / (360 / premios.length)) - 1;
-      const premioGanado = premios[index < 0 ? premios.length - 1 : index];
+      const numPremios = premios.length;
+      const anguloPorPremio = 2 * Math.PI / numPremios;
+      const anguloFinal = (anguloInicial + Math.PI / 2) % (2 * Math.PI);
+      const index = Math.floor(numPremios - (anguloFinal / anguloPorPremio)) % numPremios;
+      const premioGanado = premios[index];
+
+
       const codigo = generarCodigo();
 
       document.getElementById("resultado").textContent = `¡Ganaste: ${premioGanado}! Código: ${codigo}`;
@@ -114,6 +123,14 @@ function girarRuleta() {
 
   animar();
 }
+function continuar() {
+  document.getElementById("popup-premio").classList.add("hidden");
+}
+
+function cambiarUsuario() {
+  window.location.href = "index.html"; // Cambia a tu ruta correcta
+}
+
 
 // ======= INICIALIZACIÓN =======
 

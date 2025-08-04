@@ -1,97 +1,153 @@
    * {
-   	font-family: 'Times New Roman', Times, serif;
+     font-family: 'Times New Roman', Times, serif;
    }
 
    body {
-   	user-select: none;
-   	overflow-y: hidden;
-   	display: flex;
-   	justify-content: center;
-   	align-items: center;
-   	background: hsl(218deg 50% 91%);
-   	height: 100vh;
+     user-select: none;
+     overflow-y: hidden;
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     background: hsl(218deg 50% 91%);
+     height: 100vh;
    }
 
    .screen-1 {
-   	background: hsl(213deg 85% 97%);
-   	padding: 2em;
-   	display: flex;
-   	flex-direction: column;
-   	border-radius: 30px;
-   	box-shadow: 0 0 2em hsl(231deg 62% 94%);
-   	gap: 2em;
+     background: hsl(213deg 85% 97%);
+     padding: 2em;
+     display: flex;
+     flex-direction: column;
+     border-radius: 30px;
+     box-shadow: 0 0 2em hsl(231deg 62% 94%);
+     gap: 2em;
    }
 
    .screen-1 .logo {
-   	margin-top: -100px;
-   	width: 450px;
-   	position: relative;
-   	justify-content: center;
+     margin-top: -100px;
+     width: 450px;
+     position: relative;
+     justify-content: center;
    }
 
    .screen-1 .log {
-   	width: 240px;
-   	position: relative;
-   	justify-content: center;
-   	margin-left: 110px;
-	margin-top: -65px;
+     width: 240px;
+     position: relative;
+     justify-content: center;
+     margin-left: 110px;
+     margin-top: -65px;
    }
 
 
    .form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #333;
-  font-weight: 500;
-}
+     display: block;
+     text-align: center;
+     margin-bottom: 0.5rem;
+     font-size: 20px;
+     color: #333;
+     font-weight: 500;
+   }
 
-.form-group select {
-  width: 100%;
-  padding: 0.6rem 1rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #fafafa;
-  font-size: 1rem;
-  color: #333;
-  transition: border 0.2s;
-  appearance: none;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1rem;
-}
+   .form-group select {
+     width: 100%;
+     padding: 0.6rem 1rem;
+     border: 1px solid #ccc;
+     border-radius: 10px;
+     background-color: #fafafa;
+     font-size: 1rem;
+     color: #333;
+     transition: border 0.2s;
+     appearance: none;
+     background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+     background-repeat: no-repeat;
+     background-position: right 1rem center;
+     background-size: 1rem;
+   }
 
-.form-group select:focus {
-  outline: none;
-  border-color: #5a67d8;
-  box-shadow: 0 0 0 2px rgba(90, 103, 216, 0.2);
-}
+   .form-group select:focus {
+     outline: none;
+     border-color: #5a67d8;
+     box-shadow: 0 0 0 2px rgba(90, 103, 216, 0.2);
+   }
 
    .screen-1 .campo {
-   	margin-top: -3em;
+     margin-top: -3em;
    }
 
    .screen-1 input {
-   	outline: none;
-   	border: none;
+     outline: none;
+     border: none;
    }
 
    .screen-1 input::placeholder {
-   	color: hsl(0deg 0% 0%);
-   	font-size: 0.9em;
+     color: hsl(0deg 0% 0%);
+     font-size: 0.9em;
    }
 
    .screen-1 ion-icon {
-   	color: hsl(0deg 0% 30%);
-   	margin-bottom: -0.2em;
+     color: hsl(0deg 0% 30%);
+     margin-bottom: -0.2em;
    }
 
    .screen-1 .login {
-   	padding: 1em;
-   	background: #8ca37c;
-   	color: hsl(0deg 0% 100%);
-   	border: none;
-   	border-radius: 30px;
-   	font-weight: 600;
-   	cursor: pointer;
+     padding: 1em;
+     background: #8ca37c;
+     color: #f0f0f0;
+     border: none;
+     border-radius: 30px;
+     font-weight: 600;
+     cursor: pointer;
    }
+
+
+   .settings-container {
+     position: fixed;
+     top: 20px;
+     right: 20px;
+     z-index: 999;
+   }
+
+   #settings-btn {
+     background: #8ca37c;
+     border: none;
+     border-radius: 50%;
+     padding: 15px;
+     font-size: 1.5rem;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+     cursor: pointer;
+     transition: transform 0.2s ease;
+   }
+
+   #settings-btn:hover {
+     transform: rotate(30deg);
+   }
+
+   .settings-menu {
+     display: none;
+     position: absolute;
+     top: 50px;
+     right: 0;
+     background: white;
+     border-radius: 10px;
+     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+     padding: 0.5rem 0;
+     min-width: 160px;
+   }
+
+   .settings-menu ul {
+     list-style: none;
+     margin: 0;
+     padding: 0;
+   }
+
+   .settings-menu li {
+     padding: 10px 20px;
+     cursor: pointer;
+     transition: background 0.2s;
+   }
+
+   .settings-menu li:hover {
+     background: #f0f0f0;
+   }
+     input[type="checkbox"] {
+      transform: scale(1.2);
+    }

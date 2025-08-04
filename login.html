@@ -9,9 +9,23 @@
     <script type="module" src="https://unpkg.com/ionicons@7.2.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.2.0/dist/ionicons/ionicons.js"></script>
     <link rel="stylesheet" href="./CSS/login.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.2.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.2.0/dist/ionicons/ionicons.js"></script>
 </head>
 
 <body>
+    <div class="settings-container">
+        <button id="settings-btn">
+            <ion-icon name="settings-outline"></ion-icon>
+        </button>
+        <div class="settings-menu" id="settings-menu">
+            <ul>
+                <input type="checkbox" value="true" name="disable" id="checkbox">
+                <label for="checkbox">Desabilitar ruleta</label>
+            </ul>
+        </div>
+    </div>
 
     <div class="screen-1">
 
@@ -35,6 +49,8 @@
 
         <button class="login">Continuar</button>
     </div>
+
+    <script src="./JS/login.js"></script>
 
 </body>
 

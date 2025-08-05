@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const formulario = document.getElementById("formulario");
   const otroContainer = document.getElementById("otro-input-container");
   const otroInput = document.getElementById("otro");
+  const meseroActual = sessionStorage.getItem("meseroActual") || "Desconocido";
+  const ruletaDeshabilitada = sessionStorage.getItem("ruletaDeshabilitada") === "true";
 
   // Mostrar/ocultar campo "otro"
   document.querySelectorAll('input[name="conociste"]').forEach(input => {
@@ -26,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const data = {
       ticket: document.getElementById("ticket")?.value.trim(),
-      mesero: document.getElementById("mesero")?.value.trim(),
+      mesero: meseroActual,
       mesa: document.getElementById("mesa")?.value.trim(),
       personal: document.querySelector('input[name="personal"]:checked')?.value || "",
       bebidas: document.querySelector('input[name="bebidas"]:checked')?.value || "",
@@ -61,10 +63,15 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("¡Gracias por enviar la encuesta!");
         formulario.reset();
         otroContainer.style.display = "none";
+        const deshabilitarRuleta = document.getElementById("checkbox")?.ariaChecked;
 
-        setTimeout(() => {
-          window.location.href = "ruleta.html";
-        }, 100);
+        if (!ruletaDeshabilitada) {
+          setTimeout(() => {
+            window.location.href = "ruleta.html";
+          }, 100);
+        } else {
+          window.location.href = "index.html"
+        }
       })
       .catch(error => {
         console.error("Error al enviar:", error);

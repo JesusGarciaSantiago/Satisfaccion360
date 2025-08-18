@@ -23,5 +23,5 @@ document.querySelector(".login").addEventListener("click", () => {
   sessionStorage.setItem("meseroActual", mesero);
   sessionStorage.setItem("ruletaDeshabilitada", deshabilitarRuleta ? true : false)
 
-  window.location.href = "index.html"; // Cambia esto al nombre real del archivo del formulario
+  window.location.href = "formulario.html"; 
 });

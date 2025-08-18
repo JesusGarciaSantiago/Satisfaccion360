@@ -125,11 +125,11 @@ function girarRuleta() {
 }
 function continuar() {
   document.getElementById("popup-premio").classList.add("hidden");
-  window.location.href = "index.html"
+  window.location.href = "formulario.html"
 }
 
 function cambiarUsuario() {
-  window.location.href = "login.html"; 
+  window.location.href = "index.html"; 
 }
 
 

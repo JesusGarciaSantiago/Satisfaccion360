@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = "ruleta.html";
           }, 100);
         } else {
-          window.location.href = "index.html"
+          window.location.href = "formulario.html"
         }
       })
       .catch(error => {

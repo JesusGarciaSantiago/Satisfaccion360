@@ -156,6 +156,43 @@ textarea{
   width: 22%;
   min-height: 50%;
 }
+/* Fondo oscuro que cubre toda la pantalla */
+#popup-encuesta {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none; /* empieza oculto */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Caja del popup */
+#popup-encuesta .popup-box {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  width: 300px;
+}
+#popup-encuesta button {
+  margin-top: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+#continuar-btn {
+  background: #28a745;
+  color: white;
+}
+#cambiar-btn {
+  background: #6c757d;
+  color: white;
+}
+
 
 .popup {
   position: fixed;

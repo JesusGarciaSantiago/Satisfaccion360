@@ -49,7 +49,7 @@
               <label for="personal-regular">Regular</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="personal-regular" name="personal" value="MALO">
+              <input type="radio" id="personal-malo" name="personal" value="MALO">
               <label for="personal-regular">Malo</label>
             </div>
           </div>
@@ -71,7 +71,7 @@
               <label for="bebidas-regular">Regular</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="bebidas-regular" name="bebidas" value="MALO">
+              <input type="radio" id="bebidas-malo" name="bebidas" value="MALO">
               <label for="personal-regular">Malo</label>
             </div>
           </div>
@@ -93,7 +93,7 @@
               <label for="alimentos-regular">Regular</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="alimentos-regular" name="alimentos" value="MALO">
+              <input type="radio" id="alimentos-malo" name="alimentos" value="MALO">
               <label for="alimentos-regular">Malo</label>
             </div>
           </div>
@@ -119,7 +119,7 @@
               <label for="limpieza-regular">Regular</label>
             </div>
             <div class="opcion">
-              <input type="radio" id="limpieza-regular" name="limpieza" value="MALO">
+              <input type="radio" id="limpieza-malo" name="limpieza" value="MALO">
               <label for="limpieza-regular">Malo</label>
             </div>
           </div>
@@ -186,7 +186,8 @@
           </div>
           <div class="pregunta">
             <label class="titulo">Comentarios adicionales:</label>
-            <textarea type="text" id="comentarios" name="comentarios" placeholder="¿Algo más que quieras agregar?"></textarea> 
+            <textarea type="text" id="comentarios" name="comentarios"
+              placeholder="¿Algo más que quieras agregar?"></textarea>
           </div>
 
         </div>
@@ -198,6 +199,18 @@
   </form>
   </div>
 
+    <div id="popup-encuesta" class="popup hidden">
+    <div class="popup-content">
+      <h2>✅ ¡Gracias por enviar la encuesta!</h2>
+      <p id="mensaje-premio"></p>
+      <div class="botones-popup">
+        <button id="continuar-btn" >Continuar</button>
+        <button id="cambiar-btn">Cambiar de usuario</button>
+      </div>
+
+    </div>
+
+  </div>
   <script src="./JS/formulario.js"></script>
 </body>
 

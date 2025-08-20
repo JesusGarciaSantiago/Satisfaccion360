@@ -10,21 +10,9 @@ let colors = [];
 const sonidoRuleta = document.getElementById("sonidoRuleta");
 const boton = document.getElementById("boton-central");
 
-
 const URL = 'https://script.google.com/macros/s/AKfycby34WI92Sv8szm_agBYXXDHdYkeK2QCEAjpupyQrJ7cx0nH7GO4bdzEvGLoNasL3z4/exec';
 
 // ======= FUNCIONES =======
-
-async function obtenerPremiosDesdeSheet() {
-  try {
-    const response = await fetch(`${URL}?action=get`);
-    const data = await response.json();
-    return data.premios;
-  } catch (error) {
-    console.error("Error al obtener premios:", error);
-    return [];
-  }
-}
 
 function dibujarRuleta() {
   const num = premios.length;
@@ -69,7 +57,6 @@ function mostrarAnuncio(premio, codigo) {
   popup.classList.remove("hidden");
 }
 
-
 async function guardarGanador(premio, codigo) {
   try {
     await fetch(`${URL}?action=save&premio=${encodeURIComponent(premio)}&codigo=${encodeURIComponent(codigo)}`);
@@ -82,9 +69,7 @@ function girarRuleta() {
   const audio = document.getElementById('sonidoRuleta');
   if (audio) {
     audio.currentTime = 0;
-    audio.play().catch(e => {
-      console.error("No se pudo reproducir el audio", e);
-    });
+    audio.play().catch(e => console.error("No se pudo reproducir el audio", e));
   }
   if (girando) return;
   girando = true;
@@ -101,7 +86,6 @@ function girarRuleta() {
     ctx.clearRect(0, 0, size, size);
     dibujarRuleta();
 
-
     if (velocidad > 0.002) {
       requestAnimationFrame(animar);
     } else {
@@ -111,9 +95,7 @@ function girarRuleta() {
       const index = Math.floor(numPremios - (anguloFinal / anguloPorPremio)) % numPremios;
       const premioGanado = premios[index];
 
-
       const codigo = generarCodigo();
-
       document.getElementById("resultado").textContent = `¡Ganaste: ${premioGanado}! Código: ${codigo}`;
       mostrarAnuncio(premioGanado, codigo);
       guardarGanador(premioGanado, codigo);
@@ -123,24 +105,29 @@ function girarRuleta() {
 
   animar();
 }
+
 function continuar() {
   document.getElementById("popup-premio").classList.add("hidden");
-  window.location.href = "formulario.html"
+  window.location.href = "formulario.html";
 }
 
 function cambiarUsuario() {
   window.location.href = "index.html"; 
 }
 
-
 // ======= INICIALIZACIÓN =======
-
 document.getElementById("boton-central").addEventListener("click", girarRuleta);
 
-async function inicializar() {
-  premios = await obtenerPremiosDesdeSheet();
-  colors = premios.map((_, i) => ["#8ca37c", "#e8e9e5", "#5a514a", "#bac1af", "#757a70", "#c9d4bc", "#7c8c6c", "#acb79b", "#bac1af", "#8ca37c"][i % 10]);
-  dibujarRuleta();
+function inicializar() {
+  const premiosGuardados = localStorage.getItem("premios");
+  if (premiosGuardados) {
+    premios = JSON.parse(premiosGuardados);
+    colors = premios.map((_, i) => ["#8ca37c", "#e8e9e5", "#5a514a", "#bac1af", "#757a70", "#c9d4bc", "#7c8c6c", "#acb79b", "#bac1af", "#8ca37c"][i % 10]);
+    dibujarRuleta();
+    console.log("✅ Premios cargados desde localStorage:", premios);
+  } else {
+    console.error("❌ No hay premios en localStorage. Asegúrate de cargar desde formulario.js");
+  }
 }
 
 inicializar();

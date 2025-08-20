@@ -19,7 +19,26 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Al enviar formulario
+  // === 📌 Precargar premios desde Google Sheet y guardarlos en localStorage ===
+  const URL_RULETA = "https://script.google.com/macros/s/AKfycby34WI92Sv8szm_agBYXXDHdYkeK2QCEAjpupyQrJ7cx0nH7GO4bdzEvGLoNasL3z4/exec";
+
+  async function precargarPremios() {
+    try {
+      const response = await fetch(`${URL_RULETA}?action=get`);
+      const data = await response.json();
+      if (data?.premios?.length) {
+        localStorage.setItem("premios", JSON.stringify(data.premios));
+        console.log("✅ Premios precargados y guardados en localStorage:", data.premios);
+      }
+    } catch (err) {
+      console.error("❌ Error al precargar premios:", err);
+    }
+  }
+
+  // Llamar apenas cargue la página del formulario
+  precargarPremios();
+
+  // === Envío del formulario ===
   formulario.addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -60,22 +79,25 @@ document.addEventListener("DOMContentLoaded", function () {
       body: JSON.stringify(data)
     })
       .then(() => {
-        alert("¡Gracias por enviar la encuesta!");
         formulario.reset();
         otroContainer.style.display = "none";
-        const deshabilitarRuleta = document.getElementById("checkbox")?.ariaChecked;
 
-        if (!ruletaDeshabilitada) {
-          setTimeout(() => {
+        const popup = document.getElementById("popup-encuesta");
+        popup.style.display = "flex"; // aquí lo mostramos
+
+        document.getElementById("continuar-btn").onclick = () => {
+          const ruletaDeshabilitada = sessionStorage.getItem("ruletaDeshabilitada") === "true";
+          if (!ruletaDeshabilitada) {
             window.location.href = "ruleta.html";
-          }, 100);
-        } else {
-          window.location.href = "formulario.html"
-        }
+          } else {
+            window.location.href = "formulario.html";
+          }
+        };
+
+        document.getElementById("cambiar-btn").onclick = () => {
+          window.location.href = "index.html";
+        };
       })
-      .catch(error => {
-        console.error("Error al enviar:", error);
-        alert("Hubo un problema al enviar la encuesta.");
-      });
+
   });
 });

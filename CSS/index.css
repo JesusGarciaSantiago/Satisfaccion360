@@ -1,153 +1,116 @@
-   * {
-     font-family: 'Times New Roman', Times, serif;
-   }
+html, body {
+  margin:0; padding:0; height:100%; width:100%;
+  font-family: Arial, sans-serif;
+  background-color: #7B8C6E;
+  color: #fff;
+  overflow: hidden;
+}
+body {
+  display:flex; flex-direction:column; align-items:center;
+}
 
-   body {
-     user-select: none;
-     overflow-y: hidden;
-     display: flex;
-     justify-content: center;
-     align-items: center;
-     background: hsl(218deg 50% 91%);
-     height: 100vh;
-   }
+/* Header */
+header {
+  width:100%; padding:15px; font-size:1.8rem;
+}
+header i { cursor:pointer; color:#fff; }
 
-   .screen-1 {
-     background: hsl(213deg 85% 97%);
-     padding: 2em;
-     display: flex;
-     flex-direction: column;
-     border-radius: 30px;
-     box-shadow: 0 0 2em hsl(231deg 62% 94%);
-     gap: 2em;
-   }
+/* Contenedor central */
+.container {
+  flex:1; width:100%; box-sizing:border-box;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; padding:20px;
+  overflow-y:auto;
+}
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: -240px 0 100px 20px; /* 👍 menos espacio arriba (20px), y sigue separado del bloque */
+  align-self: flex-start;
+  color: #fff;
+}
 
-   .screen-1 .logo {
-     margin-top: -100px;
-     width: 450px;
-     position: relative;
-     justify-content: center;
-   }
+/* Bloque con icono, select, botón */
+.form-block {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px; /* 🔥 más separación entre icono, select y botón */
+}
 
-   .screen-1 .log {
-     width: 240px;
-     position: relative;
-     justify-content: center;
-     margin-left: 110px;
-     margin-top: -65px;
-   }
+/* Icono de usuario */
+.icon-user {
+  width:150px; height:150px;
+  background:#fff; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:#7B8C6E; font-size:4.5rem;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
 
+/* Custom select */
+.custom-select { position: relative; width:100%; }
+.custom-select label {
+  position:absolute; top:-10px; left:12px;
+  background:#7B8C6E; padding:0 6px;
+  font-size:0.85rem; border-radius:4px; color:#ffffffde;
+}
+.select-selected {
+  background:#f6f3eb; color:#333;
+  padding:12px; border-radius:10px;
+  cursor:pointer; font-size:1.05rem;
+  text-align:center; box-shadow:0 2px 6px rgba(0,0,0,0.2);
+  width:100%; box-sizing:border-box;
+}
 
-   .form-group label {
-     display: block;
-     text-align: center;
-     margin-bottom: 0.5rem;
-     font-size: 20px;
-     color: #333;
-     font-weight: 500;
-   }
+/* Dropdown con position fixed */
+.select-items {
+  position: fixed;
+  background:#f6f3eb; color:#333;
+  border-radius:12px;
+  box-shadow:0 6px 16px rgba(0,0,0,0.25);
+  display:none; z-index:99999;
+  overflow:hidden;
+}
+.select-items div {
+  padding:12px 14px;
+  border-bottom:1px solid #7B8C6E;
+  display:flex; justify-content:space-between; align-items:center;
+  cursor:pointer;
+}
+.select-items div:last-child { border-bottom:none; }
+.select-items div:hover { background:#e6e2d6; }
+.select-items div.active { color:#7B8C6E; font-weight:700; }
 
-   .form-group select {
-     width: 100%;
-     padding: 0.6rem 1rem;
-     border: 1px solid #ccc;
-     border-radius: 10px;
-     background-color: #fafafa;
-     font-size: 1rem;
-     color: #333;
-     transition: border 0.2s;
-     appearance: none;
-     background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
-     background-repeat: no-repeat;
-     background-position: right 1rem center;
-     background-size: 1rem;
-   }
+.radio {
+  width:20px; height:20px;
+  border:2px solid #ffffff00;
+  border-radius:50%;
+  display:inline-block;
+  flex-shrink:0; margin-left:10px;
+}
+.radio.active::after {
+  content:''; display:block;
+  width: 18px; height:18px;
+  background:#7B8C6E; border-radius:50%;
+  margin:5px;
+}
 
-   .form-group select:focus {
-     outline: none;
-     border-color: #5a67d8;
-     box-shadow: 0 0 0 2px rgba(90, 103, 216, 0.2);
-   }
+/* Botón */
+.btn {
+  background:#f6f3eb; color:#333;
+  border:none; padding:12px 36px;
+  border-radius:12px; font-size:1.05rem;
+  cursor:pointer; box-shadow:0 2px 6px rgba(0,0,0,0.2);
+}
+.btn:hover { background:#e6e2d6; }
 
-   .screen-1 .campo {
-     margin-top: -3em;
-   }
-
-   .screen-1 input {
-     outline: none;
-     border: none;
-   }
-
-   .screen-1 input::placeholder {
-     color: hsl(0deg 0% 0%);
-     font-size: 0.9em;
-   }
-
-   .screen-1 ion-icon {
-     color: hsl(0deg 0% 30%);
-     margin-bottom: -0.2em;
-   }
-
-   .screen-1 .login {
-     padding: 1em;
-     background: #8ca37c;
-     color: #f0f0f0;
-     border: none;
-     border-radius: 30px;
-     font-weight: 600;
-     cursor: pointer;
-   }
-
-
-   .settings-container {
-     position: fixed;
-     top: 20px;
-     right: 20px;
-     z-index: 999;
-   }
-
-   #settings-btn {
-     background: #8ca37c;
-     border: none;
-     border-radius: 50%;
-     padding: 15px;
-     font-size: 1.5rem;
-     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-     cursor: pointer;
-     transition: transform 0.2s ease;
-   }
-
-   #settings-btn:hover {
-     transform: rotate(30deg);
-   }
-
-   .settings-menu {
-     display: none;
-     position: absolute;
-     top: 50px;
-     right: 0;
-     background: white;
-     border-radius: 10px;
-     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-     padding: 0.5rem 0;
-     min-width: 160px;
-   }
-
-   .settings-menu ul {
-     list-style: none;
-     margin: 0;
-     padding: 0;
-   }
-
-   .settings-menu li {
-     padding: 10px 20px;
-     cursor: pointer;
-     transition: background 0.2s;
-   }
-
-   .settings-menu li:hover {
-     background: #f0f0f0;
-   }
-     input[type="checkbox"] {
-      transform: scale(1.2);
-    }
+/* Nav fijo al fondo */
+nav {
+  position:fixed; bottom:0; left:0; right:0;
+  display:flex; justify-content:space-around; align-items:center;
+  background:#e6e2d6; padding:12px 0;
+  z-index:2000;
+}
+nav .icon { font-size:1.6rem; color:#7B8C6E; }

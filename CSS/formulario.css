@@ -1,267 +1,259 @@
 body {
-    font-family: 'Times New Roman', Times, serif;
-    background: #6666;
-    margin: 0;
-    padding: 0;
-  }
-  .container {
-    max-width: 85%;
-    margin: 40px auto;
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  h1 {
-    text-align: center;
-    color: #8AA27E;
-  }
-  fieldset {
-    border: 1px solid #ccc;
-    padding: 20px;
-    margin-bottom: 25px;
-    border-radius: 6px;
-  }
-  legend {
-    font-size: 18px;
-    font-weight: bold;
-    color: #8AA27E;
-  }
-  .pregunta {
-    margin-top: 20px;
-  }
-  .pregunta label.titulo {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #513b47;
-    font-weight: bold;
-  }
-  .opciones {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
-  .opcion {
-    position: relative;
-    display: inline-block;
-  }
-  .opcion input[type="radio"] {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    border: 2px solid #999;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    transition: border 0.3s, background 0.3s;
-    vertical-align: middle;
-  }
-  .opcion input[type="radio"]:checked {
-    background-image: url("../images/favicon.png") ;
-    border-color: #8AA27E;
-  }
-  .opcion label {
-    margin-left: 6px;
-    cursor: pointer;
-    vertical-align: middle;
-    color: #0f0f0fb1;
-    font-weight: bold;
-  }
-  button {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: #f6f3eb;
+  color: #333;
+}
 
-    position: relative;
-    background-color: #8AA27E;
-    color: #fff;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-    display: block;
-    margin: 0 auto;
-    margin-bottom: 2%;
-  }
-  button:hover {
-    background-color: #878686b0;
-  }
-  .mensaje-exito {
-    text-align: center;
-    color: green;
-    margin-top: 20px;
-    display: none;
-    font-weight: bold;
-  }
-  .logo-container {
+/* Encabezado */
+.encabezado {
+  background: #7B8C6E;
+  color: #fff;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.encabezado h1 {
+  margin: 0;
+  font-size: 1.8rem;   /* ✅ más grande */
+  line-height: 1.4;    /* más aire entre las 2 líneas */
+  font-weight: bold;
+  text-align: left;
+  flex: 1;
+  margin-left: 120px;
+
+}
+
+.encabezado .volver {
+  font-size: 1.3rem;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+
+.encabezado .logo {
+  height: 160px;
+  width: 160px;
+  flex: 0 0 auto;
+  margin-right: 125px;
+}
+
+/* Datos ticket */
+.datos-ticket {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 10px auto 30px auto;
+  /* ✅ bajamos la sección, ya no invade el título */
+  position: relative;
+  z-index: 10;
+}
+
+.campo-ticket {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 25px 10px;
+  /* más padding arriba para el label flotante */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   text-align: center;
-  margin-bottom: 2%;
+  position: relative;
+  min-width: 120px;
 }
 
-.logo {
-  max-width: 75%;
-  height: auto;
+.campo-ticket label {
+  position: absolute;
+  top: 5px; 
+  left: 15px;
+  background: #7B8C6E;
+  color: #fff;
+  padding: 3px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.25); /* ✅ sombra flotante */
 }
-.campo {
+
+.campo-ticket input {
+  border: none;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
+  width: 100%;
+  outline: none;
+  background: transparent;
+}
+
+/* Preguntas */
+form {
+  padding: 20px;
+}
+
+.pregunta {
+  margin-bottom: 25px;
+}
+
+.pregunta p {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #513b47;
+}
+
+/* Opciones generales */
+.opciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.opciones input {
+  display: none;
+}
+
+/* Caritas */
+.opciones.caritas label {
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 15px;
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
-}
-
-.campo label {
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.campo input,
-.campo select {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: border-color 0.3s;
-}
-
-.campo input:focus,
-.campo select:focus {
-  border-color: #878686b0;
-  outline: none;
-}
-
-  #otro-input-container label {
-  font-weight: 600;
-  margin-bottom: 5px;
-  display: block;
-}
-
-#otro-input-container input {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 15px;
-  width: 100%;
-  max-width: 400px;
-}
-
-input, textarea{
-  border: 1px solid #ccc;
-  font-size: 15px;
-  border-radius: 8px;
-  field-sizing: content;
-}
-textarea{
-  width: 22%;
-  min-height: 50%;
-}
-/* Fondo oscuro que cubre toda la pantalla */
-#popup-encuesta {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: none; /* empieza oculto */
-  justify-content: center;
   align-items: center;
-  z-index: 9999;
-}
-
-/* Caja del popup */
-#popup-encuesta .popup-box {
-  background: #fff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-  text-align: center;
-  width: 300px;
-}
-#popup-encuesta button {
-  margin-top: 10px;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
   cursor: pointer;
+  flex: 1;
+  min-width: 70px;
+  transition: 0.2s;
+}
+
+.opciones.caritas label i {
+  font-size: 2rem;
+  color: #bbb;
+}
+
+.opciones.caritas label span {
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+.opciones.caritas input:checked+i,
+.opciones.caritas input:checked~span {
+  color: #7B8C6E;
+  font-weight: bold;
+}
+
+/* Precios */
+.opciones.precios label {
+  background: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  flex: 1;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.opciones.precios input:checked+span {
+  color: #fff;
+  font-weight: bold;
+  background: #7B8C6E;
+  border-radius: 8px;
+  padding: 5px 10px;
+}
+
+/* Redes */
+.opciones.redes label {
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  min-width: 60px;
+}
+
+.opciones.redes label i {
+  font-size: 1.6rem;
+  color: #888;
+}
+
+/* Hover para opciones de texto en "¿Cómo te enteraste?" */
+.opciones.redes label span {
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.opciones.redes label span:hover {
+  background: #7B8C6E;
+  color: #fff;
+}
+
+.opciones.redes input:checked+span {
+  background: #7B8C6E;
+  color: #fff;
+  font-weight: bold;
+}
+
+.opciones.redes input:checked+i.fa-facebook {
+  color: #1877F2;
+}
+
+.opciones.redes input:checked+i.fa-instagram {
+  color: #E1306C;
+}
+
+.opciones.redes input:checked+i.fa-tiktok {
+  color: #000;
+}
+
+/* Textarea */
+textarea {
   width: 100%;
-}
-#continuar-btn {
-  background: #28a745;
-  color: white;
-}
-#cambiar-btn {
-  background: #6c757d;
-  color: white;
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  min-height: 80px;
 }
 
+/* Botón */
+button {
+  width: 100%;
+  background: #7B8C6E;
+  color: #fff;
+  font-size: 1.2rem;
+  padding: 15px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+}
 
+button:hover {
+  background: #6a7b5f;
+}
+
+/* Popup */
 .popup {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: flex; justify-content: center; align-items: center;
-  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .popup.hidden {
   display: none;
 }
+
 .popup-content {
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
   text-align: center;
-  font-size: 18px;
-  max-width: 90%;
-}
-.popup-buttons button {
-  margin: 10px;
-  padding: 10px 20px;
-  font-size: 16px;
-}
-
-
-
-@media screen and (max-width: 1024px) {
-  .container {
-    max-width: 85%;
-    padding: 20px;
-  }
-
-  .opciones {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  textarea {
-    width: 100%;
-  }
-
-  .logo {
-    max-width: 90%;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .campo {
-    flex-direction: column;
-  }
-
-  .campo input,
-  .campo select {
-    width: 100%;
-  }
-
-  .opcion label {
-    display: inline-block;
-    margin-left: 8px;
-  }
-
-  button {
-    width: 100%;
-  }
-}
-@media screen and (max-width: 480px) {
-  .logo {
-    max-width: 80%;
-  }
 }

@@ -1,61 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Satisfacción 360</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <script type="module" src="https://unpkg.com/ionicons@7.2.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.2.0/dist/ionicons/ionicons.js"></script>
-    <link rel="stylesheet" href="./CSS/index.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-    <script type="module" src="https://unpkg.com/ionicons@7.2.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.2.0/dist/ionicons/ionicons.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Selección Mesero</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./CSS/index.css">
 </head>
-
 <body>
-    <div class="settings-container">
-        <button id="settings-btn">
-            <ion-icon name="settings-outline"></ion-icon>
-        </button>
-        <div class="settings-menu" id="settings-menu">
-            <ul>
-                <li>
-                    <label>
-                        <input type="checkbox" name="disable" id="checkbox">
-                        Deshabilitar ruleta
-                    </label>
-                </li>
-            </ul>
+  <header>
+    <i class="fa-solid fa-arrow-left"></i>
+  </header>
+
+  <div class="container">
+    <div class="title">¡Hola!</div>
+
+    <div class="form-block">
+      <div class="icon-user">
+        <i class="fa-solid fa-user"></i>
+      </div>
+
+      <div class="custom-select" id="mesero-select">
+        <label for="mesero">NOMBRE MESERO</label>
+        <div class="select-selected">Selecciona...</div>
+        <div class="select-items">
+          <div data-value="ROBERTO">ROBERTO<span class="radio"></span></div>
+          <div data-value="ROMAN">ROMAN<span class="radio"></span></div>
+          <div data-value="SERGIO">SERGIO<span class="radio"></span></div>
+          <div data-value="RAMSES">RAMSES<span class="radio"></span></div>
+          <div data-value="FERNANDO">FERNANDO<span class="radio"></span></div>
         </div>
+      </div>
+
+      <button class="btn">SIGUIENTE</button>
     </div>
+  </div>
 
-    <div class="screen-1">
+  <nav>
+    <i class="fa-solid fa-house icon"></i>
+    <i class="fa-solid fa-user icon"></i>
+    <i class="fa-regular fa-face-smile icon"></i>
+    <i class="fa-solid fa-gear icon"></i>
+  </nav>
 
-
-        <svg>
-            <div class="logo">
-                <img src="./images/Cuvalogo.png" alt="Carranza" class="logo">
-                <img src="./images/login.png" alt="login" class="log">
-            </div>
-        </svg>
-        <div class="form-group">
-            <label for="mesero">Nombre del Meser@:</label>
-            <select id="mesero" name="mesero" required>
-                <option value="">Selecciona...</option>
-                <option value="ROBERTO">ROBERTO</option>
-                <option value="SERGIO">SERGIO</option>
-                <option value="RAMSES">RAMSES</option>
-                <option value="ROMAN">ROMAN</option>
-            </select>
-        </div>
-
-        <button class="login">Continuar</button>
-    </div>
-
-    <script src="./JS/index.js"></script>
-
+  <script src="./JS/index.js"></script>
 </body>
-
 </html>

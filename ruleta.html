@@ -9,29 +9,40 @@
 </head>
 
 <body>
-  <h1>¡Gracias por tu respuesta!</h1>
-  <p>Haz girar la ruleta y gana un premio</p>
+  <main class="contenedor">
+    <h1>¡Gracias por tu respuesta!</h1>
 
-  <div class="ruleta-container">
-    <canvas id="canvas" width="500" height="500"></canvas>
-    <img src="./images/favicon.png" id="boton-central" alt="Girar" />
-  </div>
-
-  <div id="resultado"></div>
-  <div id="popup-premio" class="popup hidden">
-    <div class="popup-content">
-      <h2>¡Ganaste!</h2>
-      <p id="mensaje-premio"></p>
-      <div class="botones-popup">
-        <button onclick="continuar()">Continuar</button>
-        <button onclick="cambiarUsuario()">Cambiar de usuario</button>
-      </div>
-
+    <div class="instruccion">
+      <p>¡Gira la ruleta y GANA y un premio!*</p>
+      <small>*Aplican términos y condiciones</small>
     </div>
 
-  </div>
-  <audio id="sonidoRuleta" src="./sounds/ruleta.mp3" preload="auto"></audio>
+    <div class="ruleta-container">
+      <canvas id="canvas" width="500" height="500"></canvas>
+      <div id="boton-central" class="boton-central"></div>
+    </div>
 
+    <div id="resultado"></div>
+
+    <!-- Popup -->
+    <div id="popup-premio" class="popup hidden">
+      <div class="popup-content">
+        <h2>¡Ganaste!</h2>
+        <p id="mensaje-premio"></p>
+        <div class="botones-popup">
+          <button onclick="continuar()">Continuar</button>
+          <button onclick="cambiarUsuario()">Cambiar de usuario</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logo -->
+    <footer>
+      <img src="./images/logo.png" alt="Logo Carranza 50" class="logo">
+    </footer>
+  </main>
+
+  <audio id="sonidoRuleta" src="./sounds/ruleta.mp3" preload="auto"></audio>
   <script src="./JS/ruleta.js"></script>
 </body>
 

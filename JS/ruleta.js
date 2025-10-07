@@ -173,7 +173,7 @@ async function generarPDFPremio(premio) {
   );
 
   // Subir a Google Apps Script
-  const scriptURL = "https://script.google.com/macros/s/AKfycbzg8DQFIgHSgDDp0ePlaTOt4SpzT7XfBgST6b0aacNf--GV-m5AueWzRhSXThu_-pUhXA/exec"; // 🔗 Pega aquí la URL del Apps Script publicado
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwtTjd5uCTJoY4xJbnebp-yauP-JbqKZxIBVBg31LhXBLTDb1Y403cx642yYJotG7pqeQ/exec"; // 🔗 Pega aquí la URL del Apps Script publicado
   const fileName = `Premio-${mesero}-${uuid}.pdf`;
 
   let pdfPublicURL = null;

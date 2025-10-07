@@ -7,6 +7,7 @@
   <title>Encuesta de Satisfacción</title>
   <link rel="stylesheet" href="./CSS/formulario.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./CSS/footer.css">
 </head>
 
 <body>
@@ -131,7 +132,6 @@
     <button type="submit">Enviar encuesta</button>
   </form>
 
-  <!-- POPUP -->
   <div id="popup-encuesta" class="popup hidden">
     <div class="popup-content">
       <h2>✅ ¡Gracias por enviar la encuesta!</h2>
@@ -143,7 +143,16 @@
     </div>
   </div>
 
-  <script src="./JS/formulario.js"></script>
+<!-- Footer (solo botón Home) -->
+<footer class="bottom-nav">
+  <div class="nav-item" id="btn-home" aria-label="Inicio">
+    <i class="fa-solid fa-house"></i>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="./JS/formulario.js"></script>
+<script src="./JS/footer.js"></script>
 </body>
 
 </html>

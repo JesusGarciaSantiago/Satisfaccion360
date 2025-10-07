@@ -145,6 +145,41 @@ canvas::after {
   display: flex;
   gap: 10px;
 }
+/* === QR dentro del popup === */
+.qr-popup {
+  text-align: center;
+  margin-top: 15px;
+  color: #333;
+}
+
+.qr-popup h3 {
+  color: #7B8C6E;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+#qr-popup-code {
+  display: flex;
+  justify-content: center;
+  margin: 10px auto;
+}
+
+.btn-descargar {
+  display: inline-block;
+  background: #f6f3eb;
+  color: #7B8C6E;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 8px 14px;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background 0.2s ease;
+}
+
+.btn-descargar:hover {
+  background: #e6e2d6;
+}
+
 
 .botones-popup button {
   flex: 1;

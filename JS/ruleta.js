@@ -99,6 +99,10 @@ function girarRuleta() {
       document.getElementById("resultado").textContent = `¡Ganaste: ${premioGanado}! Código: ${codigo}`;
       mostrarAnuncio(premioGanado, codigo);
       guardarGanador(premioGanado, codigo);
+
+      // === Generar PDF con QR del premio ===
+      generarPDFPremio(premioGanado);
+
       girando = false;
     }
   };
@@ -112,7 +116,7 @@ function continuar() {
 }
 
 function cambiarUsuario() {
-  window.location.href = "index.html"; 
+  window.location.href = "index.html";
 }
 
 // ======= INICIALIZACIÓN =======
@@ -131,3 +135,79 @@ function inicializar() {
 }
 
 inicializar();
+/***************************************************************
+ * 🎁 GENERAR PDF, SUBIRLO A GOOGLE DRIVE Y MOSTRAR QR GLOBAL
+ ***************************************************************/
+async function generarPDFPremio(premio) {
+  const mesero = sessionStorage.getItem("meseroActual") || "Desconocido";
+  const fecha = new Date().toLocaleString();
+  const uuid = crypto.randomUUID();
+
+  // Crear QR interno
+  const qrCanvas = document.createElement("canvas");
+  await new Promise((resolve) => {
+    new QRCode(qrCanvas, { text: uuid, width: 100, height: 100 });
+    setTimeout(resolve, 250);
+  });
+  const qrDataURL = qrCanvas.querySelector("img")?.src || qrCanvas.toDataURL("image/png");
+
+  // Crear PDF
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(22);
+  doc.text("🎉 ¡Felicidades!", 20, 30);
+  doc.setFontSize(15);
+  doc.text(`Has ganado: ${premio}`, 20, 50);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(12);
+  doc.text(`Mesero: ${mesero}`, 20, 70);
+  doc.text(`Fecha: ${fecha}`, 20, 80);
+  doc.text("Código de validación:", 20, 100);
+  doc.text(uuid, 20, 108);
+  if (qrDataURL) doc.addImage(qrDataURL, "PNG", 150, 85, 40, 40);
+
+  // Convertir a base64
+  const pdfBase64 = btoa(
+    new Uint8Array(doc.output("arraybuffer")).reduce((data, byte) => data + String.fromCharCode(byte), "")
+  );
+
+  // Subir a Google Apps Script
+  const scriptURL = "https://script.google.com/macros/s/AKfycbzg8DQFIgHSgDDp0ePlaTOt4SpzT7XfBgST6b0aacNf--GV-m5AueWzRhSXThu_-pUhXA/exec"; // 🔗 Pega aquí la URL del Apps Script publicado
+  const fileName = `Premio-${mesero}-${uuid}.pdf`;
+
+  let pdfPublicURL = null;
+
+  try {
+    const response = await fetch(scriptURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fileName, pdfBase64 }),
+    });
+    const result = await response.json();
+    if (result.success) {
+      pdfPublicURL = result.url;
+    } else {
+      console.error("Error subiendo PDF:", result.error);
+    }
+  } catch (err) {
+    console.error("❌ Error al subir el PDF:", err);
+  }
+
+  // Mostrar QR global dentro del popup
+  const qrDiv = document.getElementById("qr-popup-code");
+  const link = document.getElementById("btn-descargar-pdf");
+
+  qrDiv.innerHTML = "";
+
+  if (pdfPublicURL) {
+    new QRCode(qrDiv, { text: pdfPublicURL, width: 140, height: 140 });
+    link.href = pdfPublicURL;
+  } else {
+    qrDiv.innerHTML = "<p style='color:red;'>Error al generar enlace del PDF ❌</p>";
+    link.href = "#";
+  }
+
+  link.download = fileName;
+}
+

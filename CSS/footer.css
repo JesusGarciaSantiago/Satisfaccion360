@@ -1,0 +1,133 @@
+/* footer.css - Barra inferior fija + modal ajustes */
+
+/* Reserva espacio para el footer */
+:root { --footer-height: 64px; }
+
+body {
+  box-sizing: border-box;
+  padding-bottom: var(--footer-height); /* evita que el footer tape contenido */
+}
+
+/* Footer fijo */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--footer-height);
+  background: #f6f3eb;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 10px;
+  border-top: 2px solid #7B8C6E;
+  z-index: 10000;
+  animation: slideUp 0.32s ease-out;
+}
+
+.bottom-nav .nav-item {
+  font-size: 1.9rem;
+  color: #7B8C6E;
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:48px;
+  height:48px;
+  border-radius:10px;
+  transition: transform 0.16s ease, background 0.16s ease, color 0.16s ease;
+}
+.bottom-nav .nav-item:active { transform: scale(0.95); }
+.bottom-nav .nav-item:hover { transform: scale(1.08); background: rgba(123,140,110,0.08); }
+
+/* Modal Ajustes (overlay) */
+.ajustes-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0,0,0,0.45);
+  z-index: 20000;
+}
+.ajustes-modal.hidden { display: none; }
+
+/* Modal box */
+.ajustes-content {
+  background: #ffffff;
+  color: #333;
+  width: 92%;
+  max-width: 360px;
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+  animation: fadeIn 0.22s ease;
+}
+
+.ajustes-content h3 {
+  margin: 0 0 12px 0;
+  color: #7B8C6E;
+  font-size: 1.05rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 56px;
+  height: 30px;
+  margin-top: 8px;
+}
+.switch input { display: none; }
+
+.slider {
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  background: #d6d6d6;
+  transition: 0.25s;
+}
+.slider::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.25s;
+}
+.switch input:checked + .slider {
+  background: #7B8C6E;
+}
+.switch input:checked + .slider::before {
+  transform: translateX(26px);
+}
+
+.texto-switch {
+  display:block;
+  margin-top: 10px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* disable background scroll when modal open (applied toggling class from JS) */
+body.no-scroll { overflow: hidden; }
+
+/* Animaciones */
+@keyframes slideUp {
+  from { transform: translateY(12%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Responsive tweaks */
+@media (max-width: 480px) {
+  .bottom-nav .nav-item { font-size: 1.6rem; width:44px; height:44px; }
+  .ajustes-content { padding: 14px; }
+  :root { --footer-height: 60px; }
+}

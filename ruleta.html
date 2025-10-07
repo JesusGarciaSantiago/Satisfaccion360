@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ruleta de Premios</title>
   <link rel="stylesheet" href="./CSS/ruleta.css" />
+  <link rel="stylesheet" href="./CSS/footer.css">
 </head>
 
 <body>
@@ -29,6 +30,16 @@
       <div class="popup-content">
         <h2>¡Ganaste!</h2>
         <p id="mensaje-premio"></p>
+
+        <!-- 📲 Contenedor donde se mostrará el QR y el botón -->
+        <div id="qr-popup" class="qr-popup">
+          <h3>📲 Escanea o descarga tu comprobante</h3>
+          <div id="qr-popup-code"></div>
+          <a id="btn-descargar-pdf" href="#" download class="btn-descargar">
+            ⬇️ Descargar PDF
+          </a>
+        </div>
+
         <div class="botones-popup">
           <button onclick="continuar()">Continuar</button>
           <button onclick="cambiarUsuario()">Cambiar de usuario</button>
@@ -37,13 +48,24 @@
     </div>
 
     <!-- Logo -->
-    <footer>
-      <img src="./images/logo.png" alt="Logo Carranza 50" class="logo">
+    <footer class="logo-footer">
+      <img src="./images/logo C50.jpg" alt="Logo Carranza 50" class="logo">
     </footer>
   </main>
 
-  <audio id="sonidoRuleta" src="./sounds/ruleta.mp3" preload="auto"></audio>
+  <!-- Footer (solo botón Home) -->
+  <footer class="bottom-nav">
+    <div class="nav-item" id="btn-home" aria-label="Inicio">
+      <i class="fa-solid fa-house"></i>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="./JS/ruleta.js"></script>
+  <script src="./JS/footer.js"></script>
+
 </body>
 
 </html>

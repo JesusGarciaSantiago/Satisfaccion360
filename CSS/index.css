@@ -25,7 +25,7 @@ header i { cursor:pointer; color:#fff; }
 .title {
   font-size: 2rem;
   font-weight: bold;
-  margin: -240px 0 100px 20px; /* 👍 menos espacio arriba (20px), y sigue separado del bloque */
+  margin: -240px 0 100px 20px;
   align-self: flex-start;
   color: #fff;
 }
@@ -37,7 +37,7 @@ header i { cursor:pointer; color:#fff; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 60px; /* 🔥 más separación entre icono, select y botón */
+  gap: 60px;
 }
 
 /* Icono de usuario */
@@ -50,7 +50,10 @@ header i { cursor:pointer; color:#fff; }
 }
 
 /* Custom select */
-.custom-select { position: relative; width:100%; }
+.custom-select { 
+  position: relative; 
+  width:100%;
+}
 .custom-select label {
   position:absolute; top:-10px; left:12px;
   background:#7B8C6E; padding:0 6px;
@@ -66,12 +69,16 @@ header i { cursor:pointer; color:#fff; }
 
 /* Dropdown con position fixed */
 .select-items {
-  position: fixed;
+  position: absolute;
   background:#f6f3eb; color:#333;
   border-radius:12px;
   box-shadow:0 6px 16px rgba(0,0,0,0.25);
   display:none; z-index:99999;
-  overflow:hidden;
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+  width: 100%;
+  top: 100%;
+  margin-top: 5px;
 }
 .select-items div {
   padding:12px 14px;
@@ -114,8 +121,52 @@ nav {
   z-index:2000;
 }
 nav .icon { font-size:1.6rem; color:#7B8C6E; }
-/* ======== RESPONSIVE: Google Pixel 8a ======== */
-@media (max-width: 430px) {
+
+/* Logo */
+.logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.logo-img {
+  margin-bottom: -55px;
+  margin-top: -100px;
+  width: 425px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 4px rgba(0,0,0,0.2));
+}
+
+/* ======================================
+   RESPONSIVE
+   ====================================== */
+
+/* Móviles pequeños (hasta 375px) */
+@media (max-width: 375px) {
+  .title {
+    font-size: 1.2rem;
+  }
+
+  .icon-user {
+    width: 90px;
+    height: 90px;
+    font-size: 2.8rem;
+  }
+
+  .logo-img {
+    width: 300px;
+  }
+
+  .select-items {
+    max-height: calc(100vh - 180px);
+  }
+}
+
+/* Móviles estándar (376px - 430px) */
+@media (min-width: 376px) and (max-width: 430px) {
   html, body {
     overflow-y: auto;
     overflow-x: hidden;
@@ -140,14 +191,19 @@ nav .icon { font-size:1.6rem; color:#7B8C6E; }
   }
 
   .icon-user {
-    width: 110px;
-    height: 110px;
-    font-size: 3rem;
+    width: 100px;
+    height: 100px;
+    font-size: 3.2rem;
   }
 
   .select-selected {
     font-size: 0.95rem;
     padding: 10px;
+  }
+
+  .select-items {
+    max-height: 50vh;
+    overflow-y: auto;
   }
 
   .btn {
@@ -163,19 +219,169 @@ nav .icon { font-size:1.6rem; color:#7B8C6E; }
     font-size: 1.4rem;
   }
 }
-.logo-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 15px; /* separa el logo del icono de usuario */
+
+/* Aplicar a todos los móviles (hasta 430px) */
+@media (max-width: 430px) {
+  html, body {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  header {
+    text-align: center;
+    font-size: 1.4rem;
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 1.4rem;
+    margin: 20px 0 40px 0;
+    text-align: center;
+    align-self: center;
+  }
+
+  .form-block {
+    max-width: 90%;
+    gap: 30px;
+  }
+
+  .select-selected {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .select-items {
+    max-height: calc(100vh - 200px);
+  }
+
+  .btn {
+    font-size: 1rem;
+    padding: 10px 24px;
+  }
+
+  nav {
+    padding: 10px 0;
+  }
+
+  nav .icon {
+    font-size: 1.4rem;
+  }
 }
 
-.logo-img {
-  margin-bottom: -55px;
-  margin-top: -100px;
-  width: 425px; /* ajusta tamaño del logo */
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 3px 4px rgba(0,0,0,0.2));
+/* Tablets pequeñas y móviles grandes (431px - 768px) */
+@media (min-width: 431px) and (max-width: 768px) {
+  header {
+    font-size: 1.6rem;
+  }
+
+  .title {
+    font-size: 1.7rem;
+    margin: -200px 0 80px 15px;
+  }
+
+  .form-block {
+    max-width: 400px;
+    gap: 50px;
+  }
+
+  .icon-user {
+    width: 130px;
+    height: 130px;
+    font-size: 4rem;
+  }
+
+  .select-selected {
+    font-size: 1rem;
+  }
+
+  .btn {
+    padding: 11px 30px;
+  }
+
+  .logo-img {
+    width: 380px;
+  }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .title {
+    font-size: 2.2rem;
+    margin: -220px 0 90px 20px;
+  }
+
+  .form-block {
+    max-width: 500px;
+  }
+
+  .icon-user {
+    width: 170px;
+    height: 170px;
+    font-size: 5rem;
+  }
+
+  .logo-img {
+    width: 450px;
+  }
+}
+
+/* Tablets grandes y escritorio (1025px+) */
+@media (min-width: 1025px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .form-block {
+    max-width: 550px;
+  }
+}
+
+/* Móviles en horizontal */
+@media (max-height: 500px) and (orientation: landscape) {
+  .logo-container {
+    margin-top: 10px;
+    margin-bottom: 0;
+  }
+
+  .logo-img {
+    width: 180px !important;
+    max-width: 180px;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .title {
+    display: none;
+  }
+
+  .icon-user {
+    width: 70px;
+    height: 70px;
+    font-size: 2.2rem;
+  }
+
+  .form-block {
+    gap: 15px;
+    margin-top: 10px;
+  }
+
+  .container {
+    padding: 5px 10px;
+    justify-content: flex-start;
+  }
+
+  .select-selected {
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  .select-items {
+    max-height: calc(100vh - 150px);
+  }
+
+  .btn {
+    padding: 8px 20px;
+    font-size: 0.95rem;
+  }
 }

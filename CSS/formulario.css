@@ -395,3 +395,271 @@ button:hover {
   object-fit: contain;
   filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
 }
+/* Loader overlay - cubre toda la pantalla */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  
+}
+
+.loader-content {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #8ca37c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-content p {
+  color: #5a514a;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+@media (min-width: 431px) and (max-width: 768px) {
+  .encabezado {
+    padding: 12px 15px;
+  }
+
+  .encabezado h1 {
+    font-size: 1.5rem;
+    margin-left: 60px;
+  }
+
+  .encabezado .logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .datos-ticket {
+    gap: 12px;
+    margin: 15px auto 25px auto;
+  }
+
+  .campo-ticket {
+    min-width: 140px;
+    padding: 22px 28px 12px;
+  }
+
+  .campo-ticket input {
+    font-size: 1.3rem;
+  }
+
+  .opciones {
+    gap: 10px;
+  }
+
+  button {
+    font-size: 1.1rem;
+    padding: 14px;
+  }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .encabezado h1 {
+    font-size: 1.6rem;
+  }
+
+  .encabezado .logo {
+    width: 140px;
+    height: 140px;
+  }
+
+  .datos-ticket {
+    max-width: 700px;
+  }
+
+  form {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .opciones.caritas label,
+  .opciones.precios label {
+    min-width: 90px;
+  }
+}
+
+/* Móviles pequeños (hasta 375px) */
+@media (max-width: 375px) {
+  .encabezado h1 {
+    font-size: 1.1rem;
+  }
+
+  .encabezado .logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .campo-ticket {
+    padding: 12px;
+  }
+
+  .campo-ticket input {
+    font-size: 1.2rem;
+  }
+
+  .opciones.caritas label i {
+    font-size: 1.4rem;
+  }
+}
+
+/* Móviles en horizontal */
+@media (max-height: 500px) and (orientation: landscape) {
+  /* Formulario */
+  .encabezado {
+    padding: 8px 15px;
+  }
+
+  .encabezado h1 {
+    font-size: 1.2rem;
+  }
+
+  .encabezado .logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .datos-ticket {
+    margin: 10px auto 20px auto;
+  }
+}
+/* Tablets pequeñas y móviles grandes (481px - 768px) */
+@media (min-width: 431px) and (max-width: 768px) {
+  .encabezado {
+    padding: 12px 15px;
+  }
+
+  .encabezado h1 {
+    font-size: 1.5rem;
+    margin-left: 60px;
+  }
+
+  .encabezado .logo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .datos-ticket {
+    gap: 12px;
+    margin: 15px auto 25px auto;
+  }
+
+  .campo-ticket {
+    min-width: 140px;
+    padding: 22px 28px 12px;
+  }
+
+  .campo-ticket input {
+    font-size: 1.3rem;
+  }
+
+  .opciones {
+    gap: 10px;
+  }
+
+  button {
+    font-size: 1.1rem;
+    padding: 14px;
+  }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .encabezado h1 {
+    font-size: 1.6rem;
+  }
+
+  .encabezado .logo {
+    width: 140px;
+    height: 140px;
+  }
+
+  .datos-ticket {
+    max-width: 700px;
+  }
+
+  form {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .opciones.caritas label,
+  .opciones.precios label {
+    min-width: 90px;
+  }
+}
+
+/* Móviles pequeños (hasta 375px) */
+@media (max-width: 375px) {
+  .encabezado h1 {
+    font-size: 1.1rem;
+  }
+
+  .encabezado .logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .campo-ticket {
+    padding: 12px;
+  }
+
+  .campo-ticket input {
+    font-size: 1.2rem;
+  }
+
+  .opciones.caritas label i {
+    font-size: 1.4rem;
+  }
+}
+
+/* Móviles en horizontal */
+@media (max-height: 500px) and (orientation: landscape) {
+  .encabezado {
+    padding: 8px 15px;
+  }
+
+  .encabezado h1 {
+    font-size: 1.2rem;
+  }
+
+  .encabezado .logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .datos-ticket {
+    margin: 10px auto 20px auto;
+  }
+}

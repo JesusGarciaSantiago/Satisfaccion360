@@ -63,6 +63,26 @@ document.addEventListener("DOMContentLoaded", function () {
     return true;
   }
 
+  // 🔥 FUNCIÓN PARA MOSTRAR/OCULTAR LOADER
+  function mostrarLoader(mostrar) {
+    const loader = document.getElementById("loader-formulario");
+    if (mostrar) {
+      loader.classList.remove("hidden");
+    } else {
+      loader.classList.add("hidden");
+    }
+  }
+
+  // 🔥 FUNCIÓN PARA MOSTRAR/OCULTAR POPUP
+  function mostrarPopup(mostrar) {
+    const popup = document.getElementById("popup-encuesta");
+    if (mostrar) {
+      popup.classList.remove("hidden");
+    } else {
+      popup.classList.add("hidden");
+    }
+  }
+
   // === Envío del formulario ===
   formulario.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -87,6 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // 🚫 Validar antes de enviar
     if (!validarFormulario(data)) return;
 
+    // 🔥 MOSTRAR LOADER ANTES DE ENVIAR
+    mostrarLoader(true);
+
     // === Envío a Google Apps Script ===
     const url = "https://script.google.com/macros/s/AKfycbwCMj9CaPewcaZ319oBLG5ldLDZTlul5qFDx7HY29lW9ntP17EsEMsouoDWKX1VetB6/exec";
 
@@ -97,25 +120,41 @@ document.addEventListener("DOMContentLoaded", function () {
       body: JSON.stringify(data)
     })
       .then(() => {
-        formulario.reset();
-        otroContainer.style.display = "none";
+        console.log("✅ Formulario enviado");
+        
+        // Delay mínimo para que se vea el loader
+        setTimeout(() => {
+          // 🔥 OCULTAR LOADER
+          mostrarLoader(false);
 
-        const popup = document.getElementById("popup-encuesta");
-        popup.style.display = "flex";
+          // Limpiar formulario
+          formulario.reset();
+          otroContainer.style.display = "none";
 
-        document.getElementById("continuar-btn").onclick = () => {
-          const ruletaDeshabilitada = sessionStorage.getItem("ruletaDeshabilitada") === "true";
-          if (!ruletaDeshabilitada) {
-            window.location.href = "ruleta.html";
-          } else {
-            window.location.href = "formulario.html";
-          }
-        };
+          // 🔥 MOSTRAR POPUP
+          mostrarPopup(true);
 
-        document.getElementById("cambiar-btn").onclick = () => {
-          window.location.href = "index.html";
-        };
+          // Configurar botones del popup
+          document.getElementById("continuar-btn").onclick = () => {
+            const ruletaDeshabilitada = sessionStorage.getItem("ruletaDeshabilitada") === "true";
+            if (!ruletaDeshabilitada) {
+              window.location.href = "ruleta.html";
+            } else {
+              window.location.href = "formulario.html";
+            }
+          };
+
+          document.getElementById("cambiar-btn").onclick = () => {
+            window.location.href = "index.html";
+          };
+        }, 1000); // Delay de 1 segundo
       })
-      .catch(err => console.error("❌ Error al enviar formulario:", err));
+      .catch(err => {
+        console.error("❌ Error al enviar formulario:", err);
+        
+        // 🔥 OCULTAR LOADER EN CASO DE ERROR
+        mostrarLoader(false);
+        alert("❌ Hubo un error al enviar la encuesta. Por favor intenta de nuevo.");
+      });
   });
 });

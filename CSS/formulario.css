@@ -14,30 +14,33 @@ body {
   align-items: center;
   justify-content: space-between;
   position: relative;
+  flex-wrap: wrap;
 }
 
 .encabezado h1 {
-  margin: 0;
-  font-size: 1.8rem;   /* ✅ más grande */
-  line-height: 1.4;    /* más aire entre las 2 líneas */
+margin: 0 0 0 20px;
+  font-size: 1.8rem;
   font-weight: bold;
-  text-align: left;
-  flex: 1;
-  margin-left: 120px;
+  line-height: 1.3;
+  margin-left: 50px;
+  text-align: center;
+  color: #fff;
 
 }
 
 .encabezado .volver {
-  font-size: 1.3rem;
+ font-size: 1.3rem;
   cursor: pointer;
-  flex: 0 0 auto;
+  position: absolute;
+  left: 20px;
+  top: 20px;
 }
 
 .encabezado .logo {
   height: 160px;
   width: 160px;
-  flex: 0 0 auto;
-  margin-right: 125px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* Datos ticket */
@@ -64,8 +67,8 @@ body {
 
 .campo-ticket label {
   position: absolute;
-  top: 5px; 
-  left: 15px;
+  top: 0px; 
+  left: 0px;
   background: #7B8C6E;
   color: #fff;
   padding: 3px 12px;
@@ -230,6 +233,7 @@ button {
   padding: 15px;
   border-radius: 12px;
   border: none;
+  margin-top: 20px;
   cursor: pointer;
 }
 
@@ -256,4 +260,138 @@ button:hover {
   padding: 20px;
   border-radius: 12px;
   text-align: center;
+}
+/* ======== RESPONSIVE: Google Pixel 8a ======== */
+@media (max-width: 430px) {
+  /* Encabezado */
+  .encabezado {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+  }
+
+  .encabezado h1 {
+    font-size: 1.3rem;
+    margin: 10px 0 5px 0;
+  }
+
+  .encabezado .logo {
+    width: 90px;
+    height: 90px;
+    margin: 10px 0 0 0;
+  }
+
+  .encabezado .volver {
+    font-size: 1.1rem;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+  }
+
+  /* Datos ticket */
+  .datos-ticket {
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px 0;
+    width: 90%;
+  }
+
+  .campo-ticket {
+    width: 100%;
+    padding: 15px;
+  }
+
+  /* Preguntas */
+  .pregunta p {
+    font-size: 1rem;
+  }
+
+  .opciones {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .opciones.caritas label i {
+    font-size: 1.6rem;
+  }
+
+  textarea {
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .popup-content {
+    width: 85%;
+    padding: 15px;
+  }
+}
+
+/* === Input "Otro" === */
+#otro-input-container {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#otro-input-container input[type="text"],
+#otro-input-container input[type="text"]:focus {
+  width: 100%;
+  background-color: #f6f3eb; /* mismo tono del textarea */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #333;
+  box-sizing: border-box;
+  outline: none;
+  resize: none; /* coherente con el textarea */
+}
+
+#otro-input-container input[type="text"]::placeholder {
+  color: #888;
+}
+
+#otro-input-container input[type="text"]:focus {
+  border-color: #7B8C6E;
+  box-shadow: 0 0 5px rgba(123, 140, 110, 0.4);
+}
+
+/* === Alinear visualmente con el textarea === */
+#comentarios {
+  width: 100%;
+  background-color: #f6f3eb;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #333;
+  box-sizing: border-box;
+  outline: none;
+}
+
+#comentarios:focus {
+  border-color: #7B8C6E;
+  box-shadow: 0 0 5px rgba(123, 140, 110, 0.4);
+}
+
+.logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 15px; /* separa el logo del icono de usuario */
+}
+
+.logo-img {
+  width: 450px;
+  max-width: 80%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
 }

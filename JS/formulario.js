@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const meseroActual = sessionStorage.getItem("meseroActual") || "Desconocido";
   const ruletaDeshabilitada = sessionStorage.getItem("ruletaDeshabilitada") === "true";
 
-  // Mostrar/ocultar campo "otro"
+  // === Mostrar/ocultar campo "Otro" ===
   document.querySelectorAll('input[name="conociste"]').forEach(input => {
     input.addEventListener('change', function () {
       if (this.labels[0]?.textContent.toUpperCase() === "OTRO") {
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // === 📌 Precargar premios desde Google Sheet y guardarlos en localStorage ===
+  // === 📌 Precargar premios desde Google Sheet ===
   const URL_RULETA = "https://script.google.com/macros/s/AKfycby34WI92Sv8szm_agBYXXDHdYkeK2QCEAjpupyQrJ7cx0nH7GO4bdzEvGLoNasL3z4/exec";
 
   async function precargarPremios() {
@@ -28,15 +28,40 @@ document.addEventListener("DOMContentLoaded", function () {
       const data = await response.json();
       if (data?.premios?.length) {
         localStorage.setItem("premios", JSON.stringify(data.premios));
-        console.log("✅ Premios precargados y guardados en localStorage:", data.premios);
+        console.log("✅ Premios precargados:", data.premios);
       }
     } catch (err) {
       console.error("❌ Error al precargar premios:", err);
     }
   }
 
-  // Llamar apenas cargue la página del formulario
   precargarPremios();
+
+  // === Validación de campos requeridos ===
+  function validarFormulario(data) {
+    // Campos de texto requeridos
+    if (!data.ticket || !data.mesa) {
+      alert("Por favor ingresa el número de ticket y de mesa.");
+      return false;
+    }
+
+    // Campos tipo 'radio' requeridos
+    const grupos = ["personal", "bebidas", "alimentos", "limpieza", "precios", "conociste"];
+    for (const grupo of grupos) {
+      if (!document.querySelector(`input[name="${grupo}"]:checked`)) {
+        alert(`Por favor responde la pregunta sobre ${grupo}.`);
+        return false;
+      }
+    }
+
+    // Si seleccionó "Otro", debe escribir texto
+    if (data.conociste === "Otro" && !otroInput.value.trim()) {
+      alert("Por favor especifica cómo conociste el restaurante.");
+      return false;
+    }
+
+    return true;
+  }
 
   // === Envío del formulario ===
   formulario.addEventListener("submit", function (e) {
@@ -59,23 +84,16 @@ document.addEventListener("DOMContentLoaded", function () {
       comentarios: document.getElementById("comentarios")?.value.trim() || ""
     };
 
-    // Validación
-    for (let campo in data) {
-      if (!data[campo] && campo !== "otro" && campo !== "comentarios") {
-        alert("Por favor responde todas las preguntas.");
-        return;
-      }
-    }
+    // 🚫 Validar antes de enviar
+    if (!validarFormulario(data)) return;
 
-    // Envío a Google Apps Script
+    // === Envío a Google Apps Script ===
     const url = "https://script.google.com/macros/s/AKfycbwCMj9CaPewcaZ319oBLG5ldLDZTlul5qFDx7HY29lW9ntP17EsEMsouoDWKX1VetB6/exec";
 
     fetch(url, {
       method: "POST",
       mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     })
       .then(() => {
@@ -83,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
         otroContainer.style.display = "none";
 
         const popup = document.getElementById("popup-encuesta");
-        popup.style.display = "flex"; // aquí lo mostramos
+        popup.style.display = "flex";
 
         document.getElementById("continuar-btn").onclick = () => {
           const ruletaDeshabilitada = sessionStorage.getItem("ruletaDeshabilitada") === "true";
@@ -98,6 +116,6 @@ document.addEventListener("DOMContentLoaded", function () {
           window.location.href = "index.html";
         };
       })
-
+      .catch(err => console.error("❌ Error al enviar formulario:", err));
   });
 });

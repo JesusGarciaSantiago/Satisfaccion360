@@ -131,3 +131,65 @@ body.no-scroll { overflow: hidden; }
   .ajustes-content { padding: 14px; }
   :root { --footer-height: 60px; }
 }
+/* ======== RESPONSIVE: Google Pixel 8a ======== */
+@media (max-width: 430px) {
+  :root {
+    --footer-height: 68px; /* un poco más alto para mejor área táctil */
+  }
+
+  .bottom-nav {
+    padding: 6px 8px;
+    justify-content: space-evenly;
+    border-top-width: 1px;
+  }
+
+  .bottom-nav .nav-item {
+    font-size: 1.5rem;
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+  }
+
+  .bottom-nav .nav-item:hover {
+    transform: scale(1.05);
+  }
+
+  /* Modal ajustes */
+  .ajustes-content {
+    width: 88%;
+    max-width: 320px;
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .ajustes-content h3 {
+    font-size: 1rem;
+  }
+
+  .switch {
+    width: 52px;
+    height: 28px;
+  }
+
+  .slider::before {
+    width: 20px;
+    height: 20px;
+    top: 4px;
+    left: 4px;
+  }
+
+  .texto-switch {
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+
+  /* Evita que el modal tape demasiado */
+  .ajustes-modal {
+    align-items: flex-end;
+    padding-bottom: 80px;
+  }
+}
+
+body.ruleta .bottom-nav .nav-item {
+  color: #7B8C6E !important; /* forzar color visible */
+}

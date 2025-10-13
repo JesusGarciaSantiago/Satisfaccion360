@@ -114,3 +114,68 @@ nav {
   z-index:2000;
 }
 nav .icon { font-size:1.6rem; color:#7B8C6E; }
+/* ======== RESPONSIVE: Google Pixel 8a ======== */
+@media (max-width: 430px) {
+  html, body {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  header {
+    text-align: center;
+    font-size: 1.4rem;
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 1.4rem;
+    margin: 20px 0 40px 0;
+    text-align: center;
+    align-self: center;
+  }
+
+  .form-block {
+    max-width: 90%;
+    gap: 30px;
+  }
+
+  .icon-user {
+    width: 110px;
+    height: 110px;
+    font-size: 3rem;
+  }
+
+  .select-selected {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .btn {
+    font-size: 1rem;
+    padding: 10px 24px;
+  }
+
+  nav {
+    padding: 10px 0;
+  }
+
+  nav .icon {
+    font-size: 1.4rem;
+  }
+}
+.logo-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 15px; /* separa el logo del icono de usuario */
+}
+
+.logo-img {
+  margin-bottom: -55px;
+  margin-top: -100px;
+  width: 425px; /* ajusta tamaño del logo */
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 4px rgba(0,0,0,0.2));
+}

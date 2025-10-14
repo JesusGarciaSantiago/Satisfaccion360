@@ -64,54 +64,110 @@ input.addEventListener('keypress', (e) => {
     }
 });
 
+// Función para detener el escaneo de forma segura
+async function detenerEscaneo() {
+    if (html5QrCode && scanning) {
+        try {
+            await html5QrCode.stop();
+        } catch (err) {
+            console.log("Error al detener cámara:", err);
+        }
+    }
+    scanning = false;
+    scanOverlay.classList.remove('active');
+    startScanBtn.innerHTML = '<span class="icon">📸</span><span>Escanear Código QR</span>';
+    startScanBtn.className = 'btn btn-primary';
+    cameraStatus.textContent = "";
+}
+
 // Escaneo con cámara (QR)
 startScanBtn.addEventListener('click', async () => {
     if (scanning) {
-        html5QrCode.stop().then(() => {
-            scanning = false;
-            scanOverlay.classList.remove('active');
-            startScanBtn.innerHTML = '<span class="icon">📸</span><span>Escanear Código QR</span>';
-            startScanBtn.className = 'btn btn-primary';
-            cameraStatus.textContent = "";
-        }).catch(err => {
-            console.error(err);
-        });
+        await detenerEscaneo();
         return;
     }
 
+    // Crear nueva instancia
     html5QrCode = new Html5Qrcode("video");
 
     try {
+        cameraStatus.textContent = "⏳ Buscando cámaras...";
+
         const cameras = await Html5Qrcode.getCameras();
 
-        if (cameras && cameras.length) {
-            scanning = true;
-            scanOverlay.classList.add('active');
-            startScanBtn.innerHTML = '<span class="icon">⏹️</span><span>Detener Escaneo</span>';
-            startScanBtn.className = 'btn btn-secondary';
-            cameraStatus.textContent = "📷 Cámara activa - Apunta al código";
-
-            html5QrCode.start(
-                { facingMode: "environment" },
-                { fps: 10, qrbox: { width: 250, height: 250 } },
-                codigo => {
-                    validarCodigo(codigo);
-                    html5QrCode.stop();
-                    scanning = false;
-                    scanOverlay.classList.remove('active');
-                    startScanBtn.innerHTML = '<span class="icon">📸</span><span>Escanear Código QR</span>';
-                    startScanBtn.className = 'btn btn-primary';
-                    cameraStatus.textContent = "";
-                },
-                error => {
-                    // Errores de lectura silenciosos
-                }
-            );
-        } else {
+        if (!cameras || cameras.length === 0) {
             cameraStatus.textContent = "❌ No se encontró cámara disponible";
+            return;
         }
+
+        scanning = true;
+        scanOverlay.classList.add('active');
+        startScanBtn.innerHTML = '<span class="icon">⏹️</span><span>Detener Escaneo</span>';
+        startScanBtn.className = 'btn btn-secondary';
+        cameraStatus.textContent = "📷 Iniciando cámara...";
+
+        // Configuración mejorada para evitar timeout
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0,
+            disableFlip: false
+        };
+
+        // Intentar con la cámara trasera primero (mejor para móviles)
+        let cameraId = cameras[0].id;
+
+        // Buscar cámara trasera si existe
+        const backCamera = cameras.find(camera =>
+            camera.label.toLowerCase().includes('back') ||
+            camera.label.toLowerCase().includes('rear') ||
+            camera.label.toLowerCase().includes('trasera')
+        );
+
+        if (backCamera) {
+            cameraId = backCamera.id;
+        }
+
+        await html5QrCode.start(
+            cameraId,
+            config,
+            (decodedText) => {
+                // Código escaneado exitosamente
+                validarCodigo(decodedText);
+                detenerEscaneo();
+            },
+            (errorMessage) => {
+                // Errores de lectura silenciosos (normal cuando no detecta QR)
+            }
+        );
+
+        cameraStatus.textContent = "📷 Cámara activa - Apunta al código";
+
     } catch (err) {
-        cameraStatus.textContent = "❌ Error al acceder a la cámara";
-        console.error(err);
+        console.error("Error al iniciar cámara:", err);
+        scanning = false;
+        scanOverlay.classList.remove('active');
+        startScanBtn.innerHTML = '<span class="icon">📸</span><span>Escanear Código QR</span>';
+        startScanBtn.className = 'btn btn-primary';
+
+        // Mensajes de error más específicos
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+            cameraStatus.textContent = "❌ Permiso de cámara denegado";
+        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+            cameraStatus.textContent = "❌ No se encontró cámara";
+        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+            cameraStatus.textContent = "❌ Cámara en uso por otra app";
+        } else if (err.name === 'AbortError') {
+            cameraStatus.textContent = "❌ Tiempo de espera agotado. Intenta de nuevo";
+        } else {
+            cameraStatus.textContent = "❌ Error al acceder a la cámara";
+        }
+    }
+});
+
+// Limpiar al salir de la página
+window.addEventListener('beforeunload', () => {
+    if (scanning && html5QrCode) {
+        html5QrCode.stop().catch(err => console.log(err));
     }
 });

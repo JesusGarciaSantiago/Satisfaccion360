@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Validar Cupón</title>
+  <link rel="stylesheet" href="./CSS/validacion.css">
+</head>
+<body>
+  <!-- Encabezado -->
+  <div class="encabezado">
+    <h1>🎟️ Validación de Cupones</h1>
+    <p class="subtitle">Escanea o ingresa el código para validar</p>
+  </div>
+
+  <!-- Container principal -->
+  <div class="container">
+    <!-- Sección de escaneo -->
+    <div class="scanner-section">
+      <div class="video-container">
+        <video id="video" autoplay playsinline></video>
+        <div id="scanOverlay" class="scan-overlay"></div>
+      </div>
+      <button id="startScan" class="btn btn-primary">
+        <span class="icon">📸</span>
+        <span>Escanear Código QR</span>
+      </button>
+      <p id="cameraStatus" class="status"></p>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider">
+      <span>O INGRESA MANUALMENTE</span>
+    </div>
+
+    <!-- Sección manual -->
+    <div class="manual-section">
+      <div class="input-group">
+        <input 
+          type="text" 
+          id="codigoInput" 
+          placeholder="Código del cupón"
+          autocomplete="off"
+        >
+        <button id="validarBtn" class="btn-validate">
+          Validar
+        </button>
+      </div>
+    </div>
+
+    <!-- Resultado -->
+    <div id="resultado" class="resultado"></div>
+  </div>
+
+  <!-- Loader -->
+  <div id="loader" class="loader-overlay hidden">
+    <div class="loader-content">
+      <div class="spinner"></div>
+      <p>Validando cupón...</p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+  <script src="./JS/validacion.js"></script>
+</body>
+</html>

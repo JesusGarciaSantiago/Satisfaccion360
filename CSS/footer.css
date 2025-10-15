@@ -292,7 +292,7 @@ body.ruleta .bottom-nav .nav-item {
 /* Tablets grandes y escritorio (1025px+) */
 @media (min-width: 1025px) {
   .bottom-nav {
-    max-width: 1380px;
+    max-width: 1600px;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 20px 20px 0 0;

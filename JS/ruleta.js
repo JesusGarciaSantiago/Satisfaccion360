@@ -7,7 +7,8 @@ let girando = false;
 let premios = [];
 let colors = [];
 
-const sonidoRuleta = document.getElementById("/sounds/ruleta.mp3");
+// Audio de la ruleta
+const sonidoRuleta = document.getElementById("sonido-ruleta");
 const boton = document.getElementById("boton-central");
 
 const URL = 'https://script.google.com/macros/s/AKfycby34WI92Sv8szm_agBYXXDHdYkeK2QCEAjpupyQrJ7cx0nH7GO4bdzEvGLoNasL3z4/exec';
@@ -26,24 +27,75 @@ function dibujarRuleta() {
     ctx.arc(radius, radius, radius, angle, angle + arco);
     ctx.fill();
 
+    // Borde entre segmentos
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Dibujar texto
     ctx.save();
     ctx.translate(radius, radius);
     ctx.rotate(angle + arco / 2);
-    ctx.fillStyle = "#000";
-    ctx.font = "14px Arial";
+    ctx.fillStyle = "#fff";
     ctx.textAlign = "right";
-    ctx.fillText(premios[i], radius - 10, 10);
+    ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+
+    // Ajustar tamaño de fuente según longitud del texto
+    const texto = premios[i];
+    let fontSize = 14;
+
+    if (texto.length > 20) {
+      fontSize = 10;
+    } else if (texto.length > 15) {
+      fontSize = 11;
+    } else if (texto.length > 10) {
+      fontSize = 12;
+    }
+
+    ctx.font = `bold ${fontSize}px Arial`;
+
+    // Dividir texto si es muy largo
+    const maxChars = 18;
+    if (texto.length > maxChars) {
+      const palabras = texto.split(' ');
+      let linea1 = '';
+      let linea2 = '';
+      let lineaActual = linea1;
+
+      palabras.forEach(palabra => {
+        if ((lineaActual + palabra).length <= maxChars) {
+          lineaActual += (lineaActual ? ' ' : '') + palabra;
+        } else {
+          if (lineaActual === linea1) {
+            linea1 = lineaActual;
+            lineaActual = linea2 = palabra;
+          } else {
+            linea2 += (linea2 ? ' ' : '') + palabra;
+          }
+        }
+      });
+
+      if (lineaActual === linea1 || !linea2) {
+        linea1 = lineaActual;
+      }
+
+      // Dibujar dos líneas
+      if (linea2) {
+        ctx.fillText(linea1, radius - 20, 0);
+        ctx.fillText(linea2, radius - 20, fontSize + 4);
+      } else {
+        ctx.fillText(linea1, radius - 20, fontSize / 2);
+      }
+    } else {
+      // Texto en una sola línea
+      ctx.fillText(texto, radius - 20, fontSize / 2);
+    }
+
     ctx.restore();
   }
-
-  // Flecha
-  ctx.fillStyle = "#5a514a";
-  ctx.beginPath();
-  ctx.moveTo(radius - 10, 0);
-  ctx.lineTo(radius + 10, 0);
-  ctx.lineTo(radius, 20);
-  ctx.closePath();
-  ctx.fill();
 }
 
 function generarCodigo() {
@@ -53,12 +105,17 @@ function generarCodigo() {
 function mostrarAnuncio(premio, codigo) {
   const popup = document.getElementById("popup-premio");
   const mensaje = document.getElementById("mensaje-premio");
+  const resultado = document.getElementById("resultado");
+
   mensaje.innerHTML = `🎁 <strong>${premio}</strong><br>Código: <strong>${codigo}</strong>`;
-  
-  // 🔥 MOSTRAR LOADER, OCULTAR QR
+
+  // Ocultar el mensaje de resultado cuando se muestra el popup
+  resultado.style.display = 'none';
+
+  // Mostrar loader, ocultar QR
   document.getElementById("loader-pdf").classList.remove("hidden");
   document.getElementById("premio-generado").classList.add("hidden");
-  
+
   popup.classList.remove("hidden");
 }
 
@@ -71,17 +128,31 @@ async function guardarGanador(premio, codigo) {
 }
 
 function girarRuleta() {
-
-  if (sonidoRuleta) {
-    audio.currentTime = 0;
-    audio.play().catch(e => console.error("No se pudo reproducir el audio", e));
-  }
   if (girando) return;
+
   girando = true;
+  boton.classList.add('girando');
+
+  // Reproducir sonido - intento mejorado
+  if (sonidoRuleta) {
+    sonidoRuleta.volume = 0.6;
+    const playPromise = sonidoRuleta.play();
+
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        console.log("✅ Sonido reproduciendo");
+      }).catch(error => {
+        console.log("❌ Error reproduciendo sonido:", error);
+      });
+    }
+  } else {
+    console.log("❌ Elemento de audio no encontrado");
+  }
 
   let giro = 0;
   let velocidad = Math.random() * 0.3 + 0.25;
   const desaceleracion = 0.995;
+  const vueltasMinimas = 5; // Mínimo 5 vueltas completas
 
   const animar = () => {
     giro += velocidad;
@@ -91,9 +162,17 @@ function girarRuleta() {
     ctx.clearRect(0, 0, size, size);
     dibujarRuleta();
 
-    if (velocidad > 0.002) {
+    if (velocidad > 0.002 || giro < vueltasMinimas * 2 * Math.PI) {
       requestAnimationFrame(animar);
     } else {
+      // Detener sonido al finalizar
+      if (sonidoRuleta) {
+        sonidoRuleta.pause();
+        sonidoRuleta.currentTime = 0;
+      }
+
+      boton.classList.remove('girando');
+
       const numPremios = premios.length;
       const anguloPorPremio = 2 * Math.PI / numPremios;
       const anguloFinal = (anguloInicial + Math.PI / 2) % (2 * Math.PI);
@@ -101,15 +180,15 @@ function girarRuleta() {
       const premioGanado = premios[index];
 
       const codigo = generarCodigo();
-      
+
       document.getElementById("resultado").textContent = `¡Ganaste: ${premioGanado}! Código: ${codigo}`;
-      
-      // 🔥 MOSTRAR POPUP CON LOADER INMEDIATAMENTE
-      mostrarAnuncio(premioGanado, codigo);
-      
-      // 🔥 GUARDAR Y GENERAR PDF EN PARALELO (async)
-      guardarGanador(premioGanado, codigo);
-      generarPDFPremio(premioGanado, codigo);
+
+      // Esperar 500ms antes de mostrar el popup para efecto dramático
+      setTimeout(() => {
+        mostrarAnuncio(premioGanado, codigo);
+        guardarGanador(premioGanado, codigo);
+        generarPDFPremio(premioGanado, codigo);
+      }, 500);
 
       girando = false;
     }
@@ -119,16 +198,49 @@ function girarRuleta() {
 }
 
 function continuar() {
-  document.getElementById("popup-premio").classList.add("hidden");
+  const popup = document.getElementById("popup-premio");
+  const resultado = document.getElementById("resultado");
+
+  popup.classList.add("hidden");
+  resultado.style.display = 'none'; // Ocultar también al continuar
   window.location.href = "formulario.html";
 }
 
 function cambiarUsuario() {
+  const popup = document.getElementById("popup-premio");
+  const resultado = document.getElementById("resultado");
+
+  popup.classList.add("hidden");
+  resultado.style.display = 'none'; // Ocultar también al cambiar usuario
   window.location.href = "index.html";
 }
 
 // ======= INICIALIZACIÓN =======
 document.getElementById("boton-central").addEventListener("click", girarRuleta);
+
+// Habilitar audio con primera interacción
+document.body.addEventListener('click', function habilitarAudio() {
+  if (sonidoRuleta) {
+    sonidoRuleta.load();
+    console.log("🔊 Audio habilitado");
+  }
+  document.body.removeEventListener('click', habilitarAudio);
+}, { once: true });
+
+// Verificar que el audio esté cargado
+window.addEventListener('load', () => {
+  if (sonidoRuleta) {
+    console.log("✅ Elemento de audio encontrado");
+    sonidoRuleta.addEventListener('loadeddata', () => {
+      console.log("✅ Audio cargado correctamente");
+    });
+    sonidoRuleta.addEventListener('error', (e) => {
+      console.error("❌ Error cargando audio:", e);
+    });
+  } else {
+    console.error("❌ Elemento de audio NO encontrado");
+  }
+});
 
 function inicializar() {
   const premiosGuardados = localStorage.getItem("premios");
@@ -156,14 +268,14 @@ async function generarPDFPremio(premio, codigoValidacion) {
     // Crear QR interno con el código de validación
     const qrCanvas = document.createElement("canvas");
     await new Promise((resolve) => {
-      new QRCode(qrCanvas, { 
-        text: codigo, 
-        width: 100, 
-        height: 100 
+      new QRCode(qrCanvas, {
+        text: codigo,
+        width: 100,
+        height: 100
       });
       setTimeout(resolve, 250);
     });
-    const qrDataURL = qrCanvas.querySelector("img")?.src || qrCanvas.toDataURL("/images/");
+    const qrDataURL = qrCanvas.querySelector("img")?.src || qrCanvas.toDataURL("image/png");
 
     // Crear PDF
     const { jsPDF } = window.jspdf;
@@ -206,17 +318,17 @@ async function generarPDFPremio(premio, codigoValidacion) {
     if (result.success) {
       const pdfPublicURL = result.url;
 
-      // 🔥 OCULTAR LOADER Y MOSTRAR QR
+      // Ocultar loader y mostrar QR
       document.getElementById("loader-pdf").classList.add("hidden");
       document.getElementById("premio-generado").classList.remove("hidden");
 
       // Mostrar QR descargable
       const qrDiv = document.getElementById("qr-popup-code");
       qrDiv.innerHTML = "";
-      new QRCode(qrDiv, { 
-        text: pdfPublicURL, 
-        width: 140, 
-        height: 140 
+      new QRCode(qrDiv, {
+        text: pdfPublicURL,
+        width: 140,
+        height: 140
       });
 
       const link = document.getElementById("btn-descargar-pdf");
@@ -236,7 +348,7 @@ async function generarPDFPremio(premio, codigoValidacion) {
   }
 }
 
-// 🔥 Función para mostrar error si falla
+// Función para mostrar error si falla
 function mostrarError() {
   document.getElementById("loader-pdf").classList.add("hidden");
   document.getElementById("premio-generado").innerHTML = `

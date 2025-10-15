@@ -7,21 +7,41 @@
   <title>Ruleta de Premios</title>
   <link rel="stylesheet" href="./CSS/ruleta.css" />
   <link rel="stylesheet" href="./CSS/footer.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="icon" href="images/favicon.png" type="image/png">
 </head>
 
 <body class="ruleta">
+  <!-- Logo en la parte superior -->
+  <div class="logo-header">
+    <img src="./images/logo C50_Inverted.png" alt="Logo Carranza 50" class="logo-top">
+  </div>
+
   <main class="contenedor">
     <h1>¡Gracias por tu respuesta!</h1>
 
     <div class="instruccion">
-      <p>¡Gira la ruleta y GANA y un premio!*</p>
+      <p>¡Gira la ruleta y GANA un premio!*</p>
       <small>*Aplican términos y condiciones</small>
     </div>
 
     <div class="ruleta-container">
+      <!-- Decoración alrededor de la ruleta -->
+      <div class="ruleta-decoration">
+        <div class="sparkle sparkle-1">✨</div>
+        <div class="sparkle sparkle-2">✨</div>
+        <div class="sparkle sparkle-3">✨</div>
+        <div class="sparkle sparkle-4">✨</div>
+      </div>
+
       <canvas id="canvas" width="500" height="500"></canvas>
-      <div id="boton-central" class="boton-central"></div>
+
+      <!-- Flecha indicadora mejorada -->
+      <div class="arrow-indicator">▼</div>
+
+      <div id="boton-central" class="boton-central">
+        <span class="girar-text">GIRAR</span>
+      </div>
     </div>
 
     <div id="resultado"></div>
@@ -29,9 +49,15 @@
     <!-- Popup -->
     <div id="popup-premio" class="hidden">
       <div class="popup-content">
+        <div class="confetti-container">
+          <div class="confetti">🎉</div>
+          <div class="confetti">🎊</div>
+          <div class="confetti">✨</div>
+          <div class="confetti">🎁</div>
+        </div>
+
         <h2>¡Ganaste!</h2>
         <p id="mensaje-premio"></p>
-
 
         <div id="loader-pdf" class="loader-container">
           <div class="spinner"></div>
@@ -44,26 +70,25 @@
           <a id="btn-descargar-pdf" href="#" class="btn-descarga">⬇️ Descargar PDF</a>
         </div>
 
-        <button onclick="continuar()">Continuar</button>
-        <button onclick="cambiarUsuario()">Cambiar Usuario</button>
+        <div class="popup-buttons">
+          <button onclick="continuar()">Continuar</button>
+          <button onclick="cambiarUsuario()">Cambiar Usuario</button>
+        </div>
       </div>
     </div>
-
-    </div>
-    </div>
-
-    <!-- Logo -->
-    <footer class="logo-footer">
-      <img src="./images/logo C50.jpg" alt="Logo Carranza 50" class="logo">
-    </footer>
   </main>
 
   <!-- Footer (solo botón Home) -->
- <footer class="bottom-nav">
+  <footer class="bottom-nav">
     <div class="nav-item" id="btn-home" aria-label="Inicio">
       <i class="fa-solid fa-house"></i>
     </div>
   </footer>
+
+  <!-- Audio de ruleta -->
+  <audio id="sonido-ruleta" preload="auto">
+    <source src="./sounds/ruleta.mp3" type="audio/mpeg">
+  </audio>
 
   <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

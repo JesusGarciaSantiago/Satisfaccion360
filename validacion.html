@@ -1,66 +1,92 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Validar Cupón</title>
-  <link rel="stylesheet" href="./CSS/validacion.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validar Cupón</title>
+    <link rel="stylesheet" href="./CSS/validacion.css">
 </head>
+
 <body>
-  <!-- Encabezado -->
-  <div class="encabezado">
-    <h1>🎟️ Validación de Cupones</h1>
-    <p class="subtitle">Escanea o ingresa el código para validar</p>
-  </div>
-
-  <!-- Container principal -->
-  <div class="container">
-    <!-- Sección de escaneo -->
-    <div class="scanner-section">
-      <div class="video-container">
-        <video id="video" autoplay playsinline></video>
-        <div id="scanOverlay" class="scan-overlay"></div>
-      </div>
-      <button id="startScan" class="btn btn-primary">
-        <span class="icon">📸</span>
-        <span>Escanear Código QR</span>
-      </button>
-      <p id="cameraStatus" class="status"></p>
+    <!-- Encabezado -->
+    <div class="encabezado">
+        <img src="./images/logo C50_Inverted.png" alt="Logo" class="logo" id="logo">
+        <div class="encabezado-texto">
+            <h1>🎟️ Validación de Cupones</h1>
+            <p class="subtitle">Escanea o ingresa el código para validar</p>
+        </div>
     </div>
 
-    <!-- Divider -->
-    <div class="divider">
-      <span>O INGRESA MANUALMENTE</span>
+    <!-- Container principal -->
+    <div class="container">
+        <!-- Sección de escaneo -->
+        <div class="scanner-section">
+            <div class="video-container">
+                <video id="video" autoplay playsinline muted></video>
+                <canvas id="canvas" style="display: none;"></canvas>
+                <div id="scanOverlay" class="scan-overlay"></div>
+            </div>
+
+            <button id="startScan" class="btn btn-primary">
+                <span class="icon">📸</span>
+                <span>Escanear Código QR</span>
+            </button>
+
+            <p id="cameraStatus" class="status"></p>
+        </div>
+
+        <!-- Divider -->
+        <div class="divider">
+            <span>O INGRESA MANUALMENTE</span>
+        </div>
+
+        <!-- Sección manual -->
+        <div class="manual-section">
+            <div class="input-group">
+                <input type="text" id="codigoInput" placeholder="Código del cupón" autocomplete="off">
+                <button id="validarBtn" class="btn-validate">
+                    Validar
+                </button>
+            </div>
+        </div>
+
+        <!-- Resultado -->
+        <div id="resultado" class="resultado"></div>
     </div>
 
-    <!-- Sección manual -->
-    <div class="manual-section">
-      <div class="input-group">
-        <input 
-          type="text" 
-          id="codigoInput" 
-          placeholder="Código del cupón"
-          autocomplete="off"
-        >
-        <button id="validarBtn" class="btn-validate">
-          Validar
-        </button>
-      </div>
+    <!-- Popup para mensajes -->
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <div id="popupIcon" class="popup-icon"></div>
+            <h2 id="popupTitulo"></h2>
+            <p id="popupMensaje"></p>
+            <button id="popupCerrar" class="btn btn-primary">Aceptar</button>
+        </div>
     </div>
 
-    <!-- Resultado -->
-    <div id="resultado" class="resultado"></div>
-  </div>
-
-  <!-- Loader -->
-  <div id="loader" class="loader-overlay hidden">
-    <div class="loader-content">
-      <div class="spinner"></div>
-      <p>Validando cupón...</p>
+    <!-- Loader -->
+    <div id="loader" class="loader-overlay hidden">
+        <div class="loader-content">
+            <div class="spinner"></div>
+            <p>Validando cupón...</p>
+        </div>
     </div>
-  </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-  <script src="./JS/validacion.js"></script>
+    <!-- Librería jsQR para escaneo QR -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script>
+        // Verificar que jsQR se cargó correctamente
+        window.addEventListener('load', () => {
+            if (typeof jsQR === 'undefined') {
+                console.error('jsQR no se cargó correctamente');
+                document.getElementById('cameraStatus').textContent = '⚠️ Error al cargar escáner. Recarga la página.';
+            } else {
+                console.log('jsQR cargado correctamente');
+            }
+        });
+    </script>
+    <script src="./JS/validacion.js"></script>
 </body>
+
 </html>

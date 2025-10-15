@@ -1,4 +1,5 @@
 const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
 const startScanBtn = document.getElementById('startScan');
 const validarBtn = document.getElementById('validarBtn');
 const input = document.getElementById('codigoInput');
@@ -6,12 +7,18 @@ const resultado = document.getElementById('resultado');
 const cameraStatus = document.getElementById('cameraStatus');
 const scanOverlay = document.getElementById('scanOverlay');
 const loader = document.getElementById('loader');
+const popup = document.getElementById('popup');
+const popupIcon = document.getElementById('popupIcon');
+const popupTitulo = document.getElementById('popupTitulo');
+const popupMensaje = document.getElementById('popupMensaje');
+const popupCerrar = document.getElementById('popupCerrar');
 
 // ⚠️ Cambia esta URL por la URL desplegada de tu Apps Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNdss7f9lanIvAEFrlebQb2RLu0R25qDPjellurYFEgRqsJQgQPptfAllrUKX7NioE/exec";
 
 let scanning = false;
-let html5QrCode;
+let stream = null;
+let scanInterval = null;
 
 async function validarCodigo(codigo) {
     if (!codigo) {
@@ -45,10 +52,27 @@ async function validarCodigo(codigo) {
 }
 
 function mostrarResultado(success, mensaje) {
-    resultado.style.display = 'block';
-    resultado.className = `resultado ${success ? 'success' : 'error'}`;
-    resultado.textContent = `${success ? '✅' : '❌'} ${mensaje}`;
+    // Ocultar resultado anterior
+    resultado.style.display = 'none';
+
+    // Mostrar popup
+    popup.classList.remove('hidden');
+
+    if (success) {
+        popupIcon.textContent = '✅';
+        popupTitulo.textContent = '¡Cupón Válido!';
+        popupMensaje.textContent = mensaje;
+    } else {
+        popupIcon.textContent = '❌';
+        popupTitulo.textContent = 'Cupón No Válido';
+        popupMensaje.textContent = mensaje;
+    }
 }
+
+// Cerrar popup
+popupCerrar.addEventListener('click', () => {
+    popup.classList.add('hidden');
+});
 
 // Validación manual
 validarBtn.addEventListener('click', () => {
@@ -64,110 +88,166 @@ input.addEventListener('keypress', (e) => {
     }
 });
 
-// Función para detener el escaneo de forma segura
-async function detenerEscaneo() {
-    if (html5QrCode && scanning) {
-        try {
-            await html5QrCode.stop();
-        } catch (err) {
-            console.log("Error al detener cámara:", err);
-        }
-    }
+// Función para detener el escaneo
+function detenerEscaneo() {
     scanning = false;
     scanOverlay.classList.remove('active');
+
+    // Detener intervalo de escaneo
+    if (scanInterval) {
+        clearInterval(scanInterval);
+        scanInterval = null;
+    }
+
+    // Detener stream de video
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+    }
+
+    video.srcObject = null;
+
     startScanBtn.innerHTML = '<span class="icon">📸</span><span>Escanear Código QR</span>';
     startScanBtn.className = 'btn btn-primary';
     cameraStatus.textContent = "";
 }
 
-// Escaneo con cámara (QR)
-startScanBtn.addEventListener('click', async () => {
-    if (scanning) {
-        await detenerEscaneo();
-        return;
-    }
-
-    // Crear nueva instancia
-    html5QrCode = new Html5Qrcode("video");
+// Función para escanear QR del video
+function escanearFrame() {
+    if (!scanning) return;
 
     try {
-        cameraStatus.textContent = "⏳ Buscando cámaras...";
-
-        const cameras = await Html5Qrcode.getCameras();
-
-        if (!cameras || cameras.length === 0) {
-            cameraStatus.textContent = "❌ No se encontró cámara disponible";
+        // Verificar que jsQR esté cargado
+        if (typeof jsQR === 'undefined') {
+            console.error("jsQR no está cargado todavía");
             return;
         }
 
-        scanning = true;
-        scanOverlay.classList.add('active');
-        startScanBtn.innerHTML = '<span class="icon">⏹️</span><span>Detener Escaneo</span>';
-        startScanBtn.className = 'btn btn-secondary';
-        cameraStatus.textContent = "📷 Iniciando cámara...";
+        const ctx = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
 
-        // Configuración mejorada para evitar timeout
-        const config = {
-            fps: 10,
-            qrbox: { width: 250, height: 250 },
-            aspectRatio: 1.0,
-            disableFlip: false
+        if (canvas.width === 0 || canvas.height === 0) {
+            return;
+        }
+
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: "dontInvert",
+        });
+
+        if (code) {
+            console.log("QR detectado:", code.data);
+            validarCodigo(code.data);
+            detenerEscaneo();
+        }
+    } catch (err) {
+        console.error("Error al escanear frame:", err);
+    }
+}
+
+// Iniciar escaneo con cámara - Versión simplificada
+startScanBtn.addEventListener('click', async () => {
+    if (scanning) {
+        detenerEscaneo();
+        return;
+    }
+
+    // Verificar que jsQR esté cargado antes de comenzar
+    if (typeof jsQR === 'undefined') {
+        cameraStatus.textContent = "❌ Error: Librería de escaneo no cargada. Recarga la página.";
+        return;
+    }
+
+    try {
+        cameraStatus.textContent = "⏳ Iniciando cámara...";
+
+        // Verificar soporte
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            cameraStatus.textContent = "❌ Tu navegador no soporta acceso a cámara";
+            return;
+        }
+
+        // Configuración FORZANDO cámara trasera para móviles
+        const constraints = {
+            video: {
+                facingMode: { exact: "environment" } // Fuerza cámara trasera
+            },
+            audio: false
         };
 
-        // Intentar con la cámara trasera primero (mejor para móviles)
-        let cameraId = cameras[0].id;
-
-        // Buscar cámara trasera si existe
-        const backCamera = cameras.find(camera =>
-            camera.label.toLowerCase().includes('back') ||
-            camera.label.toLowerCase().includes('rear') ||
-            camera.label.toLowerCase().includes('trasera')
-        );
-
-        if (backCamera) {
-            cameraId = backCamera.id;
+        // Intentar primero con cámara trasera (environment)
+        let camaraUsada = "trasera";
+        try {
+            stream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (firstError) {
+            console.log("No se pudo forzar cámara trasera, intentando con 'ideal'...");
+            camaraUsada = "trasera (preferida)";
+            // Si falla el 'exact', intentar con 'ideal'
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: { ideal: "environment" } },
+                    audio: false
+                });
+            } catch (secondError) {
+                console.log("Tampoco con 'ideal', probando configuración básica...");
+                camaraUsada = "disponible";
+                // Último intento: cualquier cámara
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: false
+                });
+            }
         }
 
-        await html5QrCode.start(
-            cameraId,
-            config,
-            (decodedText) => {
-                // Código escaneado exitosamente
-                validarCodigo(decodedText);
-                detenerEscaneo();
-            },
-            (errorMessage) => {
-                // Errores de lectura silenciosos (normal cuando no detecta QR)
-            }
-        );
+        video.srcObject = stream;
 
-        cameraStatus.textContent = "📷 Cámara activa - Apunta al código";
+        // Esperar a que el video esté listo
+        await new Promise((resolve, reject) => {
+            video.onloadedmetadata = () => {
+                video.play()
+                    .then(() => resolve())
+                    .catch((err) => reject(err));
+            };
+
+            // Timeout de seguridad
+            setTimeout(() => reject(new Error("Timeout al cargar video")), 10000);
+        });
+
+        scanning = true;
+        scanOverlay.classList.add('active');
+
+        startScanBtn.innerHTML = '<span class="icon">⏹️</span><span>Detener Escaneo</span>';
+        startScanBtn.className = 'btn btn-secondary';
+        cameraStatus.textContent = `📷 Cámara ${camaraUsada} activa - Apunta al código QR`;
+
+        // Iniciar escaneo continuo
+        scanInterval = setInterval(escanearFrame, 150); // Cada 150ms
 
     } catch (err) {
-        console.error("Error al iniciar cámara:", err);
-        scanning = false;
-        scanOverlay.classList.remove('active');
+        console.error("Error completo:", err);
+
+        // Mensajes de error específicos
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+            cameraStatus.textContent = "❌ Debes permitir el acceso a la cámara";
+        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+            cameraStatus.textContent = "❌ No se detectó ninguna cámara";
+        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+            cameraStatus.textContent = "❌ La cámara está siendo usada por otra app. Ciérrala e intenta de nuevo.";
+        } else if (err.name === 'OverconstrainedError') {
+            cameraStatus.textContent = "❌ Restricciones de cámara no soportadas";
+        } else if (err.name === 'AbortError') {
+            cameraStatus.textContent = "❌ Timeout. Intenta de nuevo o usa ingreso manual";
+        } else {
+            cameraStatus.textContent = "❌ Error desconocido. Usa ingreso manual";
+        }
+
         startScanBtn.innerHTML = '<span class="icon">📸</span><span>Escanear Código QR</span>';
         startScanBtn.className = 'btn btn-primary';
-
-        // Mensajes de error más específicos
-        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-            cameraStatus.textContent = "❌ Permiso de cámara denegado";
-        } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-            cameraStatus.textContent = "❌ No se encontró cámara";
-        } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
-            cameraStatus.textContent = "❌ Cámara en uso por otra app";
-        } else if (err.name === 'AbortError') {
-            cameraStatus.textContent = "❌ Tiempo de espera agotado. Intenta de nuevo";
-        } else {
-            cameraStatus.textContent = "❌ Error al acceder a la cámara";
-        }
     }
 });
 
-// Limpiar al salir de la página
-window.addEventListener('beforeunload', () => {
-    if (scanning && html5QrCode) {
-        html5QrCode.stop().catch(err => console.log(err));
-    }
-});
+// Limpiar al salir
+window.addEventListener('beforeunload', detenerEscaneo);

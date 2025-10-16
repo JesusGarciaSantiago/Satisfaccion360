@@ -2,69 +2,400 @@
 <html lang="es">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Selección Mesero</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="./CSS/index.css">
-  <link rel="stylesheet" href="./CSS/footer.css">
-  <link rel="icon" href="images/favicon.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satisfacción 360 - Carranza 50</title>
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            background: #6b7456;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .splash-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.8s ease-out;
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Logo circular con flechas */
+        .logo-circle {
+            width: 340px;
+            height: 340px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        /* Círculo completo con flechas SVG */
+        .circle-arrows {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            animation: rotate360 4s linear infinite;
+        }
+
+        @keyframes rotate360 {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .circle-arrows svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Número 360 */
+        .number-360 {
+            position: absolute;
+            font-size: 7rem;
+            font-weight: bold;
+            color: #e8e5d8;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+            letter-spacing: -8px;
+        }
+
+        /* Contenedor de texto */
+        .text-container {
+            text-align: center;
+            color: #e8e5d8;
+            width: 100%;
+        }
+
+        .text-main {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .text-carranza {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            letter-spacing: 3px;
+            font-weight: 400;
+        }
+
+        .text-sub {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            opacity: 0.95;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Indicador de carga */
+        .loading-text {
+            margin-top: 40px;
+            color: #e8e5d8;
+            font-size: 1rem;
+            opacity: 0.9;
+            text-align: center;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* Dots animados */
+        .dots span {
+            animation: dotBlink 1.5s ease-in-out infinite;
+        }
+
+        .dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dotBlink {
+
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* RESPONSIVE */
+
+        /* Móviles pequeños (hasta 375px) */
+        @media (max-width: 375px) {
+            .logo-circle {
+                width: 240px;
+                height: 240px;
+                margin-bottom: 30px;
+            }
+
+            .number-360 {
+                font-size: 4.5rem;
+                letter-spacing: -5px;
+            }
+
+            .text-main {
+                font-size: 2rem;
+            }
+
+            .text-carranza {
+                font-size: 2.5rem;
+            }
+
+            .text-sub {
+                font-size: 1.2rem;
+                letter-spacing: 5px;
+            }
+
+            .loading-text {
+                font-size: 0.9rem;
+                margin-top: 25px;
+            }
+        }
+
+        /* Móviles estándar (376px - 430px) */
+        @media (min-width: 376px) and (max-width: 430px) {
+            .logo-circle {
+                width: 280px;
+                height: 280px;
+                margin-bottom: 35px;
+            }
+
+            .number-360 {
+                font-size: 5.5rem;
+                letter-spacing: -6px;
+            }
+
+            .text-main {
+                font-size: 2.3rem;
+            }
+
+            .text-carranza {
+                font-size: 3rem;
+            }
+
+            .text-sub {
+                font-size: 1.4rem;
+                letter-spacing: 6px;
+            }
+        }
+
+        /* Tablets pequeñas (431px - 768px) */
+        @media (min-width: 431px) and (max-width: 768px) {
+            .logo-circle {
+                width: 360px;
+                height: 360px;
+            }
+
+            .number-360 {
+                font-size: 7.5rem;
+            }
+
+            .text-main {
+                font-size: 3.2rem;
+            }
+
+            .text-carranza {
+                font-size: 4.6rem;
+            }
+
+            .text-sub {
+                font-size: 1.9rem;
+            }
+        }
+
+        /* Tablets (769px - 1024px) */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .logo-circle {
+                width: 400px;
+                height: 400px;
+            }
+
+            .number-360 {
+                font-size: 8.5rem;
+            }
+
+            .text-main {
+                font-size: 3.5rem;
+            }
+
+            .text-carranza {
+                font-size: 4.2rem;
+            }
+
+            .text-sub {
+                font-size: 2rem;
+            }
+        }
+
+        /* Tablets grandes y escritorio (1025px+) */
+        @media (min-width: 1025px) {
+            .splash-container {
+                max-width: 700px;
+            }
+
+            .logo-circle {
+                width: 440px;
+                height: 440px;
+            }
+
+            .number-360 {
+                font-size: 9rem;
+            }
+
+            .text-main {
+                font-size: 3.8rem;
+            }
+
+            .text-carranza {
+                font-size: 5rem;
+            }
+
+            .text-sub {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Móviles en horizontal */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .splash-container {
+                flex-direction: row;
+                gap: 30px;
+                align-items: center;
+            }
+
+            .logo-circle {
+                width: 200px;
+                height: 200px;
+                margin-bottom: 0;
+            }
+
+            .number-360 {
+                font-size: 4rem;
+                letter-spacing: -4px;
+            }
+
+            .text-main {
+                font-size: 1.8rem;
+            }
+
+            .text-carranza {
+                font-size: 2rem;
+                margin-bottom: 8px;
+            }
+
+            .text-sub {
+                font-size: 1rem;
+                letter-spacing: 4px;
+            }
+
+            .loading-text {
+                margin-top: 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <div class="splash-container">
+        <!-- Logo circular con flechas -->
+        <div class="logo-circle">
+            <!-- Flechas circulares giratorias -->
+            <div class="circle-arrows">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Arco superior - sin punta -->
+                    <path d="M 100 25 A 75 75 0 0 1 175 100" fill="none" stroke="#e8e5d8" stroke-width="18"
+                        stroke-linecap="round" />
 
-  <header>
-    <i class="fa-solid fa-arrow-left"></i>
-  </header>
+                    <!-- Arco inferior - sin punta -->
+                    <path d="M 100 175 A 75 75 0 0 1 25 100" fill="none" stroke="#e8e5d8" stroke-width="18"
+                        stroke-linecap="round" />
+                </svg>
+            </div>
 
-  <div class="container">
-    <div class="logo-container">
-      <img src="images/Cuvalog_blanco.png" alt="Logo del restaurante" class="logo-img">
-    </div>
-    <div class="form-block">
-      <div class="icon-user">
-        <i class="fa-solid fa-user"></i>
-      </div>
-
-      <div class="custom-select" id="mesero-select">
-        <label for="mesero">NOMBRE MESERO</label>
-        <div class="select-selected">Selecciona...</div>
-        <div class="select-items">
-          <div data-value="ROBERTO">ROBERTO<span class="radio"></span></div>
-          <div data-value="ROMAN">ROMAN<span class="radio"></span></div>
-          <div data-value="SERGIO">SERGIO<span class="radio"></span></div>
-          <div data-value="RAMSES">RAMSES<span class="radio"></span></div>
-          <div data-value="FERNANDO">FERNANDO<span class="radio"></span></div>
+            <!-- Número 360 -->
+            <div class="number-360">360</div>
         </div>
-      </div>
 
-      <button class="btn">SIGUIENTE</button>
+        <!-- Texto -->
+        <div class="text-container">
+            <div class="text-main">Satisfacción 360</div>
+            <div class="text-carranza">Carranza 50</div>
+            <div class="text-sub">CARRANZA</div>
+        </div>
+
+        <!-- Texto de carga -->
+        <div class="loading-text">
+            Cargando<span class="dots"><span>.</span><span>.</span><span>.</span></span>
+        </div>
     </div>
-  </div>
 
-  <!-- FOOTER: solo botón ajustes en index -->
-  <footer class="bottom-nav">
-    <div class="nav-item" id="btn-ajustes" aria-label="Ajustes">
-      <i class="fa-solid fa-gear"></i>
-    </div>
-  </footer>
-
-  <!-- Modal Ajustes (incluído en index) -->
-  <div id="ajustes-modal" class="ajustes-modal hidden" aria-hidden="true">
-    <div class="ajustes-content" role="dialog" aria-modal="true" aria-labelledby="ajustes-title">
-      <h3 id="ajustes-title">⚙️ Ajustes</h3>
-
-      <label class="switch" title="Desactivar ruleta">
-        <input type="checkbox" id="checkbox-ruleta">
-        <span class="slider"></span>
-      </label>
-
-      <div class="texto-switch">Desactivar ruleta</div>
-    </div>
-  </div>
-
-  <script src="./JS/index.js"></script>
-  <script src="./JS/footer.js"></script>
+    <script>
+        // Redirigir a index.html después de 3 segundos
+        setTimeout(() => {
+            window.location.href = 'menu.html';
+        }, 3000);
+    </script>
 </body>
 
 </html>

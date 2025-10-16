@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Home button redirige a index
   if (homeBtn) {
     homeBtn.addEventListener("click", () => {
-      window.location.href = "index.html";
+      window.location.href = "menu.html";
     });
   }
 });

@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
           };
 
           document.getElementById("cambiar-btn").onclick = () => {
-            window.location.href = "index.html";
+            window.location.href = "menu.html";
           };
         }, 1000); // Delay de 1 segundo
       })

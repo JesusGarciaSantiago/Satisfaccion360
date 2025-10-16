@@ -17,11 +17,17 @@ body {
 .encabezado {
     background: #7B8C6E;
     color: #fff;
-    padding: 10px 100px;
+    padding: 0px 100px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 0px;
+    flex-wrap: wrap;
+    align-content: flex-end;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+    align-content: center;
 }
 
 .encabezado .logo {
@@ -405,7 +411,17 @@ input[type="text"]::placeholder {
 /* Móviles pequeños (hasta 375px) */
 @media (max-width: 375px) {
     .encabezado {
-        padding: 10px 15px;
+
+        padding: 0px 100px;
+        display: flex;
+        align-items: center;
+        gap: 0px;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+        justify-content: flex-end;
+        align-content: center;
     }
 
     .encabezado .logo {
@@ -443,7 +459,8 @@ input[type="text"]::placeholder {
 /* Móviles estándar (376px - 430px) */
 @media (max-width: 430px) {
     .encabezado {
-        padding: 12px 15px;
+        padding: 0% 15px;
+        align-content: center;
     }
 
     .encabezado .logo {
@@ -472,6 +489,7 @@ input[type="text"]::placeholder {
 @media (min-width: 431px) and (max-width: 768px) {
     .container {
         max-width: 600px;
+        align-content: center;
     }
 
     .encabezado h1 {
@@ -493,7 +511,16 @@ input[type="text"]::placeholder {
 /* Móviles en horizontal */
 @media (max-height: 500px) and (orientation: landscape) {
     .encabezado {
-        padding: 12px 15px;
+        padding: 0px 100px;
+        display: flex;
+        align-items: center;
+        gap: 0px;
+        flex-wrap: wrap;
+        align-content: flex-end;
+        flex-direction: column;
+        align-items: center;
+        gap: 0px;
+        align-content: center;
     }
 
     .encabezado h1 {

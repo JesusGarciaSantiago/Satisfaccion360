@@ -212,7 +212,7 @@ function cambiarUsuario() {
 
   popup.classList.add("hidden");
   resultado.style.display = 'none'; // Ocultar también al cambiar usuario
-  window.location.href = "index.html";
+  window.location.href = "menu.html";
 }
 
 // ======= INICIALIZACIÓN =======

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selección Mesero</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="./CSS/index.css">
+  <link rel="stylesheet" href="./CSS/footer.css">
+  <link rel="icon" href="images/favicon.png" type="image/png">
+</head>
+
+<body>
+
+  <header>
+    <i class="fa-solid fa-arrow-left"></i>
+  </header>
+
+  <div class="container">
+    <div class="logo-container">
+      <img src="images/Cuvalog_blanco.png" alt="Logo del restaurante" class="logo-img">
+    </div>
+    <div class="form-block">
+      <div class="icon-user">
+        <i class="fa-solid fa-user"></i>
+      </div>
+
+      <div class="custom-select" id="mesero-select">
+        <label for="mesero">NOMBRE MESERO</label>
+        <div class="select-selected">Selecciona...</div>
+        <div class="select-items">
+          <div data-value="ROBERTO">ROBERTO<span class="radio"></span></div>
+          <div data-value="ROMAN">ROMAN<span class="radio"></span></div>
+          <div data-value="SERGIO">SERGIO<span class="radio"></span></div>
+          <div data-value="RAMSES">RAMSES<span class="radio"></span></div>
+          <div data-value="FERNANDO">FERNANDO<span class="radio"></span></div>
+        </div>
+      </div>
+
+      <button class="btn">SIGUIENTE</button>
+    </div>
+  </div>
+
+  <!-- FOOTER: solo botón ajustes en index -->
+  <footer class="bottom-nav">
+    <div class="nav-item" id="btn-ajustes" aria-label="Ajustes">
+      <i class="fa-solid fa-gear"></i>
+    </div>
+  </footer>
+
+  <!-- Modal Ajustes (incluído en index) -->
+  <div id="ajustes-modal" class="ajustes-modal hidden" aria-hidden="true">
+    <div class="ajustes-content" role="dialog" aria-modal="true" aria-labelledby="ajustes-title">
+      <h3 id="ajustes-title">⚙️ Ajustes</h3>
+
+      <label class="switch" title="Desactivar ruleta">
+        <input type="checkbox" id="checkbox-ruleta">
+        <span class="slider"></span>
+      </label>
+
+      <div class="texto-switch">Desactivar ruleta</div>
+    </div>
+  </div>
+
+  <script src="./JS/index.js"></script>
+  <script src="./JS/footer.js"></script>
+</body>
+
+</html>

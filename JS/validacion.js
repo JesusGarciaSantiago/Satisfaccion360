@@ -13,8 +13,7 @@ const popupTitulo = document.getElementById('popupTitulo');
 const popupMensaje = document.getElementById('popupMensaje');
 const popupCerrar = document.getElementById('popupCerrar');
 
-// ⚠️ Cambia esta URL por la URL desplegada de tu Apps Script
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNdss7f9lanIvAEFrlebQb2RLu0R25qDPjellurYFEgRqsJQgQPptfAllrUKX7NioE/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4zOPj8QjC3cpBpWHZFnto7r9xN0Xkx7lWluKkajkYzJREcF3ARNVx8_CfNVGWCkfn/exec";
 
 let scanning = false;
 let stream = null;
@@ -251,3 +250,4 @@ startScanBtn.addEventListener('click', async () => {
 
 // Limpiar al salir
 window.addEventListener('beforeunload', detenerEscaneo);
+

@@ -99,6 +99,7 @@ header i {
   border-radius: 4px;
   color: #fff;
   font-weight: 600;
+  z-index: 1;
 }
 
 .select-selected {
@@ -114,9 +115,9 @@ header i {
   box-sizing: border-box;
 }
 
-/* Dropdown con position fixed */
+/* Dropdown con position fixed y límites de viewport */
 .select-items {
-  position: absolute;
+  position: fixed;
   background: #f6f3eb;
   color: #333;
   border-radius: 12px;
@@ -124,10 +125,7 @@ header i {
   display: none;
   z-index: 99999;
   overflow-y: auto;
-  max-height: calc(100vh - 250px);
-  width: 100%;
-  top: 100%;
-  margin-top: 8px;
+  overflow-x: hidden;
 }
 
 .select-items div {
@@ -237,6 +235,11 @@ header i {
     padding: 12px 30px;
     font-size: 1rem;
   }
+
+  .select-items div {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
 }
 
 /* Móviles estándar (376px - 430px) */
@@ -258,10 +261,6 @@ header i {
   .form-block {
     gap: 35px;
     max-width: 90%;
-  }
-
-  .select-items {
-    max-height: 50vh;
   }
 }
 
@@ -375,12 +374,13 @@ header i {
     font-size: 0.95rem;
   }
 
-  .select-items {
-    max-height: calc(100vh - 120px);
-  }
-
   .btn {
     padding: 10px 25px;
     font-size: 0.95rem;
+  }
+
+  .select-items div {
+    padding: 10px 14px;
+    font-size: 0.9rem;
   }
 }

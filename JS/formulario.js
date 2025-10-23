@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // === 📌 Precargar premios desde Google Sheet ===
-  const URL_RULETA = "https://script.google.com/macros/s/AKfycby34WI92Sv8szm_agBYXXDHdYkeK2QCEAjpupyQrJ7cx0nH7GO4bdzEvGLoNasL3z4/exec";
+  const URL_RULETA = "https://script.google.com/macros/s/AKfycbwOSs9Ue73ipM-mt2IM1QVbff0fLeE0FdhUJXi1WxNFuV95Fv_P3i3Bx4JO2dhfBI_h/exec";
 
   async function precargarPremios() {
     try {

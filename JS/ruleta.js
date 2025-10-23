@@ -11,7 +11,7 @@ let colors = [];
 const sonidoRuleta = document.getElementById("sonido-ruleta");
 const boton = document.getElementById("boton-central");
 
-const URL = 'https://script.google.com/macros/s/AKfycby34WI92Sv8szm_agBYXXDHdYkeK2QCEAjpupyQrJ7cx0nH7GO4bdzEvGLoNasL3z4/exec';
+const URL = 'https://script.google.com/macros/s/AKfycbw4zOPj8QjC3cpBpWHZFnto7r9xN0Xkx7lWluKkajkYzJREcF3ARNVx8_CfNVGWCkfn/exec';
 
 // ======= FUNCIONES =======
 
@@ -255,7 +255,6 @@ function inicializar() {
 }
 
 inicializar();
-
 /***************************************************************
  * 🎁 Generar PDF y subirlo a Google Drive con código existente
  ***************************************************************/
@@ -265,32 +264,134 @@ async function generarPDFPremio(premio, codigoValidacion) {
   const codigo = codigoValidacion;
 
   try {
-    // Crear QR interno con el código de validación
+    // Crear QR interno con el código de validación usando canvas directamente
     const qrCanvas = document.createElement("canvas");
-    await new Promise((resolve) => {
-      new QRCode(qrCanvas, {
-        text: codigo,
-        width: 100,
-        height: 100
-      });
-      setTimeout(resolve, 250);
+    const qr = new QRCode(qrCanvas, {
+      text: codigo,
+      width: 200,
+      height: 200,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
     });
-    const qrDataURL = qrCanvas.querySelector("img")?.src || qrCanvas.toDataURL("image/png");
 
-    // Crear PDF
+    // Esperar a que el QR se genere completamente
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Obtener el canvas del QR generado
+    const qrCanvasElement = qrCanvas.querySelector("canvas");
+    const qrDataURL = qrCanvasElement ? qrCanvasElement.toDataURL("image/png") : null;
+
+    // Cargar el logo (ajusta la ruta según tu estructura de carpetas)
+    const logoURL = "/images/logo C50_Inverted.png"; // o la ruta donde tengas tu logo
+
+    // Crear PDF con diseño mejorado
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const colorPrimario = [123, 140, 110]; // #7B8C6E en RGB
+    const colorClaro = [186, 193, 175]; // Color más claro para detalles
+
+    // === MARCO DECORATIVO ===
+    // Marco exterior
+    doc.setDrawColor(...colorPrimario);
+    doc.setLineWidth(2);
+    doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+
+    // Marco interior decorativo
+    doc.setDrawColor(...colorClaro);
+    doc.setLineWidth(0.5);
+    doc.rect(15, 15, pageWidth - 30, pageHeight - 30);
+
+    // === HEADER CON COLOR ===
+    doc.setFillColor(...colorPrimario);
+    doc.rect(15, 15, pageWidth - 30, 35, 'F');
+
+    // Intentar cargar y agregar el logo
+    try {
+      const logoImg = await cargarImagen(logoURL);
+      doc.addImage(logoImg, 'PNG', 50, 50, 25, 25);
+    } catch (error) {
+      console.log("⚠️ No se pudo cargar el logo:", error);
+      // Continuar sin logo
+    }
+
+    // === TÍTULO ===
+    doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(22);
-    doc.text("🎉 ¡Felicidades!", 20, 30);
+    doc.setFontSize(24);
+    doc.text("¡FELICIDADES!", pageWidth / 2, 32, { align: 'center' });
+
+    // === CONTENIDO ===
+    doc.setTextColor(0, 0, 0);
+
+    // Premio ganado
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("Has ganado:", pageWidth / 2, 65, { align: 'center' });
+
+    doc.setFillColor(...colorClaro);
+    doc.roundedRect(25, 70, pageWidth - 50, 20, 3, 3, 'F');
+
     doc.setFontSize(16);
-    doc.text(`Has ganado: ${premio}`, 20, 50);
+    doc.setTextColor(...colorPrimario);
+    const premioLines = doc.splitTextToSize(premio, pageWidth - 60);
+    doc.text(premioLines, pageWidth / 2, 82, { align: 'center' });
+
+    // Información adicional
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Mesero: ${mesero}`, 30, 105);
+    doc.text(`Fecha: ${fecha}`, 30, 112);
+
+    // === CÓDIGO DE VALIDACIÓN ===
     doc.setFontSize(12);
-    doc.text(`Mesero: ${mesero}`, 20, 70);
-    doc.text(`Fecha: ${fecha}`, 20, 80);
-    doc.text(`Código de validación:`, 20, 100);
-    doc.text(codigo, 20, 108);
-    if (qrDataURL) doc.addImage(qrDataURL, "PNG", 150, 85, 40, 40);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(...colorPrimario);
+    doc.text("CÓDIGO DE VALIDACIÓN:", pageWidth / 2, 130, { align: 'center' });
+
+    doc.setFillColor(240, 240, 240);
+    doc.roundedRect(40, 135, pageWidth - 80, 12, 2, 2, 'F');
+
+    doc.setFontSize(14);
+    doc.setFont("courier", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text(codigo, pageWidth / 2, 143, { align: 'center' });
+
+    // === QR CODE ===
+    if (qrDataURL) {
+      doc.setDrawColor(...colorPrimario);
+      doc.setLineWidth(1);
+      const qrSize = 50;
+      const qrX = (pageWidth - qrSize) / 2;
+      const qrY = 155;
+
+      // Marco para el QR
+      doc.roundedRect(qrX - 3, qrY - 3, qrSize + 6, qrSize + 6, 2, 2);
+      doc.addImage(qrDataURL, "PNG", qrX, qrY, qrSize, qrSize);
+
+      doc.setFontSize(9);
+      doc.setTextColor(100, 100, 100);
+      doc.text("Escanea para validar", pageWidth / 2, qrY + qrSize + 8, { align: 'center' });
+    }
+
+    // === PIE DE PÁGINA ===
+    doc.setDrawColor(...colorClaro);
+    doc.setLineWidth(0.5);
+    doc.line(30, pageHeight - 25, pageWidth - 30, pageHeight - 25);
+
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.setFont("helvetica", "italic");
+    doc.text("Presenta este documento para reclamar tu premio", pageWidth / 2, pageHeight - 18, { align: 'center' });
+    doc.text("¡Gracias por tu preferencia!", pageWidth / 2, pageHeight - 13, { align: 'center' });
 
     // Convertir PDF a Base64
     const pdfBase64 = btoa(
@@ -348,11 +449,13 @@ async function generarPDFPremio(premio, codigoValidacion) {
   }
 }
 
-// Función para mostrar error si falla
-function mostrarError() {
-  document.getElementById("loader-pdf").classList.add("hidden");
-  document.getElementById("premio-generado").innerHTML = `
-    <p style="color: red;">⚠️ Error al generar el PDF. Intenta de nuevo.</p>
-  `;
-  document.getElementById("premio-generado").classList.remove("hidden");
+// Función auxiliar para cargar imágenes
+function cargarImagen(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = url;
+  });
 }

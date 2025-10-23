@@ -53,7 +53,6 @@
             }
         }
 
-        /* Logo circular con flechas */
         .logo-circle {
             width: 340px;
             height: 340px;
@@ -64,7 +63,6 @@
             margin-bottom: 40px;
         }
 
-        /* Círculo completo con flechas SVG */
         .circle-arrows {
             position: absolute;
             width: 100%;
@@ -87,7 +85,6 @@
             height: 100%;
         }
 
-        /* Número 360 */
         .number-360 {
             position: absolute;
             font-size: 7rem;
@@ -98,7 +95,6 @@
             letter-spacing: -8px;
         }
 
-        /* Contenedor de texto */
         .text-container {
             text-align: center;
             color: #e8e5d8;
@@ -131,7 +127,6 @@
             text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
         }
 
-        /* Indicador de carga */
         .loading-text {
             margin-top: 40px;
             color: #e8e5d8;
@@ -142,18 +137,14 @@
         }
 
         @keyframes blink {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 0.4;
             }
-
             50% {
                 opacity: 1;
             }
         }
 
-        /* Dots animados */
         .dots span {
             animation: dotBlink 1.5s ease-in-out infinite;
         }
@@ -167,20 +158,30 @@
         }
 
         @keyframes dotBlink {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 0.2;
             }
-
             50% {
                 opacity: 1;
             }
         }
 
-        /* RESPONSIVE */
+        .progress-indicator {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #e8e5d8;
+            opacity: 0.8;
+        }
 
-        /* Móviles pequeños (hasta 375px) */
+        .progress-indicator.success {
+            color: #a8d5a8;
+        }
+
+        .progress-indicator.error {
+            color: #ff9999;
+        }
+
+        /* RESPONSIVE */
         @media (max-width: 375px) {
             .logo-circle {
                 width: 240px;
@@ -212,7 +213,6 @@
             }
         }
 
-        /* Móviles estándar (376px - 430px) */
         @media (min-width: 376px) and (max-width: 430px) {
             .logo-circle {
                 width: 280px;
@@ -239,7 +239,6 @@
             }
         }
 
-        /* Tablets pequeñas (431px - 768px) */
         @media (min-width: 431px) and (max-width: 768px) {
             .logo-circle {
                 width: 360px;
@@ -263,7 +262,6 @@
             }
         }
 
-        /* Tablets (769px - 1024px) */
         @media (min-width: 769px) and (max-width: 1024px) {
             .logo-circle {
                 width: 400px;
@@ -287,7 +285,6 @@
             }
         }
 
-        /* Tablets grandes y escritorio (1025px+) */
         @media (min-width: 1025px) {
             .splash-container {
                 max-width: 700px;
@@ -315,7 +312,6 @@
             }
         }
 
-        /* Móviles en horizontal */
         @media (max-height: 500px) and (orientation: landscape) {
             .splash-container {
                 flex-direction: row;
@@ -358,43 +354,110 @@
 
 <body>
     <div class="splash-container">
-        <!-- Logo circular con flechas -->
         <div class="logo-circle">
-            <!-- Flechas circulares giratorias -->
             <div class="circle-arrows">
                 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Arco superior - sin punta -->
                     <path d="M 100 25 A 75 75 0 0 1 175 100" fill="none" stroke="#e8e5d8" stroke-width="18"
                         stroke-linecap="round" />
-
-                    <!-- Arco inferior - sin punta -->
                     <path d="M 100 175 A 75 75 0 0 1 25 100" fill="none" stroke="#e8e5d8" stroke-width="18"
                         stroke-linecap="round" />
                 </svg>
             </div>
-
-            <!-- Número 360 -->
             <div class="number-360">360</div>
         </div>
 
-        <!-- Texto -->
         <div class="text-container">
             <div class="text-main">Satisfacción 360</div>
             <div class="text-carranza">Carranza 50</div>
             <div class="text-sub">CARRANZA</div>
         </div>
 
-        <!-- Texto de carga -->
-        <div class="loading-text">
+        <div class="loading-text" id="loading-text">
             Cargando<span class="dots"><span>.</span><span>.</span><span>.</span></span>
         </div>
+        
+        <div class="progress-indicator" id="progress-indicator"></div>
     </div>
 
     <script>
-        // Redirigir a index.html después de 3 segundos
+        // URL de tu Google Apps Script - REEMPLAZA CON TU NUEVA URL
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzsh_ZGXV_4Pfgx2sjox4mNYOTJGAvTJlyt8FEUbzYPTr8qTZg1t7SzkjIasCcvxjAC/exec';
+        
+        let meserosLoaded = false;
+        let minTimeElapsed = false;
+        const progressIndicator = document.getElementById('progress-indicator');
+        const loadingText = document.getElementById('loading-text');
+
+        // Función para precargar meseros usando JSONP
+        function precargarMeseros() {
+            progressIndicator.textContent = '📋 Cargando meseros...';
+            
+            const callbackName = 'precarga_meseros_' + Date.now();
+            
+            window[callbackName] = function(data) {
+                try {
+                    if (data.success && data.meseros && data.meseros.length > 0) {
+                        // Guardar en localStorage para uso posterior
+                        localStorage.setItem('meseros', JSON.stringify(data.meseros));
+                        localStorage.setItem('meserosTimestamp', Date.now().toString());
+                        
+                        progressIndicator.textContent = '✅ Meseros cargados';
+                        progressIndicator.classList.add('success');
+                        meserosLoaded = true;
+                        
+                        console.log('✅ Meseros precargados:', data.meseros);
+                    } else {
+                        throw new Error('No se encontraron meseros');
+                    }
+                } catch (error) {
+                    console.error('❌ Error al procesar meseros:', error);
+                    progressIndicator.textContent = '⚠️ Usando datos locales';
+                    progressIndicator.classList.add('error');
+                    meserosLoaded = true; // Continuar de todos modos
+                }
+                
+                // Limpiar
+                delete window[callbackName];
+                const scriptTag = document.getElementById(callbackName);
+                if (scriptTag) document.body.removeChild(scriptTag);
+                checkAndRedirect();
+            };
+            
+            const script = document.createElement('script');
+            script.id = callbackName;
+            script.src = `${SHEET_URL}?action=getMeseros&callback=${callbackName}`;
+            script.onerror = function() {
+                console.error('❌ Error al cargar script');
+                progressIndicator.textContent = '⚠️ Error de conexión';
+                progressIndicator.classList.add('error');
+                meserosLoaded = true;
+                delete window[callbackName];
+                const scriptTag = document.getElementById(callbackName);
+                if (scriptTag) document.body.removeChild(scriptTag);
+                checkAndRedirect();
+            };
+            
+            document.body.appendChild(script);
+        }
+
+        // Verificar si ambas condiciones están listas
+        function checkAndRedirect() {
+            if (meserosLoaded && minTimeElapsed) {
+                loadingText.textContent = 'Listo!';
+                setTimeout(() => {
+                    window.location.href = 'menu.html';
+                }, 300);
+            }
+        }
+
+        // Tiempo mínimo de splash (2 segundos)
         setTimeout(() => {
-            window.location.href = 'menu.html';
-        }, 3000);
+            minTimeElapsed = true;
+            checkAndRedirect();
+        }, 2000);
+
+        // Iniciar precarga inmediatamente
+        precargarMeseros();
     </script>
 </body>
 

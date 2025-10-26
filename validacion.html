@@ -3,9 +3,10 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Validar Cupón</title>
     <link rel="stylesheet" href="./CSS/validacion.css">
+    <link rel="icon" href="images/favicon.png" type="image/png">
 </head>
 
 <body>
@@ -20,9 +21,10 @@
 
     <!-- Container principal -->
     <div class="container">
-        <!-- Sección de escaneo -->
+        <!-- Sección de escaneo CON BOTÓN -->
         <div class="scanner-section">
             <div class="video-container">
+                <!-- El placeholder se crea dinámicamente en JS -->
                 <video id="video" autoplay playsinline muted></video>
                 <canvas id="canvas" style="display: none;"></canvas>
                 <div id="scanOverlay" class="scan-overlay"></div>
@@ -50,9 +52,6 @@
                 </button>
             </div>
         </div>
-
-        <!-- Resultado -->
-        <div id="resultado" class="resultado"></div>
     </div>
 
     <!-- Popup para mensajes -->
@@ -79,10 +78,11 @@
         // Verificar que jsQR se cargó correctamente
         window.addEventListener('load', () => {
             if (typeof jsQR === 'undefined') {
-                console.error('jsQR no se cargó correctamente');
+                console.error('❌ jsQR no se cargó correctamente');
                 document.getElementById('cameraStatus').textContent = '⚠️ Error al cargar escáner. Recarga la página.';
+                document.getElementById('cameraStatus').style.color = '#d32f2f';
             } else {
-                console.log('jsQR cargado correctamente');
+                console.log('✅ jsQR cargado correctamente');
             }
         });
     </script>

@@ -37,11 +37,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   precargarPremios();
 
+  // 🎨 FUNCIÓN PARA MOSTRAR ALERTAS PERSONALIZADAS
+  function mostrarAlerta(mensaje) {
+    const alertaHTML = `
+      <div id="alerta-custom" class="popup" style="display: flex;">
+        <div class="popup-content" style="max-width: 350px;">
+          <div style="font-size: 3rem; margin-bottom: 15px;">⚠️</div>
+          <p style="font-size: 1rem; margin-bottom: 20px; color: #333;">${mensaje}</p>
+          <button onclick="document.getElementById('alerta-custom').remove()" class="btn btn-primary" style="max-width: 150px; margin: 0 auto;">Aceptar</button>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', alertaHTML);
+  }
+
   // === Validación de campos requeridos ===
   function validarFormulario(data) {
     // Campos de texto requeridos
     if (!data.ticket || !data.mesa) {
-      alert("Por favor ingresa el número de ticket y de mesa.");
+      mostrarAlerta("Por favor ingresa el número de ticket y de mesa.");
       return false;
     }
 
@@ -49,14 +63,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const grupos = ["personal", "bebidas", "alimentos", "limpieza", "precios", "conociste"];
     for (const grupo of grupos) {
       if (!document.querySelector(`input[name="${grupo}"]:checked`)) {
-        alert(`Por favor responde la pregunta sobre ${grupo}.`);
+        mostrarAlerta(`Por favor responde la pregunta sobre ${grupo}.`);
         return false;
       }
     }
 
     // Si seleccionó "Otro", debe escribir texto
     if (data.conociste === "Otro" && !otroInput.value.trim()) {
-      alert("Por favor especifica cómo conociste el restaurante.");
+      mostrarAlerta("Por favor especifica cómo conociste el restaurante.");
       return false;
     }
 
@@ -121,20 +135,13 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then(() => {
         console.log("✅ Formulario enviado");
-        
-        // Delay mínimo para que se vea el loader
-        setTimeout(() => {
-          // 🔥 OCULTAR LOADER
-          mostrarLoader(false);
 
-          // Limpiar formulario
+        setTimeout(() => {
+          mostrarLoader(false);
           formulario.reset();
           otroContainer.style.display = "none";
-
-          // 🔥 MOSTRAR POPUP
           mostrarPopup(true);
 
-          // Configurar botones del popup
           document.getElementById("continuar-btn").onclick = () => {
             const ruletaDeshabilitada = sessionStorage.getItem("ruletaDeshabilitada") === "true";
             if (!ruletaDeshabilitada) {
@@ -147,14 +154,12 @@ document.addEventListener("DOMContentLoaded", function () {
           document.getElementById("cambiar-btn").onclick = () => {
             window.location.href = "menu.html";
           };
-        }, 1000); // Delay de 1 segundo
+        }, 1000);
       })
       .catch(err => {
         console.error("❌ Error al enviar formulario:", err);
-        
-        // 🔥 OCULTAR LOADER EN CASO DE ERROR
         mostrarLoader(false);
-        alert("❌ Hubo un error al enviar la encuesta. Por favor intenta de nuevo.");
+        mostrarAlerta("❌ Hubo un error al enviar la encuesta. Por favor intenta de nuevo.");
       });
   });
 });

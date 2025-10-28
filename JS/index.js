@@ -8,14 +8,26 @@ let selectedValue = null;
 let open = false;
 let meseros = [];
 
+// 🎨 FUNCIÓN PARA MOSTRAR ALERTAS PERSONALIZADAS
+function mostrarError(mensaje) {
+  const alertaHTML = `
+    <div id="alerta-custom" class="popup" style="display: flex; z-index: 99999;">
+      <div class="popup-content" style="max-width: 350px;">
+        <div style="font-size: 3rem; margin-bottom: 15px;">⚠️</div>
+        <p style="font-size: 1rem; margin-bottom: 20px; color: #333;">${mensaje}</p>
+        <button onclick="document.getElementById('alerta-custom').remove()" class="btn btn-primary" style="max-width: 150px; margin: 0 auto; background: #7B8C6E; color: white; padding: 12px 20px; border: none; border-radius: 12px; cursor: pointer;">Aceptar</button>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', alertaHTML);
+}
+
 // ======= CARGAR MESEROS DESDE CACHE O GOOGLE SHEETS =======
 function cargarMeseros() {
-  // Intentar cargar desde localStorage primero
   const meserosCache = localStorage.getItem('meseros');
   const timestamp = localStorage.getItem('meserosTimestamp');
-  const CACHE_DURATION = 30 * 60 * 1000; // 30 minutos
+  const CACHE_DURATION = 30 * 60 * 1000;
 
-  // Si hay cache válido, usar esos datos
   if (meserosCache && timestamp) {
     const age = Date.now() - parseInt(timestamp);
     if (age < CACHE_DURATION) {
@@ -23,19 +35,15 @@ function cargarMeseros() {
       renderizarMeseros();
       selected.textContent = 'Selecciona...';
       console.log('✅ Meseros cargados desde cache:', meseros);
-
-      // Actualizar en segundo plano
       actualizarMeserosBackground();
       return;
     }
   }
 
-  // Si no hay cache o expiró, cargar desde Google Sheets usando JSONP
   selected.textContent = 'Cargando...';
   cargarMeserosJSONP();
 }
 
-// Cargar usando JSONP para evitar CORS
 function cargarMeserosJSONP() {
   const callbackName = 'meseros_callback_' + Date.now();
 
@@ -43,11 +51,8 @@ function cargarMeserosJSONP() {
     try {
       if (data.success && data.meseros && data.meseros.length > 0) {
         meseros = data.meseros;
-
-        // Guardar en cache
         localStorage.setItem('meseros', JSON.stringify(meseros));
         localStorage.setItem('meserosTimestamp', Date.now().toString());
-
         renderizarMeseros();
         selected.textContent = 'Selecciona...';
         console.log('✅ Meseros cargados desde Google Sheets:', meseros);
@@ -59,7 +64,6 @@ function cargarMeserosJSONP() {
       usarCacheFallback();
     }
 
-    // Limpiar
     delete window[callbackName];
     const scriptTag = document.getElementById(callbackName);
     if (scriptTag) document.body.removeChild(scriptTag);
@@ -79,7 +83,6 @@ function cargarMeserosJSONP() {
   document.body.appendChild(script);
 }
 
-// Usar cache antiguo como fallback
 function usarCacheFallback() {
   const meserosCache = localStorage.getItem('meseros');
   if (meserosCache) {
@@ -93,14 +96,12 @@ function usarCacheFallback() {
   }
 }
 
-// Actualizar meseros en segundo plano sin bloquear la UI
 function actualizarMeserosBackground() {
   const callbackName = 'meseros_bg_callback_' + Date.now();
 
   window[callbackName] = function (data) {
     try {
       if (data.success && data.meseros && data.meseros.length > 0) {
-        // Solo actualizar si hay cambios
         const meserosActuales = JSON.stringify(meseros);
         const meserosNuevos = JSON.stringify(data.meseros);
 
@@ -114,7 +115,6 @@ function actualizarMeserosBackground() {
       console.log('⚠️ No se pudo actualizar el cache en segundo plano');
     }
 
-    // Limpiar
     delete window[callbackName];
     const scriptTag = document.getElementById(callbackName);
     if (scriptTag) document.body.removeChild(scriptTag);
@@ -134,7 +134,6 @@ function actualizarMeserosBackground() {
 
 // ======= RENDERIZAR OPCIONES DE MESEROS =======
 function renderizarMeseros() {
-  // Limpiar opciones existentes
   options.innerHTML = '';
 
   if (meseros.length === 0) {
@@ -146,17 +145,14 @@ function renderizarMeseros() {
     return;
   }
 
-  // Crear opciones dinámicamente
   meseros.forEach(mesero => {
     const div = document.createElement('div');
     div.setAttribute('data-value', mesero);
     div.innerHTML = `${mesero}<span class="radio"></span>`;
 
-    // Agregar evento de clic
     div.addEventListener('click', (e) => {
       e.stopPropagation();
 
-      // Remover selección anterior
       options.querySelectorAll('div').forEach(item => {
         const radio = item.querySelector('.radio');
         if (radio) {
@@ -165,7 +161,6 @@ function renderizarMeseros() {
         }
       });
 
-      // Agregar selección nueva
       div.querySelector('.radio').classList.add('active');
       div.classList.add('active');
       selected.textContent = mesero;
@@ -181,13 +176,11 @@ function renderizarMeseros() {
 function openDropdown() {
   const rect = selected.getBoundingClientRect();
   const viewportHeight = window.innerHeight;
-  const spaceBelow = viewportHeight - rect.bottom - 20; // 20px de margen
+  const spaceBelow = viewportHeight - rect.bottom - 20;
   const spaceAbove = rect.top - 20;
 
-  // Calcular altura máxima disponible
-  let maxHeight = Math.max(spaceBelow - 8, 200); // Mínimo 200px
+  let maxHeight = Math.max(spaceBelow - 8, 200);
 
-  // Si no hay suficiente espacio abajo pero sí arriba, abrir hacia arriba
   if (spaceBelow < 200 && spaceAbove > spaceBelow) {
     maxHeight = Math.min(spaceAbove - 8, 400);
     options.style.bottom = (viewportHeight - rect.top + 8) + 'px';
@@ -215,10 +208,6 @@ function closeDropdown() {
   open = false;
 }
 
-function mostrarError(mensaje) {
-  alert('⚠️ ' + mensaje);
-}
-
 // ======= EVENT LISTENERS =======
 selected.addEventListener('click', (e) => {
   e.stopPropagation();
@@ -230,12 +219,10 @@ selected.addEventListener('click', (e) => {
   }
 });
 
-// Cerrar si clic fuera
 document.addEventListener('click', () => {
   if (open) closeDropdown();
 });
 
-// Reposicionar en scroll/resize
 window.addEventListener('resize', () => {
   if (open) openDropdown();
 });
@@ -247,7 +234,7 @@ window.addEventListener('scroll', () => {
 // Botón siguiente
 document.querySelector('.btn').addEventListener('click', () => {
   if (!selectedValue) {
-    alert("Selecciona un nombre de mesero ◀");
+    mostrarError("Selecciona un nombre de mesero ◀");
     return;
   }
   sessionStorage.setItem("meseroActual", selectedValue);
@@ -255,5 +242,4 @@ document.querySelector('.btn').addEventListener('click', () => {
 });
 
 // ======= INICIALIZACIÓN =======
-// Cargar meseros al cargar la página
 cargarMeseros();

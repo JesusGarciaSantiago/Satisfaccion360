@@ -126,6 +126,40 @@ async function guardarGanador(premio, codigo) {
     console.error("Error al guardar ganador:", error);
   }
 }
+// 🔒 FUNCIÓN PARA BLOQUEAR/DESBLOQUEAR BOTÓN HOME
+function bloquearBotonHome(bloquear) {
+  const btnHome = document.getElementById("btn-home");
+  if (btnHome) {
+    if (bloquear) {
+      btnHome.style.opacity = "0.5";
+      btnHome.style.pointerEvents = "none";
+      btnHome.style.cursor = "not-allowed";
+    } else {
+      btnHome.style.opacity = "1";
+      btnHome.style.pointerEvents = "auto";
+      btnHome.style.cursor = "pointer";
+    }
+  }
+}
+
+// 🔒 FUNCIÓN PARA BLOQUEAR/DESBLOQUEAR BOTONES DEL POPUP
+function bloquearBotonesPopup(bloquear) {
+  const popupButtons = document.querySelector('.popup-buttons');
+  if (popupButtons) {
+    const buttons = popupButtons.querySelectorAll('button');
+    buttons.forEach(btn => {
+      if (bloquear) {
+        btn.style.opacity = "0.5";
+        btn.style.pointerEvents = "none";
+        btn.style.cursor = "not-allowed";
+      } else {
+        btn.style.opacity = "1";
+        btn.style.pointerEvents = "auto";
+        btn.style.cursor = "pointer";
+      }
+    });
+  }
+}
 
 function girarRuleta() {
   if (girando) return;
@@ -133,7 +167,10 @@ function girarRuleta() {
   girando = true;
   boton.classList.add('girando');
 
-  // Reproducir sonido - intento mejorado
+  // 🔒 BLOQUEAR BOTÓN HOME AL EMPEZAR A GIRAR
+  bloquearBotonHome(true);
+
+  // Reproducir sonido
   if (sonidoRuleta) {
     sonidoRuleta.volume = 0.6;
     const playPromise = sonidoRuleta.play();
@@ -152,7 +189,7 @@ function girarRuleta() {
   let giro = 0;
   let velocidad = Math.random() * 0.3 + 0.25;
   const desaceleracion = 0.995;
-  const vueltasMinimas = 5; // Mínimo 5 vueltas completas
+  const vueltasMinimas = 5;
 
   const animar = () => {
     giro += velocidad;
@@ -183,10 +220,14 @@ function girarRuleta() {
 
       document.getElementById("resultado").textContent = `¡Ganaste: ${premioGanado}! Código: ${codigo}`;
 
-      // Esperar 500ms antes de mostrar el popup para efecto dramático
       setTimeout(() => {
         mostrarAnuncio(premioGanado, codigo);
         guardarGanador(premioGanado, codigo);
+
+        // 🔒 BLOQUEAR BOTONES DEL POPUP DURANTE GENERACIÓN DE PDF
+        bloquearBotonesPopup(true);
+
+        // NOTA: El botón HOME permanece bloqueado hasta que el QR se genere
         generarPDFPremio(premioGanado, codigo);
       }, 500);
 
@@ -197,12 +238,35 @@ function girarRuleta() {
   animar();
 }
 
+// FUNCIÓN PARA BLOQUEAR/DESBLOQUEAR BOTONES DEL POPUP
+function bloquearBotonesPopup(bloquear) {
+  const popupButtons = document.querySelector('.popup-buttons');
+  if (popupButtons) {
+    const buttons = popupButtons.querySelectorAll('button');
+    buttons.forEach(btn => {
+      if (bloquear) {
+        btn.style.opacity = "0.5";
+        btn.style.pointerEvents = "none";
+        btn.style.cursor = "not-allowed";
+      } else {
+        btn.style.opacity = "1";
+        btn.style.pointerEvents = "auto";
+        btn.style.cursor = "pointer";
+      }
+    });
+  }
+}
+
 function continuar() {
   const popup = document.getElementById("popup-premio");
   const resultado = document.getElementById("resultado");
 
   popup.classList.add("hidden");
-  resultado.style.display = 'none'; // Ocultar también al continuar
+  resultado.style.display = 'none';
+
+  //  Asegurar que el botón HOME esté desbloqueado
+  bloquearBotonHome(false);
+
   window.location.href = "formulario.html";
 }
 
@@ -211,10 +275,13 @@ function cambiarUsuario() {
   const resultado = document.getElementById("resultado");
 
   popup.classList.add("hidden");
-  resultado.style.display = 'none'; // Ocultar también al cambiar usuario
+  resultado.style.display = 'none';
+  
+  //  Asegurar que el botón HOME esté desbloqueado
+  bloquearBotonHome(false);
+  
   window.location.href = "menu.html";
 }
-
 // ======= INICIALIZACIÓN =======
 document.getElementById("boton-central").addEventListener("click", girarRuleta);
 
@@ -255,9 +322,9 @@ function inicializar() {
 }
 
 inicializar();
-/***************************************************************
- * 🎁 Generar PDF y subirlo a Google Drive con código existente
- ***************************************************************/
+/*
+ * Generar PDF y subirlo a Google Drive con código existente
+ */
 async function generarPDFPremio(premio, codigoValidacion) {
   const mesero = sessionStorage.getItem("meseroActual") || "Desconocido";
   const fecha = new Date().toLocaleString();
@@ -423,6 +490,12 @@ async function generarPDFPremio(premio, codigoValidacion) {
       document.getElementById("loader-pdf").classList.add("hidden");
       document.getElementById("premio-generado").classList.remove("hidden");
 
+      //  DESBLOQUEAR BOTONES DEL POPUP CUANDO EL PDF ESTÉ LISTO
+      bloquearBotonesPopup(false);
+
+      //  DESBLOQUEAR BOTÓN HOME CUANDO TODO ESTÉ LISTO
+      bloquearBotonHome(false);
+
       // Mostrar QR descargable
       const qrDiv = document.getElementById("qr-popup-code");
       qrDiv.innerHTML = "";
@@ -441,10 +514,20 @@ async function generarPDFPremio(premio, codigoValidacion) {
       console.log("📄 URL del PDF:", pdfPublicURL);
     } else {
       console.error("❌ Error desde el servidor:", result.error);
+
+      //  DESBLOQUEAR BOTONES EN CASO DE ERROR
+      bloquearBotonesPopup(false);
+      bloquearBotonHome(false);
+
       mostrarError();
     }
   } catch (err) {
     console.error("❌ Error al subir el PDF:", err);
+
+    //  DESBLOQUEAR BOTONES EN CASO DE ERROR
+    bloquearBotonesPopup(false);
+    bloquearBotonHome(false);
+
     mostrarError();
   }
 }

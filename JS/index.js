@@ -8,14 +8,48 @@ let selectedValue = null;
 let open = false;
 let meseros = [];
 
-// 🎨 FUNCIÓN PARA MOSTRAR ALERTAS PERSONALIZADAS
+// 🎨 FUNCIÓN PARA MOSTRAR ALERTAS PERSONALIZADAS CON DISEÑO
 function mostrarError(mensaje) {
   const alertaHTML = `
-    <div id="alerta-custom" class="popup" style="display: flex; z-index: 99999;">
-      <div class="popup-content" style="max-width: 350px;">
-        <div style="font-size: 3rem; margin-bottom: 15px;">⚠️</div>
-        <p style="font-size: 1rem; margin-bottom: 20px; color: #333;">${mensaje}</p>
-        <button onclick="document.getElementById('alerta-custom').remove()" class="btn btn-primary" style="max-width: 150px; margin: 0 auto; background: #7B8C6E; color: white; padding: 12px 20px; border: none; border-radius: 12px; cursor: pointer;">Aceptar</button>
+    <div id="alerta-custom" class="popup" style="
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+      animation: fadeIn 0.3s ease-out;
+    ">
+      <div class="popup-content" style="
+        background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+        padding: 30px 25px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+        color: #5a514a;
+        max-width: 380px;
+        width: 90%;
+        animation: popupEntrance 0.4s ease-out;
+      ">
+        <div style="font-size: 3.5rem; margin-bottom: 15px;">⚠️</div>
+        <h2 style="color: #7B8C6E; margin-bottom: 15px; font-size: 1.4rem; font-weight: 700;">Atención</h2>
+        <p style="font-size: 1rem; margin-bottom: 25px; color: #5a514a; line-height: 1.5;">${mensaje}</p>
+        <button onclick="document.getElementById('alerta-custom').remove()" style="
+          padding: 12px 30px;
+          background: linear-gradient(135deg, #8ca37c 0%, #7c8c6c 100%);
+          border: none;
+          color: white;
+          cursor: pointer;
+          border-radius: 12px;
+          font-size: 1rem;
+          font-weight: 600;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          transition: all 0.3s ease;
+        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 18px rgba(0, 0, 0, 0.3)';" 
+           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0, 0, 0, 0.2)';">
+          Aceptar
+        </button>
       </div>
     </div>
   `;

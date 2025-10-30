@@ -37,35 +37,130 @@ document.addEventListener("DOMContentLoaded", function () {
 
   precargarPremios();
 
-  // 🎨 FUNCIÓN PARA MOSTRAR ALERTAS PERSONALIZADAS
+  // 🎨 FUNCIÓN PARA MOSTRAR ALERTAS PERSONALIZADAS CON DISEÑO
   function mostrarAlerta(mensaje) {
+    // Agregar estilos de animación si no existen
+    if (!document.getElementById('popup-animations')) {
+      const style = document.createElement('style');
+      style.id = 'popup-animations';
+      style.textContent = `
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes popupEntrance {
+          from { opacity: 0; transform: scale(0.8) translateY(-50px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
     const alertaHTML = `
-      <div id="alerta-custom" class="popup" style="display: flex;">
-        <div class="popup-content" style="max-width: 350px;">
-          <div style="font-size: 3rem; margin-bottom: 15px;">⚠️</div>
-          <p style="font-size: 1rem; margin-bottom: 20px; color: #333;">${mensaje}</p>
-          <button onclick="document.getElementById('alerta-custom').remove()" class="btn btn-primary" style="max-width: 150px; margin: 0 auto;">Aceptar</button>
+      <div id="alerta-custom" style="
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        animation: fadeIn 0.3s ease-out;
+      ">
+        <div style="
+          background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+          padding: 30px 25px;
+          border-radius: 20px;
+          text-align: center;
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+          color: #5a514a;
+          max-width: 380px;
+          width: 90%;
+          animation: popupEntrance 0.4s ease-out;
+        ">
+          <div style="font-size: 3.5rem; margin-bottom: 15px;">⚠️</div>
+          <h2 style="color: #7B8C6E; margin-bottom: 15px; font-size: 1.4rem; font-weight: 700;">Atención</h2>
+          <p style="font-size: 1rem; margin-bottom: 25px; color: #5a514a; line-height: 1.5;">${mensaje}</p>
+          <button id="alerta-btn-cerrar" style="
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #8ca37c 0%, #7c8c6c 100%);
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+          ">
+            Aceptar
+          </button>
         </div>
       </div>
     `;
+
     document.body.insertAdjacentHTML('beforeend', alertaHTML);
+
+    // Agregar event listener al botón
+    document.getElementById('alerta-btn-cerrar').addEventListener('click', function () {
+      document.getElementById('alerta-custom').remove();
+    });
+
+    // Agregar hover effects
+    const btn = document.getElementById('alerta-btn-cerrar');
+    btn.addEventListener('mouseenter', function () {
+      this.style.transform = 'translateY(-2px)';
+      this.style.boxShadow = '0 6px 18px rgba(0, 0, 0, 0.3)';
+    });
+    btn.addEventListener('mouseleave', function () {
+      this.style.transform = 'translateY(0)';
+      this.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    });
   }
 
-  // === Validación de campos requeridos ===
+  // === Validación de campos requeridos CON MENSAJES ESPECÍFICOS ===
   function validarFormulario(data) {
     // Campos de texto requeridos
     if (!data.ticket || !data.mesa) {
-      mostrarAlerta("Por favor ingresa el número de ticket y de mesa.");
+      if (!data.ticket && !data.mesa) {
+        mostrarAlerta("Por favor ingresa el número de ticket y de mesa.");
+      } else if (!data.ticket) {
+        mostrarAlerta("Por favor ingresa el folio del ticket.");
+      } else {
+        mostrarAlerta("Por favor ingresa el número de mesa.");
+      }
       return false;
     }
 
-    // Campos tipo 'radio' requeridos
-    const grupos = ["personal", "bebidas", "alimentos", "limpieza", "precios", "conociste"];
-    for (const grupo of grupos) {
-      if (!document.querySelector(`input[name="${grupo}"]:checked`)) {
-        mostrarAlerta(`Por favor responde la pregunta sobre ${grupo}.`);
-        return false;
-      }
+    // Validar cada pregunta con mensajes personalizados
+    if (!data.personal) {
+      mostrarAlerta("Por favor califica el servicio y trato del personal.");
+      return false;
+    }
+
+    if (!data.bebidas) {
+      mostrarAlerta("Por favor califica la calidad de las bebidas.");
+      return false;
+    }
+
+    if (!data.alimentos) {
+      mostrarAlerta("Por favor califica la calidad de los alimentos.");
+      return false;
+    }
+
+    if (!data.limpieza) {
+      mostrarAlerta("Por favor califica la limpieza del lugar.");
+      return false;
+    }
+
+    if (!data.precios) {
+      mostrarAlerta("Por favor indica tu percepción sobre los precios.");
+      return false;
+    }
+
+    if (!data.conociste) {
+      mostrarAlerta("Por favor indícanos cómo te enteraste de nosotros.");
+      return false;
     }
 
     // Si seleccionó "Otro", debe escribir texto
@@ -97,6 +192,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  // 🔒 FUNCIÓN PARA BLOQUEAR/DESBLOQUEAR BOTÓN HOME
+  function bloquearBotonHome(bloquear) {
+    const btnHome = document.getElementById("btn-home");
+    if (btnHome) {
+      if (bloquear) {
+        btnHome.style.opacity = "0.5";
+        btnHome.style.pointerEvents = "none";
+        btnHome.style.cursor = "not-allowed";
+      } else {
+        btnHome.style.opacity = "1";
+        btnHome.style.pointerEvents = "auto";
+        btnHome.style.cursor = "pointer";
+      }
+    }
+  }
+
   // === Envío del formulario ===
   formulario.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -121,6 +232,9 @@ document.addEventListener("DOMContentLoaded", function () {
     // 🚫 Validar antes de enviar
     if (!validarFormulario(data)) return;
 
+    // 🔒 BLOQUEAR BOTÓN HOME
+    bloquearBotonHome(true);
+
     // 🔥 MOSTRAR LOADER ANTES DE ENVIAR
     mostrarLoader(true);
 
@@ -137,11 +251,20 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("✅ Formulario enviado");
 
         setTimeout(() => {
+          // 🔓 DESBLOQUEAR BOTÓN HOME
+          bloquearBotonHome(false);
+
+          // 🔥 OCULTAR LOADER
           mostrarLoader(false);
+
+          // Limpiar formulario
           formulario.reset();
           otroContainer.style.display = "none";
+
+          // 🔥 MOSTRAR POPUP
           mostrarPopup(true);
 
+          // Configurar botones del popup
           document.getElementById("continuar-btn").onclick = () => {
             const ruletaDeshabilitada = sessionStorage.getItem("ruletaDeshabilitada") === "true";
             if (!ruletaDeshabilitada) {
@@ -158,6 +281,11 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch(err => {
         console.error("❌ Error al enviar formulario:", err);
+
+        // 🔓 DESBLOQUEAR BOTÓN HOME
+        bloquearBotonHome(false);
+
+        // 🔥 OCULTAR LOADER EN CASO DE ERROR
         mostrarLoader(false);
         mostrarAlerta("❌ Hubo un error al enviar la encuesta. Por favor intenta de nuevo.");
       });

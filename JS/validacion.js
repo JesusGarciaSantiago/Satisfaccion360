@@ -19,7 +19,7 @@ let scanning = false;
 let stream = null;
 let scanInterval = null;
 
-// ✅ Crear placeholder para cuando no hay video
+//  Crear placeholder para cuando no hay video
 const placeholder = document.createElement('div');
 placeholder.className = 'video-placeholder';
 placeholder.innerHTML = '📷';
@@ -42,10 +42,11 @@ async function validarCodigo(codigo) {
         // Ocultar loader
         loader.classList.add('hidden');
 
+        //  SOLO MOSTRAR RESULTADO UNA VEZ
         if (data.success) {
-            mostrarResultado(true, `${data.message} (${data.premio || 'Premio no registrado'})`);
+            mostrarResultado(true, `${data.message}${data.premio ? ' - ' + data.premio : ''}`);
         } else {
-            mostrarResultado(false, data.message);
+            mostrarResultado(false, data.message || "Código no válido");
         }
     } catch (error) {
         // Ocultar loader
@@ -89,7 +90,7 @@ input.addEventListener('keypress', (e) => {
     }
 });
 
-// ✅ Función para detener el escaneo
+// Función para detener el escaneo
 function detenerEscaneo() {
     scanning = false;
     scanOverlay.classList.remove('active');
@@ -109,7 +110,6 @@ function detenerEscaneo() {
         stream = null;
     }
 
-    // ✅ Ocultar video y mostrar placeholder
     video.srcObject = null;
     video.classList.remove('active');
     placeholder.classList.remove('hidden');
@@ -155,7 +155,7 @@ function escanearFrame() {
     }
 }
 
-// ✅ INICIAR CÁMARA CON BOTÓN
+//  INICIAR CÁMARA CON BOTÓN
 startScanBtn.addEventListener('click', async () => {
     if (scanning) {
         detenerEscaneo();
@@ -178,7 +178,7 @@ startScanBtn.addEventListener('click', async () => {
             throw new Error('NotSupported');
         }
 
-        // ✅ SOLICITAR PERMISOS EXPLÍCITAMENTE
+        //  SOLICITAR PERMISOS EXPLÍCITAMENTE
         let camaraUsada = "trasera";
 
         console.log("📸 Solicitando permisos de cámara...");
@@ -193,7 +193,7 @@ startScanBtn.addEventListener('click', async () => {
                 },
                 audio: false
             });
-            console.log("✅ Cámara trasera obtenida");
+            console.log(" Cámara trasera obtenida");
         } catch (firstError) {
             console.log("Intentando con cualquier cámara...");
             camaraUsada = "disponible";
@@ -209,11 +209,11 @@ startScanBtn.addEventListener('click', async () => {
             console.log("✅ Cámara obtenida");
         }
 
-        // ✅ Configurar video
+        //  Configurar video
         video.srcObject = stream;
         cameraStatus.textContent = "⏳ Iniciando cámara...";
 
-        // ✅ Esperar a que el video esté listo
+        //  Esperar a que el video esté listo
         await new Promise((resolve, reject) => {
             video.onloadedmetadata = () => {
                 console.log("Metadata del video cargada");
@@ -237,7 +237,7 @@ startScanBtn.addEventListener('click', async () => {
             setTimeout(() => reject(new Error("Timeout")), 15000);
         });
 
-        // ✅ Mostrar video y ocultar placeholder
+        //  Mostrar video y ocultar placeholder
         placeholder.classList.add('hidden');
         video.classList.add('active');
 
@@ -264,7 +264,7 @@ startScanBtn.addEventListener('click', async () => {
             stream = null;
         }
 
-        // ✅ Asegurar que el video esté oculto
+        // Asegurar que el video esté oculto
         video.classList.remove('active');
         placeholder.classList.remove('hidden');
 
@@ -295,7 +295,7 @@ startScanBtn.addEventListener('click', async () => {
     }
 });
 
-// ✅ Manejar cambios de orientación SIN reiniciar
+// Manejar cambios de orientación SIN reiniciar
 let isOrientationChanging = false;
 
 window.addEventListener('orientationchange', () => {
@@ -308,7 +308,7 @@ window.addEventListener('orientationchange', () => {
     }, 500);
 });
 
-// ✅ Manejar visibilidad de página
+//  Manejar visibilidad de página
 document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
         console.log('📱 Página oculta');
@@ -322,7 +322,7 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
-// ✅ Limpiar al salir
+//  Limpiar al salir
 window.addEventListener('beforeunload', () => {
     console.log('👋 Limpiando recursos...');
     detenerEscaneo();

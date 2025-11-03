@@ -5,40 +5,58 @@ body {
   color: #333;
 }
 
-/* Encabezado */
+/* Encabezado con 3 columnas */
 .encabezado {
   background: #7B8C6E;
   color: #fff;
   padding: 15px 20px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Columna 1: Título */
+.encabezado-titulo {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  position: relative;
-  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .encabezado h1 {
-margin: 0 0 0 20px;
+  margin: 0;
   font-size: 1.8rem;
   font-weight: bold;
-  line-height: 1.3;
-  margin-left: 50px;
-  text-align: center;
   color: #fff;
-
+  line-height: 1.2;
 }
 
-.encabezado .volver {
- font-size: 1.3rem;
-  cursor: pointer;
-  position: absolute;
-  left: 20px;
-  top: 20px;
+/* Columna 2: Logo Carranza (centrado) */
+.encabezado-logo-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.encabezado .logo {
-  height: 160px;
-  width: 160px;
+.logo-img {
+  width: 250px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Columna 3: Icono plato (derecha) */
+.encabezado-icono {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.logo {
+  height: 120px;
+  width: 120px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -49,7 +67,6 @@ margin: 0 0 0 20px;
   justify-content: center;
   gap: 15px;
   margin: 10px auto 30px auto;
-  /* ✅ bajamos la sección, ya no invade el título */
   position: relative;
   z-index: 10;
 }
@@ -58,7 +75,6 @@ margin: 0 0 0 20px;
   background: #fff;
   border-radius: 12px;
   padding: 20px 25px 10px;
-  /* más padding arriba para el label flotante */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   text-align: center;
   position: relative;
@@ -67,7 +83,7 @@ margin: 0 0 0 20px;
 
 .campo-ticket label {
   position: absolute;
-  top: 0px; 
+  top: 0px;
   left: 0px;
   background: #7B8C6E;
   color: #fff;
@@ -75,7 +91,7 @@ margin: 0 0 0 20px;
   border-radius: 6px;
   font-size: 0.9rem;
   font-weight: bold;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.25); /* ✅ sombra flotante */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
 }
 
 .campo-ticket input {
@@ -181,7 +197,6 @@ form {
   color: #888;
 }
 
-/* Hover para opciones de texto en "¿Cómo te enteraste?" */
 .opciones.redes label span {
   background: #fff;
   border-radius: 10px;
@@ -261,35 +276,199 @@ button:hover {
   border-radius: 12px;
   text-align: center;
 }
-/* ======== RESPONSIVE: Google Pixel 8a ======== */
-@media (max-width: 430px) {
-  /* Encabezado */
+
+/* Input "Otro" */
+#otro-input-container {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#otro-input-container input[type="text"],
+#otro-input-container input[type="text"]:focus {
+  width: 100%;
+  background-color: #f6f3eb;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #333;
+  box-sizing: border-box;
+  outline: none;
+  resize: none;
+}
+
+#otro-input-container input[type="text"]::placeholder {
+  color: #888;
+}
+
+#otro-input-container input[type="text"]:focus {
+  border-color: #7B8C6E;
+  box-shadow: 0 0 5px rgba(123, 140, 110, 0.4);
+}
+
+#comentarios {
+  width: 100%;
+  background-color: #f6f3eb;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #333;
+  box-sizing: border-box;
+  outline: none;
+}
+
+#comentarios:focus {
+  border-color: #7B8C6E;
+  box-shadow: 0 0 5px rgba(123, 140, 110, 0.4);
+}
+
+/* Loader overlay */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader-content {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #8ca37c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader-content p {
+  color: #5a514a;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ========== RESPONSIVE ========== */
+
+/* Móviles pequeños (hasta 375px) */
+@media (max-width: 375px) {
   .encabezado {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
     padding: 10px;
+    text-align: center;
+  }
+
+  .encabezado-titulo {
+    justify-content: center;
+    order: 2;
+  }
+
+  .encabezado h1 {
+    font-size: 1.1rem;
+  }
+
+  .encabezado-logo-center {
+    order: 1;
+  }
+
+  .logo-img {
+    width: 160px;
+  }
+
+  .encabezado-icono {
+    justify-content: center;
+    order: 3;
+  }
+
+  .logo {
+    width: 70px;
+    height: 70px;
+  }
+
+  .campo-ticket {
+    padding: 12px;
+  }
+
+  .campo-ticket input {
+    font-size: 1.2rem;
+  }
+
+  .opciones.caritas label i {
+    font-size: 1.4rem;
+  }
+}
+
+/* Móviles estándar (376px - 430px) */
+@media (min-width: 376px) and (max-width: 430px) {
+  .encabezado {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    gap: 10px;
+    padding: 12px 15px;
+    text-align: center;
+  }
+
+  .encabezado-titulo {
+    justify-content: center;
+    order: 2;
   }
 
   .encabezado h1 {
     font-size: 1.3rem;
-    margin: 10px 0 5px 0;
   }
 
-  .encabezado .logo {
-    width: 90px;
-    height: 90px;
-    margin: 10px 0 0 0;
+  .encabezado-logo-center {
+    order: 1;
   }
 
-  .encabezado .volver {
-    font-size: 1.1rem;
-    position: absolute;
-    left: 10px;
-    top: 10px;
+  .logo-img {
+    width: 180px;
   }
 
-  /* Datos ticket */
+  .encabezado-icono {
+    justify-content: center;
+    order: 3;
+  }
+
+  .logo {
+    height: 80px;
+    width: 80px;
+  }
+
   .datos-ticket {
     flex-direction: column;
     gap: 10px;
@@ -302,7 +481,6 @@ button:hover {
     padding: 15px;
   }
 
-  /* Preguntas */
   .pregunta p {
     font-size: 1rem;
   }
@@ -331,133 +509,24 @@ button:hover {
   }
 }
 
-/* === Input "Otro" === */
-#otro-input-container {
-  width: 100%;
-  margin-top: 10px;
-}
-
-#otro-input-container input[type="text"],
-#otro-input-container input[type="text"]:focus {
-  width: 100%;
-  background-color: #f6f3eb; /* mismo tono del textarea */
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 1rem;
-  font-family: inherit;
-  color: #333;
-  box-sizing: border-box;
-  outline: none;
-  resize: none; /* coherente con el textarea */
-}
-
-#otro-input-container input[type="text"]::placeholder {
-  color: #888;
-}
-
-#otro-input-container input[type="text"]:focus {
-  border-color: #7B8C6E;
-  box-shadow: 0 0 5px rgba(123, 140, 110, 0.4);
-}
-
-/* === Alinear visualmente con el textarea === */
-#comentarios {
-  width: 100%;
-  background-color: #f6f3eb;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px 12px;
-  font-size: 1rem;
-  font-family: inherit;
-  color: #333;
-  box-sizing: border-box;
-  outline: none;
-}
-
-#comentarios:focus {
-  border-color: #7B8C6E;
-  box-shadow: 0 0 5px rgba(123, 140, 110, 0.4);
-}
-
-.logo-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 15px; /* separa el logo del icono de usuario */
-}
-
-.logo-img {
-  width: 450px;
-  max-width: 80%;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.2));
-}
-/* Loader overlay - cubre toda la pantalla */
-.loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  
-}
-
-.loader-content {
-  background: white;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #8ca37c;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loader-content p {
-  color: #5a514a;
-  font-size: 16px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.hidden {
-  display: none !important;
-}
+/* Tablets pequeñas y móviles grandes (431px - 768px) */
 @media (min-width: 431px) and (max-width: 768px) {
   .encabezado {
-    padding: 12px 15px;
+    padding: 15px 20px;
+    gap: 12px;
   }
 
   .encabezado h1 {
-    font-size: 1.5rem;
-    margin-left: 60px;
+    font-size: 1.4rem;
   }
 
-  .encabezado .logo {
-    width: 120px;
-    height: 120px;
+  .logo-img {
+    width: 200px;
+  }
+
+  .logo {
+    width: 100px;
+    height: 100px;
   }
 
   .datos-ticket {
@@ -490,9 +559,13 @@ button:hover {
     font-size: 1.6rem;
   }
 
-  .encabezado .logo {
-    width: 140px;
-    height: 140px;
+  .logo-img {
+    width: 220px;
+  }
+
+  .logo {
+    width: 110px;
+    height: 110px;
   }
 
   .datos-ticket {
@@ -510,153 +583,44 @@ button:hover {
   }
 }
 
-/* Móviles pequeños (hasta 375px) */
-@media (max-width: 375px) {
+/* Tablets grandes y escritorio (1025px+) */
+@media (min-width: 1025px) {
+  .encabezado {
+    padding: 20px 40px;
+  }
+
   .encabezado h1 {
-    font-size: 1.1rem;
+    font-size: 2rem;
   }
 
-  .encabezado .logo {
-    width: 80px;
-    height: 80px;
+  .logo-img {
+    width: 280px;
   }
 
-  .campo-ticket {
-    padding: 12px;
-  }
-
-  .campo-ticket input {
-    font-size: 1.2rem;
-  }
-
-  .opciones.caritas label i {
-    font-size: 1.4rem;
+  .logo {
+    width: 130px;
+    height: 130px;
   }
 }
 
 /* Móviles en horizontal */
 @media (max-height: 500px) and (orientation: landscape) {
-  /* Formulario */
   .encabezado {
     padding: 8px 15px;
-  }
-
-  .encabezado h1 {
-    font-size: 1.2rem;
-  }
-
-  .encabezado .logo {
-    width: 80px;
-    height: 80px;
-  }
-
-  .datos-ticket {
-    margin: 10px auto 20px auto;
-  }
-}
-/* Tablets pequeñas y móviles grandes (481px - 768px) */
-@media (min-width: 431px) and (max-width: 768px) {
-  .encabezado {
-    padding: 12px 15px;
-  }
-
-  .encabezado h1 {
-    font-size: 1.5rem;
-    margin-left: 60px;
-  }
-
-  .encabezado .logo {
-    width: 120px;
-    height: 120px;
-  }
-
-  .datos-ticket {
-    gap: 12px;
-    margin: 15px auto 25px auto;
-  }
-
-  .campo-ticket {
-    min-width: 140px;
-    padding: 22px 28px 12px;
-  }
-
-  .campo-ticket input {
-    font-size: 1.3rem;
-  }
-
-  .opciones {
     gap: 10px;
   }
 
-  button {
-    font-size: 1.1rem;
-    padding: 14px;
-  }
-}
-
-/* Tablets (769px - 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
   .encabezado h1 {
-    font-size: 1.6rem;
+    font-size: 1rem;
   }
 
-  .encabezado .logo {
+  .logo-img {
     width: 140px;
-    height: 140px;
   }
 
-  .datos-ticket {
-    max-width: 700px;
-  }
-
-  form {
-    max-width: 700px;
-    margin: 0 auto;
-  }
-
-  .opciones.caritas label,
-  .opciones.precios label {
-    min-width: 90px;
-  }
-}
-
-/* Móviles pequeños (hasta 375px) */
-@media (max-width: 375px) {
-  .encabezado h1 {
-    font-size: 1.1rem;
-  }
-
-  .encabezado .logo {
-    width: 80px;
-    height: 80px;
-  }
-
-  .campo-ticket {
-    padding: 12px;
-  }
-
-  .campo-ticket input {
-    font-size: 1.2rem;
-  }
-
-  .opciones.caritas label i {
-    font-size: 1.4rem;
-  }
-}
-
-/* Móviles en horizontal */
-@media (max-height: 500px) and (orientation: landscape) {
-  .encabezado {
-    padding: 8px 15px;
-  }
-
-  .encabezado h1 {
-    font-size: 1.2rem;
-  }
-
-  .encabezado .logo {
-    width: 80px;
-    height: 80px;
+  .logo {
+    width: 60px;
+    height: 60px;
   }
 
   .datos-ticket {

@@ -46,7 +46,7 @@
 
     <div id="resultado"></div>
 
-    <!-- Popup -->
+    <!-- Popup sin botón "Cambiar Usuario" -->
     <div id="popup-premio" class="hidden">
       <div class="popup-content">
         <div class="confetti-container">
@@ -64,15 +64,14 @@
           <p>Generando tu premio...</p>
         </div>
 
-        <!-- QR y botón (inicialmente ocultos) -->
+        <!-- QR (inicialmente oculto) -->
         <div id="premio-generado" class="hidden">
           <div id="qr-popup-code"></div>
-          <a id="btn-descargar-pdf" href="#" class="btn-descarga">⬇️ Descargar PDF</a>
+          <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">Escanea el código para descargar tu premio</p>
         </div>
 
         <div class="popup-buttons">
           <button onclick="continuar()">Continuar</button>
-          <button onclick="cambiarUsuario()">Cambiar Usuario</button>
         </div>
       </div>
     </div>

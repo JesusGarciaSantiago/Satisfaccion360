@@ -13,14 +13,23 @@
 
 <body>
 
-  <!-- ENCABEZADO -->
+  <!-- ENCABEZADO CON 3 COLUMNAS -->
   <header class="encabezado">
-    <i class="fa-solid fa-arrow-left volver"></i>
-    <h1>Encuesta de<br>Satisfacción</h1>
-    <img src="./images/logo C50_Inverted.png" alt="Logo del restaurante" class="logo-img">
-    <img src="./images/image_plate.png" class="logo" alt="logo">
-  </header>
+    <!-- Columna 1: Título -->
+    <div class="encabezado-titulo">
+      <h1>Encuesta de<br>Satisfacción</h1>
+    </div>
 
+    <!-- Columna 2: Logo Carranza (centrado) -->
+    <div class="encabezado-logo-center">
+      <img src="./images/logo C50_Inverted.png" alt="Logo Carranza 50" class="logo-img">
+    </div>
+
+    <!-- Columna 3: Icono plato -->
+    <div class="encabezado-icono">
+      <img src="./images/image_plate.png" class="logo" alt="Icono plato">
+    </div>
+  </header>
 
   <!-- DATOS DE TICKET -->
   <section class="datos-ticket">
@@ -100,7 +109,7 @@
     <div class="pregunta">
       <p>¿Cuál es tu percepción sobre los precios?</p>
       <div class="opciones precios">
-        <label><input type="radio" name="precios" value="BARATO" ><span>Barato</span></label>
+        <label><input type="radio" name="precios" value="BARATO"><span>Barato</span></label>
         <label><input type="radio" name="precios" value="JUSTO"><span>Justo</span></label>
         <label><input type="radio" name="precios" value="CARO"><span>Caro</span></label>
       </div>
@@ -141,14 +150,13 @@
     </div>
   </div>
 
-
+  <!-- Popup sin botón "Cambiar de usuario" -->
   <div id="popup-encuesta" class="popup hidden">
     <div class="popup-content">
       <h2>✅ ¡Gracias por enviar la encuesta!</h2>
       <p id="mensaje-premio"></p>
       <div class="popup-buttons">
         <button id="continuar-btn">Continuar</button>
-        <button id="cambiar-btn">Cambiar de usuario</button>
       </div>
     </div>
   </div>

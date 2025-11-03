@@ -15,6 +15,9 @@ const boton = document.getElementById("boton-central");
 const URL_GANADORES = 'https://script.google.com/macros/s/AKfycbw4zOPj8QjC3cpBpWHZFnto7r9xN0Xkx7lWluKkajkYzJREcF3ARNVx8_CfNVGWCkfn/exec';
 const URL_PDF = "https://script.google.com/macros/s/AKfycbw3KS3KgXvgQc3VTkBf1z3_lQqJLIANZbGhSEKVxUZpo95gs8TECwjE3XrupuV_5VVnqQ/exec";
 
+// ⏰ CONFIGURACIÓN DE AUTO-ELIMINACIÓN DE PDFs (en días)
+const DIAS_ANTES_ELIMINAR = 3; // Cambia este número para ajustar el tiempo
+
 // ======= FUNCIONES DE DIBUJO =======
 
 function dibujarRuleta() {
@@ -155,6 +158,9 @@ function girarRuleta() {
   girando = true;
   boton.classList.add('girando');
 
+  // ✅ Deshabilitar botón home durante el giro
+  deshabilitarBotonHome(true);
+
   // Reproducir sonido
   if (sonidoRuleta) {
     sonidoRuleta.volume = 0.6;
@@ -211,6 +217,7 @@ function girarRuleta() {
         mostrarAnuncio(premioGanado, codigo);
         guardarGanador(premioGanado, codigo);
         generarPDFPremio(premioGanado, codigo);
+        // ✅ Mantener botón home deshabilitado hasta que termine de generar el PDF
       }, 500);
 
       girando = false;
@@ -220,6 +227,7 @@ function girarRuleta() {
   animar();
 }
 
+// ✅ FUNCIÓN CONTINUAR - Solo va a formulario
 function continuar() {
   const popup = document.getElementById("popup-premio");
   const resultado = document.getElementById("resultado");
@@ -227,20 +235,29 @@ function continuar() {
   if (popup) popup.classList.add("hidden");
   if (resultado) resultado.style.display = 'none';
 
+  // ✅ Rehabilitar botón home antes de ir al formulario
+  deshabilitarBotonHome(false);
+
   window.location.href = "formulario.html";
 }
 
-function cambiarUsuario() {
-  const popup = document.getElementById("popup-premio");
-  const resultado = document.getElementById("resultado");
-
-  if (popup) popup.classList.add("hidden");
-  if (resultado) resultado.style.display = 'none';
-
-  window.location.href = "menu.html";
+// ✅ FUNCIÓN PARA DESHABILITAR/HABILITAR BOTÓN HOME
+function deshabilitarBotonHome(deshabilitar) {
+  const btnHome = document.getElementById("btn-home");
+  if (btnHome) {
+    if (deshabilitar) {
+      btnHome.style.opacity = "0.3";
+      btnHome.style.pointerEvents = "none";
+      btnHome.style.cursor = "not-allowed";
+    } else {
+      btnHome.style.opacity = "1";
+      btnHome.style.pointerEvents = "auto";
+      btnHome.style.cursor = "pointer";
+    }
+  }
 }
 
-// ======= GENERACIÓN DE PDF CON LOGO GRANDE =======
+// ======= GENERACIÓN DE PDF CON LOGO GRANDE Y BIEN POSICIONADO =======
 
 async function generarPDFPremio(premio, codigoValidacion) {
   const mesero = sessionStorage.getItem("meseroActual") || "Desconocido";
@@ -287,46 +304,47 @@ async function generarPDFPremio(premio, codigoValidacion) {
     doc.setLineWidth(0.5);
     doc.rect(15, 15, pageWidth - 30, pageHeight - 30);
 
-    // === HEADER CON FONDO ===
+    // === HEADER CON FONDO (más alto para el logo) ===
     doc.setFillColor(...colorPrimario);
-    doc.rect(15, 15, pageWidth - 30, 50, 'F'); // ✅ Header más alto para logo grande
+    doc.rect(15, 15, pageWidth - 30, 65, 'F');
 
     // ✅ LOGO GRANDE Y CENTRADO
     try {
       const logoImg = await cargarImagen('/images/logo C50_Inverted.png');
-      // Logo más grande: 60mm de ancho (antes era 25mm)
-      const logoWidth = 80;
-      const logoHeight = 60;
-      const logoX = (pageWidth - logoWidth) / 2; // Centrado
-      const logoY = 20; // Más abajo en el header
+
+      // Logo grande: 90mm de ancho, proporción mantenida
+      const logoWidth = 90;
+      const logoHeight = 45;
+      const logoX = (pageWidth - logoWidth) / 2; // Centrado horizontal
+      const logoY = 22; // Posición vertical dentro del header
 
       doc.addImage(logoImg, 'PNG', logoX, logoY, logoWidth, logoHeight);
       console.log("✅ Logo agregado al PDF");
     } catch (error) {
       console.log("⚠️ No se pudo cargar el logo:", error);
-      // Si falla el logo, al menos mostrar el nombre
+      // Si falla el logo, mostrar el nombre
       doc.setTextColor(255, 255, 255);
       doc.setFont("helvetica", "bold");
-      doc.setFontSize(20);
-      doc.text("CARRANZA 50", pageWidth / 2, 35, { align: 'center' });
+      doc.setFontSize(22);
+      doc.text("CARRANZA 50", pageWidth / 2, 50, { align: 'center' });
     }
 
-    // === TÍTULO (Más abajo para dar espacio al logo) ===
+    // === TÍTULO (debajo del header) ===
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(24);
-    doc.text("¡FELICIDADES!", pageWidth / 2, 58, { align: 'center' });
+    doc.text("¡FELICIDADES!", pageWidth / 2, 73, { align: 'center' });
 
     // === CONTENIDO ===
     doc.setTextColor(0, 0, 0);
 
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
-    doc.text("Has ganado:", pageWidth / 2, 75, { align: 'center' });
+    doc.text("Has ganado:", pageWidth / 2, 85, { align: 'center' });
 
     // Caja del premio
     doc.setFillColor(...colorClaro);
-    doc.roundedRect(25, 80, pageWidth - 50, 25, 3, 3, 'F');
+    doc.roundedRect(25, 90, pageWidth - 50, 25, 3, 3, 'F');
 
     doc.setFontSize(16);
     doc.setTextColor(...colorPrimario);
@@ -334,29 +352,29 @@ async function generarPDFPremio(premio, codigoValidacion) {
 
     // Centrar verticalmente el texto del premio
     const textHeight = premioLines.length * 6;
-    const textY = 92.5 - (textHeight / 2);
+    const textY = 102.5 - (textHeight / 2);
     doc.text(premioLines, pageWidth / 2, textY + 6, { align: 'center' });
 
     // Información del mesero y fecha
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
     doc.setFont("helvetica", "normal");
-    doc.text(`Mesero: ${mesero}`, 30, 118);
-    doc.text(`Fecha: ${fecha}`, 30, 125);
+    doc.text(`Mesero: ${mesero}`, 30, 128);
+    doc.text(`Fecha: ${fecha}`, 30, 135);
 
     // === CÓDIGO DE VALIDACIÓN ===
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(...colorPrimario);
-    doc.text("CÓDIGO DE VALIDACIÓN:", pageWidth / 2, 140, { align: 'center' });
+    doc.text("CÓDIGO DE VALIDACIÓN:", pageWidth / 2, 150, { align: 'center' });
 
     doc.setFillColor(240, 240, 240);
-    doc.roundedRect(40, 145, pageWidth - 80, 14, 2, 2, 'F');
+    doc.roundedRect(40, 155, pageWidth - 80, 14, 2, 2, 'F');
 
     doc.setFontSize(16);
     doc.setFont("courier", "bold");
     doc.setTextColor(0, 0, 0);
-    doc.text(codigo, pageWidth / 2, 155, { align: 'center' });
+    doc.text(codigo, pageWidth / 2, 165, { align: 'center' });
 
     // === QR CODE ===
     if (qrDataURL) {
@@ -364,7 +382,7 @@ async function generarPDFPremio(premio, codigoValidacion) {
       doc.setLineWidth(1);
       const qrSize = 55;
       const qrX = (pageWidth - qrSize) / 2;
-      const qrY = 170;
+      const qrY = 180;
 
       // Marco decorativo para el QR
       doc.roundedRect(qrX - 3, qrY - 3, qrSize + 6, qrSize + 6, 2, 2);
@@ -396,10 +414,11 @@ async function generarPDFPremio(premio, codigoValidacion) {
 
     const fileName = `Premio-${mesero}-${codigo}.pdf`;
 
-    // Subir a Google Drive
+    // Subir a Google Drive con fecha de expiración
     const form = new FormData();
     form.append('fileName', fileName);
     form.append('pdfBase64', pdfBase64);
+    form.append('diasExpiracion', DIAS_ANTES_ELIMINAR); // ⏰ Enviar días configurados
 
     const response = await fetch(URL_PDF, {
       method: "POST",
@@ -410,11 +429,6 @@ async function generarPDFPremio(premio, codigoValidacion) {
 
     if (result.success) {
       const pdfPublicURL = result.url;
-      const fileId = result.fileId; // ✅ Guardar el ID del archivo
-
-      // ✅ GUARDAR FILE ID EN SESSIONSTORAGE PARA ELIMINAR DESPUÉS
-      sessionStorage.setItem(`pdf_${codigo}`, fileId);
-      console.log("📄 PDF ID guardado:", fileId);
 
       // Ocultar loader y mostrar QR
       const loader = document.getElementById("loader-pdf");
@@ -434,14 +448,10 @@ async function generarPDFPremio(premio, codigoValidacion) {
         });
       }
 
-      const link = document.getElementById("btn-descargar-pdf");
-      if (link) {
-        link.href = pdfPublicURL;
-        link.download = fileName;
-        link.textContent = "⬇️ Descargar PDF";
-      }
+      // ✅ Rehabilitar botón home cuando el PDF está listo
+      deshabilitarBotonHome(false);
 
-      console.log("✅ PDF generado con código:", codigo);
+      console.log(`✅ PDF generado con código: ${codigo} (expira en ${DIAS_ANTES_ELIMINAR} días)`);
     } else {
       console.error("❌ Error del servidor:", result.error);
       mostrarErrorPDF();
@@ -466,6 +476,9 @@ function mostrarErrorPDF() {
   }
 
   if (premioGenerado) premioGenerado.classList.add("hidden");
+
+  // ✅ Rehabilitar botón home incluso si hay error
+  deshabilitarBotonHome(false);
 }
 
 function cargarImagen(url) {

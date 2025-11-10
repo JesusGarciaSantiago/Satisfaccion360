@@ -6,17 +6,19 @@ let anguloInicial = 0;
 let girando = false;
 let premios = [];
 let colors = [];
+let yaGiro = sessionStorage.getItem('yaGiroRuleta') === 'true';
 
 // Audio de la ruleta
 const sonidoRuleta = document.getElementById("sonido-ruleta");
 const boton = document.getElementById("boton-central");
 
 // ✅ URL ÚNICA Y CONSISTENTE
-const URL_GANADORES = 'https://script.google.com/macros/s/AKfycbw4zOPj8QjC3cpBpWHZFnto7r9xN0Xkx7lWluKkajkYzJREcF3ARNVx8_CfNVGWCkfn/exec';
+//url ganadores, lista de meseros etc
+const URL_GANADORES = 'https://script.google.com/macros/s/AKfycbzn3Njr-JNpmyCiGiGIQ9H9rSwh3FADBOu5i_QtvJPijhqDb_vHMSPCSgn5dv6h0ker/exec';
 const URL_PDF = "https://script.google.com/macros/s/AKfycbw3KS3KgXvgQc3VTkBf1z3_lQqJLIANZbGhSEKVxUZpo95gs8TECwjE3XrupuV_5VVnqQ/exec";
 
 // ⏰ CONFIGURACIÓN DE AUTO-ELIMINACIÓN DE PDFs (en días)
-const DIAS_ANTES_ELIMINAR = 3; // Cambia este número para ajustar el tiempo
+const DIAS_ANTES_ELIMINAR = 3;
 
 // ======= FUNCIONES DE DIBUJO =======
 
@@ -34,12 +36,10 @@ function dibujarRuleta() {
     ctx.arc(radius, radius, radius, angle, angle + arco);
     ctx.fill();
 
-    // Borde entre segmentos
     ctx.strokeStyle = "#fff";
     ctx.lineWidth = 3;
     ctx.stroke();
 
-    // Dibujar texto
     ctx.save();
     ctx.translate(radius, radius);
     ctx.rotate(angle + arco / 2);
@@ -50,27 +50,19 @@ function dibujarRuleta() {
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
 
-    // Ajustar tamaño de fuente según longitud del texto
     const texto = premios[i];
     let fontSize = 14;
 
-    if (texto.length > 20) {
-      fontSize = 10;
-    } else if (texto.length > 15) {
-      fontSize = 11;
-    } else if (texto.length > 10) {
-      fontSize = 12;
-    }
+    if (texto.length > 20) fontSize = 10;
+    else if (texto.length > 15) fontSize = 11;
+    else if (texto.length > 10) fontSize = 12;
 
     ctx.font = `bold ${fontSize}px Arial`;
 
-    // Dividir texto si es muy largo
     const maxChars = 18;
     if (texto.length > maxChars) {
       const palabras = texto.split(' ');
-      let linea1 = '';
-      let linea2 = '';
-      let lineaActual = linea1;
+      let linea1 = '', linea2 = '', lineaActual = linea1;
 
       palabras.forEach(palabra => {
         if ((lineaActual + palabra).length <= maxChars) {
@@ -85,11 +77,8 @@ function dibujarRuleta() {
         }
       });
 
-      if (lineaActual === linea1 || !linea2) {
-        linea1 = lineaActual;
-      }
+      if (lineaActual === linea1 || !linea2) linea1 = lineaActual;
 
-      // Dibujar dos líneas
       if (linea2) {
         ctx.fillText(linea1, radius - 20, 0);
         ctx.fillText(linea2, radius - 20, fontSize + 4);
@@ -97,7 +86,6 @@ function dibujarRuleta() {
         ctx.fillText(linea1, radius - 20, fontSize / 2);
       }
     } else {
-      // Texto en una sola línea
       ctx.fillText(texto, radius - 20, fontSize / 2);
     }
 
@@ -122,11 +110,8 @@ function mostrarAnuncio(premio, codigo) {
   }
 
   mensaje.innerHTML = `🎁 <strong>${premio}</strong><br>Código: <strong>${codigo}</strong>`;
-
-  // Ocultar el mensaje de resultado cuando se muestra el popup
   resultado.style.display = 'none';
 
-  // Mostrar loader, ocultar QR
   const loader = document.getElementById("loader-pdf");
   const premioGenerado = document.getElementById("premio-generado");
 
@@ -148,6 +133,11 @@ async function guardarGanador(premio, codigo) {
 }
 
 function girarRuleta() {
+  if (yaGiro) {
+    alert("Ya has girado la ruleta. Por favor continúa al formulario.");
+    return;
+  }
+
   if (girando) return;
 
   if (premios.length === 0) {
@@ -158,10 +148,11 @@ function girarRuleta() {
   girando = true;
   boton.classList.add('girando');
 
-  // ✅ Deshabilitar botón home durante el giro
+  sessionStorage.setItem('yaGiroRuleta', 'true');
+  yaGiro = true;
+
   deshabilitarBotonHome(true);
 
-  // Reproducir sonido
   if (sonidoRuleta) {
     sonidoRuleta.volume = 0.6;
     const playPromise = sonidoRuleta.play();
@@ -191,7 +182,6 @@ function girarRuleta() {
     if (velocidad > 0.002 || giro < vueltasMinimas * 2 * Math.PI) {
       requestAnimationFrame(animar);
     } else {
-      // Detener sonido al finalizar
       if (sonidoRuleta) {
         sonidoRuleta.pause();
         sonidoRuleta.currentTime = 0;
@@ -212,12 +202,10 @@ function girarRuleta() {
         resultado.textContent = `¡Ganaste: ${premioGanado}! Código: ${codigo}`;
       }
 
-      // Esperar 500ms antes de mostrar el popup
       setTimeout(() => {
         mostrarAnuncio(premioGanado, codigo);
         guardarGanador(premioGanado, codigo);
         generarPDFPremio(premioGanado, codigo);
-        // ✅ Mantener botón home deshabilitado hasta que termine de generar el PDF
       }, 500);
 
       girando = false;
@@ -227,7 +215,6 @@ function girarRuleta() {
   animar();
 }
 
-// ✅ FUNCIÓN CONTINUAR - Solo va a formulario
 function continuar() {
   const popup = document.getElementById("popup-premio");
   const resultado = document.getElementById("resultado");
@@ -235,13 +222,12 @@ function continuar() {
   if (popup) popup.classList.add("hidden");
   if (resultado) resultado.style.display = 'none';
 
-  // ✅ Rehabilitar botón home antes de ir al formulario
   deshabilitarBotonHome(false);
+  sessionStorage.removeItem('yaGiroRuleta');
 
   window.location.href = "formulario.html";
 }
 
-// ✅ FUNCIÓN PARA DESHABILITAR/HABILITAR BOTÓN HOME
 function deshabilitarBotonHome(deshabilitar) {
   const btnHome = document.getElementById("btn-home");
   if (btnHome) {
@@ -257,7 +243,7 @@ function deshabilitarBotonHome(deshabilitar) {
   }
 }
 
-// ======= GENERACIÓN DE PDF CON LOGO GRANDE Y BIEN POSICIONADO =======
+// ======= GENERACIÓN DE PDF =======
 
 async function generarPDFPremio(premio, codigoValidacion) {
   const mesero = sessionStorage.getItem("meseroActual") || "Desconocido";
@@ -265,7 +251,6 @@ async function generarPDFPremio(premio, codigoValidacion) {
   const codigo = codigoValidacion;
 
   try {
-    // Crear QR interno con el código de validación
     const qrCanvas = document.createElement("canvas");
     const qr = new QRCode(qrCanvas, {
       text: codigo,
@@ -276,13 +261,11 @@ async function generarPDFPremio(premio, codigoValidacion) {
       correctLevel: QRCode.CorrectLevel.H
     });
 
-    // Esperar a que el QR se genere
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const qrCanvasElement = qrCanvas.querySelector("canvas");
     const qrDataURL = qrCanvasElement ? qrCanvasElement.toDataURL("image/png") : null;
 
-    // Crear PDF
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({
       orientation: 'portrait',
@@ -295,7 +278,6 @@ async function generarPDFPremio(premio, codigoValidacion) {
     const colorPrimario = [123, 140, 110];
     const colorClaro = [186, 193, 175];
 
-    // === MARCO DECORATIVO ===
     doc.setDrawColor(...colorPrimario);
     doc.setLineWidth(2);
     doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
@@ -304,65 +286,51 @@ async function generarPDFPremio(premio, codigoValidacion) {
     doc.setLineWidth(0.5);
     doc.rect(15, 15, pageWidth - 30, pageHeight - 30);
 
-    // === HEADER CON FONDO (más alto para el logo) ===
     doc.setFillColor(...colorPrimario);
     doc.rect(15, 15, pageWidth - 30, 65, 'F');
 
-    // ✅ LOGO GRANDE Y CENTRADO
     try {
       const logoImg = await cargarImagen('/images/logo C50_Inverted.png');
-
-      // Logo grande: 90mm de ancho, proporción mantenida
       const logoWidth = 90;
       const logoHeight = 45;
-      const logoX = (pageWidth - logoWidth) / 2; // Centrado horizontal
-      const logoY = 22; // Posición vertical dentro del header
-
+      const logoX = (pageWidth - logoWidth) / 2;
+      const logoY = 22;
       doc.addImage(logoImg, 'PNG', logoX, logoY, logoWidth, logoHeight);
       console.log("✅ Logo agregado al PDF");
     } catch (error) {
       console.log("⚠️ No se pudo cargar el logo:", error);
-      // Si falla el logo, mostrar el nombre
       doc.setTextColor(255, 255, 255);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(22);
       doc.text("CARRANZA 50", pageWidth / 2, 50, { align: 'center' });
     }
 
-    // === TÍTULO (debajo del header) ===
     doc.setTextColor(255, 255, 255);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(24);
     doc.text("¡FELICIDADES!", pageWidth / 2, 73, { align: 'center' });
 
-    // === CONTENIDO ===
     doc.setTextColor(0, 0, 0);
-
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
     doc.text("Has ganado:", pageWidth / 2, 85, { align: 'center' });
 
-    // Caja del premio
     doc.setFillColor(...colorClaro);
     doc.roundedRect(25, 90, pageWidth - 50, 25, 3, 3, 'F');
 
     doc.setFontSize(16);
     doc.setTextColor(...colorPrimario);
     const premioLines = doc.splitTextToSize(premio, pageWidth - 60);
-
-    // Centrar verticalmente el texto del premio
     const textHeight = premioLines.length * 6;
     const textY = 102.5 - (textHeight / 2);
     doc.text(premioLines, pageWidth / 2, textY + 6, { align: 'center' });
 
-    // Información del mesero y fecha
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
     doc.setFont("helvetica", "normal");
     doc.text(`Mesero: ${mesero}`, 30, 128);
     doc.text(`Fecha: ${fecha}`, 30, 135);
 
-    // === CÓDIGO DE VALIDACIÓN ===
     doc.setFontSize(13);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(...colorPrimario);
@@ -376,15 +344,12 @@ async function generarPDFPremio(premio, codigoValidacion) {
     doc.setTextColor(0, 0, 0);
     doc.text(codigo, pageWidth / 2, 165, { align: 'center' });
 
-    // === QR CODE ===
     if (qrDataURL) {
       doc.setDrawColor(...colorPrimario);
       doc.setLineWidth(1);
       const qrSize = 55;
       const qrX = (pageWidth - qrSize) / 2;
       const qrY = 180;
-
-      // Marco decorativo para el QR
       doc.roundedRect(qrX - 3, qrY - 3, qrSize + 6, qrSize + 6, 2, 2);
       doc.addImage(qrDataURL, "PNG", qrX, qrY, qrSize, qrSize);
 
@@ -393,7 +358,6 @@ async function generarPDFPremio(premio, codigoValidacion) {
       doc.text("Escanea este código para validar tu premio", pageWidth / 2, qrY + qrSize + 8, { align: 'center' });
     }
 
-    // === PIE DE PÁGINA ===
     doc.setDrawColor(...colorClaro);
     doc.setLineWidth(0.5);
     doc.line(30, pageHeight - 25, pageWidth - 30, pageHeight - 25);
@@ -404,7 +368,6 @@ async function generarPDFPremio(premio, codigoValidacion) {
     doc.text("Presenta este documento para reclamar tu premio", pageWidth / 2, pageHeight - 18, { align: 'center' });
     doc.text("¡Gracias por tu preferencia!", pageWidth / 2, pageHeight - 13, { align: 'center' });
 
-    // Convertir PDF a Base64
     const pdfBase64 = btoa(
       new Uint8Array(doc.output("arraybuffer")).reduce(
         (data, byte) => data + String.fromCharCode(byte),
@@ -414,11 +377,10 @@ async function generarPDFPremio(premio, codigoValidacion) {
 
     const fileName = `Premio-${mesero}-${codigo}.pdf`;
 
-    // Subir a Google Drive con fecha de expiración
     const form = new FormData();
     form.append('fileName', fileName);
     form.append('pdfBase64', pdfBase64);
-    form.append('diasExpiracion', DIAS_ANTES_ELIMINAR); // ⏰ Enviar días configurados
+    form.append('diasExpiracion', DIAS_ANTES_ELIMINAR);
 
     const response = await fetch(URL_PDF, {
       method: "POST",
@@ -430,14 +392,12 @@ async function generarPDFPremio(premio, codigoValidacion) {
     if (result.success) {
       const pdfPublicURL = result.url;
 
-      // Ocultar loader y mostrar QR
       const loader = document.getElementById("loader-pdf");
       const premioGenerado = document.getElementById("premio-generado");
 
       if (loader) loader.classList.add("hidden");
       if (premioGenerado) premioGenerado.classList.remove("hidden");
 
-      // Mostrar QR descargable
       const qrDiv = document.getElementById("qr-popup-code");
       if (qrDiv) {
         qrDiv.innerHTML = "";
@@ -448,9 +408,7 @@ async function generarPDFPremio(premio, codigoValidacion) {
         });
       }
 
-      // ✅ Rehabilitar botón home cuando el PDF está listo
       deshabilitarBotonHome(false);
-
       console.log(`✅ PDF generado con código: ${codigo} (expira en ${DIAS_ANTES_ELIMINAR} días)`);
     } else {
       console.error("❌ Error del servidor:", result.error);
@@ -476,8 +434,6 @@ function mostrarErrorPDF() {
   }
 
   if (premioGenerado) premioGenerado.classList.add("hidden");
-
-  // ✅ Rehabilitar botón home incluso si hay error
   deshabilitarBotonHome(false);
 }
 
@@ -514,14 +470,20 @@ function inicializar() {
     console.error("❌ No hay premios disponibles");
     premios = [];
   }
+
+  if (yaGiro && boton) {
+    boton.style.opacity = "0.5";
+    boton.style.cursor = "not-allowed";
+    boton.style.pointerEvents = "none";
+    const textoGirar = boton.querySelector('.girar-text');
+    if (textoGirar) textoGirar.textContent = "YA GIRASTE";
+  }
 }
 
-// Event listeners
 if (boton) {
   boton.addEventListener("click", girarRuleta);
 }
 
-// Habilitar audio con primera interacción
 document.body.addEventListener('click', function habilitarAudio() {
   if (sonidoRuleta) {
     sonidoRuleta.load();
@@ -530,7 +492,6 @@ document.body.addEventListener('click', function habilitarAudio() {
   document.body.removeEventListener('click', habilitarAudio);
 }, { once: true });
 
-// Inicializar al cargar
 window.addEventListener('load', () => {
   inicializar();
 
@@ -543,3 +504,20 @@ window.addEventListener('load', () => {
     });
   }
 });
+
+// 🔒 BLOQUEAR NAVEGACIÓN HACIA ATRÁS
+(function () {
+  window.history.pushState(null, "", window.location.href);
+
+  window.addEventListener('popstate', function () {
+    window.history.pushState(null, "", window.location.href);
+
+    if (yaGiro) {
+      alert("⚠️ Ya has girado la ruleta. Por favor continúa al formulario.");
+    } else {
+      alert("⚠️ No puedes regresar desde aquí. Usa el botón Home o continúa con el proceso.");
+    }
+  });
+})();
+
+console.log("✅ Navegación hacia atrás bloqueada");

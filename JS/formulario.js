@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 🔥 MOSTRAR LOADER ANTES DE ENVIAR
     mostrarLoader(true);
 
-    // === Envío a Google Apps Script ===
+    // === Envío a Google Apps Script ===  Encuestas URL
     const url = "https://script.google.com/macros/s/AKfycbwCMj9CaPewcaZ319oBLG5ldLDZTlul5qFDx7HY29lW9ntP17EsEMsouoDWKX1VetB6/exec";
 
     fetch(url, {

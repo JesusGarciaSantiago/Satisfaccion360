@@ -13,7 +13,7 @@ const videoContainer = document.querySelector('.video-container');
 const validarBtn = document.getElementById('validarBtn');
 const input = document.getElementById('codigoInput');
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw4zOPj8QjC3cpBpWHZFnto7r9xN0Xkx7lWluKkajkYzJREcF3ARNVx8_CfNVGWCkfn/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzn3Njr-JNpmyCiGiGIQ9H9rSwh3FADBOu5i_QtvJPijhqDb_vHMSPCSgn5dv6h0ker/exec";
 
 let scanning = false;
 let stream = null;
@@ -24,6 +24,11 @@ const placeholder = document.createElement('div');
 placeholder.className = 'video-placeholder';
 placeholder.innerHTML = '📷';
 videoContainer.insertBefore(placeholder, videoContainer.firstChild);
+
+// 🔥 Forzar mayúsculas en tiempo real
+input.addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+});
 
 async function validarCodigo(codigo) {
     if (!codigo) {
@@ -193,7 +198,7 @@ startScanBtn.addEventListener('click', async () => {
                 },
                 audio: false
             });
-            console.log(" Cámara trasera obtenida");
+            console.log("✅ Cámara trasera obtenida");
         } catch (firstError) {
             console.log("Intentando con cualquier cámara...");
             camaraUsada = "disponible";
@@ -216,7 +221,7 @@ startScanBtn.addEventListener('click', async () => {
         //  Esperar a que el video esté listo
         await new Promise((resolve, reject) => {
             video.onloadedmetadata = () => {
-                console.log("Metadata del video cargada");
+                console.log("✅ Metadata del video cargada");
                 video.play()
                     .then(() => {
                         console.log("✅ Video reproduciendo");

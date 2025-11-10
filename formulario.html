@@ -35,11 +35,13 @@
   <section class="datos-ticket">
     <div class="campo-ticket">
       <label for="ticket">Folio del ticket</label>
-      <input type="number" id="ticket" name="ticket" required placeholder="000000">
+      <input type="number" id="ticket" name="ticket" required placeholder="000000" maxlength="10"
+        oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);">
     </div>
     <div class="campo-ticket">
       <label for="mesa">No. Mesa</label>
-      <input type="number" id="mesa" name="mesa" required placeholder="00">
+      <input type="number" id="mesa" name="mesa" required placeholder="00" maxlength="3"
+        oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3);">
     </div>
   </section>
 

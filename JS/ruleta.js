@@ -20,6 +20,30 @@ const URL_PDF = "https://script.google.com/macros/s/AKfycbxDHV9WApnQcpdzoBVSW916
 // ⏰ CONFIGURACIÓN DE AUTO-ELIMINACIÓN DE PDFs (en días)
 const DIAS_ANTES_ELIMINAR = 3;
 
+// 📋 TÉRMINOS Y CONDICIONES
+const TERMINOS_CONDICIONES = {
+  normasGenerales: [
+    "Válido solo en la próxima visita dentro de los 30 días posteriores a ganar.",
+    "No canjeable el mismo día de la encuesta.",
+    "No combinable con otras promociones, descuentos o membresías.",
+    "Para canjear, presentar el comprobante digital o código de la ruleta.",
+    "Se canjeará un solo premio por mesa por visita.",
+    "Es necesario reservar al 442 212 3031 (sujeto a disponibilidad).",
+    "Todas las promociones aplican de lunes a sábado desde las 14:00 hrs hasta las 22:00 hrs.",
+    "Requiere un consumo mínimo total de $1,000 MXN por mesa."
+  ],
+  terminosEspecificos: {
+    "10% de descuento": "Se aplica un 10% de descuento al total de la cuenta.",
+    "15% de descuento": "Se aplica un 15% de descuento al total de la cuenta.",
+    "$200 MXN de descuento": "Se aplica un descuento de $200 pesos al total de la cuenta.",
+    "Mezcalita de la casa": "Se entrega una mezcalita por cada comensal adulto en la mesa.",
+    "Botella de vino de la casa": "Se entrega una botella de vino de la casa (Puerto Nuevo) para que disfrute toda la mesa, independientemente del número de personas.",
+    "Mezcal de cortesía": "Se entrega una copa de mezcal por cada comensal adulto en la mesa.",
+    "Postre para cada uno": "Se entrega un postre para que disfrute toda la mesa.",
+    "Entrada para compartir": "Se entrega una orden de la entrada o botana seleccionada para que disfrute toda la mesa."
+  }
+};
+
 // ======= FUNCIONES DE DIBUJO =======
 
 function dibujarRuleta() {
@@ -51,7 +75,7 @@ function dibujarRuleta() {
     ctx.shadowOffsetY = 2;
 
     const texto = premios[i];
-    
+
     // 🎯 MEJORADO: Ajuste dinámico del tamaño de fuente
     let fontSize = 16;
     if (texto.length > 25) fontSize = 9;
@@ -70,7 +94,7 @@ function dibujarRuleta() {
     palabras.forEach(palabra => {
       const testLine = lineaActual ? `${lineaActual} ${palabra}` : palabra;
       const medida = ctx.measureText(testLine);
-      
+
       if (medida.width > maxWidth && lineaActual) {
         lineas.push(lineaActual);
         lineaActual = palabra;
@@ -78,7 +102,7 @@ function dibujarRuleta() {
         lineaActual = testLine;
       }
     });
-    
+
     if (lineaActual) {
       lineas.push(lineaActual);
     }
@@ -184,7 +208,7 @@ function girarRuleta() {
   const desaceleracion = 0.992 + Math.random() * 0.005;
   // Vueltas mínimas variables entre 5 y 8 (antes era fijo en 5)
   const vueltasMinimas = 5 + Math.floor(Math.random() * 4);
-  
+
   console.log(`🎲 Giro: velocidad=${velocidad.toFixed(3)}, desaceleración=${desaceleracion.toFixed(4)}, vueltas=${vueltasMinimas}`);
 
   const animar = () => {
@@ -259,7 +283,7 @@ function deshabilitarBotonHome(deshabilitar) {
   }
 }
 
-// ======= GENERACIÓN DE PDF =======
+// ======= GENERACIÓN DE PDF CON TÉRMINOS Y CONDICIONES =======
 
 async function generarPDFPremio(premio, codigoValidacion) {
   const mesero = sessionStorage.getItem("meseroActual") || "Desconocido";
@@ -294,6 +318,7 @@ async function generarPDFPremio(premio, codigoValidacion) {
     const colorPrimario = [123, 140, 110];
     const colorClaro = [186, 193, 175];
 
+    // ========== PÁGINA 1: PREMIO ==========
     doc.setDrawColor(...colorPrimario);
     doc.setLineWidth(2);
     doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
@@ -382,8 +407,98 @@ async function generarPDFPremio(premio, codigoValidacion) {
     doc.setTextColor(120, 120, 120);
     doc.setFont("helvetica", "italic");
     doc.text("Presenta este documento para reclamar tu premio", pageWidth / 2, pageHeight - 18, { align: 'center' });
-    doc.text("¡Gracias por tu preferencia!", pageWidth / 2, pageHeight - 13, { align: 'center' });
+    doc.text("Ver términos y condiciones en la siguiente página", pageWidth / 2, pageHeight - 13, { align: 'center' });
 
+    // ========== PÁGINA 2: TÉRMINOS Y CONDICIONES ==========
+    doc.addPage();
+
+    // Encabezado de la página
+    doc.setDrawColor(...colorPrimario);
+    doc.setLineWidth(2);
+    doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+
+    doc.setFillColor(...colorPrimario);
+    doc.rect(15, 15, pageWidth - 30, 25, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.text("TÉRMINOS Y CONDICIONES", pageWidth / 2, 30, { align: 'center' });
+
+    let yPos = 50;
+
+    // Normas Generales
+    doc.setTextColor(...colorPrimario);
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Normas Generales:", 20, yPos);
+    yPos += 8;
+
+    doc.setTextColor(60, 60, 60);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+
+    TERMINOS_CONDICIONES.normasGenerales.forEach((norma, index) => {
+      const lines = doc.splitTextToSize(`• ${norma}`, pageWidth - 50);
+      lines.forEach(line => {
+        if (yPos > pageHeight - 30) {
+          doc.addPage();
+          yPos = 20;
+        }
+        doc.text(line, 25, yPos);
+        yPos += 5;
+      });
+      yPos += 1;
+    });
+
+    yPos += 5;
+
+    // Términos Específicos del Premio
+    if (TERMINOS_CONDICIONES.terminosEspecificos[premio]) {
+      doc.setTextColor(...colorPrimario);
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+
+      if (yPos > pageHeight - 40) {
+        doc.addPage();
+        yPos = 20;
+      }
+
+      doc.text("Términos Específicos de tu Premio:", 20, yPos);
+      yPos += 8;
+
+      doc.setTextColor(60, 60, 60);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+
+      const terminoEspecifico = doc.splitTextToSize(
+        `• ${premio}: ${TERMINOS_CONDICIONES.terminosEspecificos[premio]}`,
+        pageWidth - 50
+      );
+
+      terminoEspecifico.forEach(line => {
+        if (yPos > pageHeight - 30) {
+          doc.addPage();
+          yPos = 20;
+        }
+        doc.text(line, 25, yPos);
+        yPos += 6;
+      });
+    }
+
+    // Información de contacto al final
+    yPos = pageHeight - 20;
+    doc.setDrawColor(...colorClaro);
+    doc.setLineWidth(0.5);
+    doc.line(30, yPos - 5, pageWidth - 30, yPos - 5);
+
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 100);
+    doc.setFont("helvetica", "normal");
+    doc.text("Para reservaciones: 442 212 3031", pageWidth / 2, yPos, { align: 'center' });
+    doc.text("¡Gracias por tu preferencia!", pageWidth / 2, yPos + 5, { align: 'center' });
+
+    // Convertir a Base64 y subir
     const pdfBase64 = btoa(
       new Uint8Array(doc.output("arraybuffer")).reduce(
         (data, byte) => data + String.fromCharCode(byte),
@@ -521,19 +636,5 @@ window.addEventListener('load', () => {
   }
 });
 
-// 🔒 BLOQUEAR NAVEGACIÓN HACIA ATRÁS
-(function () {
-  window.history.pushState(null, "", window.location.href);
-
-  window.addEventListener('popstate', function () {
-    window.history.pushState(null, "", window.location.href);
-
-    if (yaGiro) {
-      alert("⚠️ Ya has girado la ruleta. Por favor continúa al formulario.");
-    } else {
-      alert("⚠️ No puedes regresar desde aquí. Usa el botón Home o continúa con el proceso.");
-    }
-  });
-})();
-
-console.log("✅ Navegación hacia atrás bloqueada");
+// Navegación controlada - sin bloqueo forzado
+console.log("✅ Script de ruleta cargado");

@@ -113,7 +113,7 @@ h1 {
   color: #d4e5c9;
 }
 
-/* 🆕 MODAL DE TÉRMINOS Y CONDICIONES */
+/* 🆕 MODAL DE TÉRMINOS Y CONDICIONES MEJORADO */
 .modal-terminos {
   position: fixed;
   inset: 0;
@@ -151,6 +151,14 @@ h1 {
   text-align: center;
 }
 
+.modal-terminos-content h3 {
+  color: #7B8C6E;
+  margin: 20px 0 10px 0;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #bac1af;
+  padding-bottom: 5px;
+}
+
 .btn-cerrar-modal {
   position: absolute;
   top: 15px;
@@ -174,6 +182,67 @@ h1 {
 .btn-cerrar-modal:hover {
   background: #6a7b5f;
   transform: rotate(90deg);
+}
+
+/* 🆕 ESTILOS PARA EL CONTENIDO DE TEXTO */
+.terminos-texto {
+  text-align: left;
+  color: #333;
+  line-height: 1.6;
+}
+
+.terminos-texto ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 10px 0;
+}
+
+.terminos-texto ul li {
+  padding: 8px 0 8px 25px;
+  position: relative;
+  font-size: 0.95rem;
+}
+
+.terminos-texto ul li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #7B8C6E;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.terminos-premios li {
+  margin-bottom: 8px;
+}
+
+.terminos-premios li strong {
+  color: #7B8C6E;
+}
+
+.contacto-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f0f4ed;
+  border-radius: 10px;
+  text-align: center;
+  border: 2px solid #bac1af;
+}
+
+.contacto-info p {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #5a514a;
+}
+
+.contacto-info i {
+  color: #7B8C6E;
+  margin-right: 8px;
+}
+
+.contacto-info strong {
+  color: #7B8C6E;
+  font-size: 1.1rem;
 }
 
 .terminos-imagen-container {
@@ -685,6 +754,14 @@ canvas:hover {
     font-size: 1.2rem;
   }
 
+  .modal-terminos-content h3 {
+    font-size: 1rem;
+  }
+
+  .terminos-texto ul li {
+    font-size: 0.85rem;
+  }
+
   .btn-cerrar-modal {
     width: 30px;
     height: 30px;
@@ -744,6 +821,10 @@ canvas:hover {
 
   .modal-terminos-content {
     max-width: 700px;
+  }
+
+  .terminos-texto ul li {
+    font-size: 1rem;
   }
 }
 

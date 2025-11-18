@@ -22,7 +22,10 @@
 
     <div class="instruccion">
       <p>¡Gira la ruleta y GANA un premio!*</p>
-      <small>*Aplican términos y condiciones</small>
+      <small>
+        *Aplican términos y condiciones
+        <button id="btn-terminos" class="btn-link-terminos">Ver términos</button>
+      </small>
     </div>
 
     <div class="ruleta-container">
@@ -75,6 +78,19 @@
         </div>
       </div>
     </div>
+
+    <!-- 🆕 MODAL DE TÉRMINOS Y CONDICIONES -->
+    <div id="modal-terminos" class="modal-terminos hidden">
+      <div class="modal-terminos-content">
+        <button class="btn-cerrar-modal" id="btn-cerrar-terminos">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h2>📋 Términos y Condiciones</h2>
+        <div class="terminos-imagen-container">
+          <img src="./images/terminos-condiciones.png" alt="Términos y Condiciones" class="terminos-imagen">
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- Footer (solo botón Home) -->
@@ -94,6 +110,38 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script src="./JS/ruleta.js"></script>
   <script src="./JS/footer.js"></script>
+
+  <!-- 🆕 Script para modal de términos -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnTerminos = document.getElementById('btn-terminos');
+      const modalTerminos = document.getElementById('modal-terminos');
+      const btnCerrarTerminos = document.getElementById('btn-cerrar-terminos');
+
+      if (btnTerminos && modalTerminos) {
+        btnTerminos.addEventListener('click', (e) => {
+          e.preventDefault();
+          modalTerminos.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        });
+      }
+
+      if (btnCerrarTerminos && modalTerminos) {
+        btnCerrarTerminos.addEventListener('click', () => {
+          modalTerminos.classList.add('hidden');
+          document.body.style.overflow = '';
+        });
+
+        // Cerrar al hacer clic fuera del modal
+        modalTerminos.addEventListener('click', (e) => {
+          if (e.target === modalTerminos) {
+            modalTerminos.classList.add('hidden');
+            document.body.style.overflow = '';
+          }
+        });
+      }
+    });
+  </script>
 
 </body>
 

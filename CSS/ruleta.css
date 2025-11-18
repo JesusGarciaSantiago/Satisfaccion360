@@ -95,6 +95,102 @@ h1 {
   font-style: italic;
 }
 
+/* 🆕 BOTÓN DE TÉRMINOS Y CONDICIONES */
+.btn-link-terminos {
+  background: none;
+  border: none;
+  color: #fff;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  margin-left: 4px;
+  transition: color 0.2s ease;
+  font-style: italic;
+}
+
+.btn-link-terminos:hover {
+  color: #d4e5c9;
+}
+
+/* 🆕 MODAL DE TÉRMINOS Y CONDICIONES */
+.modal-terminos {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 15000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+  overflow-y: auto;
+}
+
+.modal-terminos.hidden {
+  display: none;
+}
+
+.modal-terminos-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+  padding: 30px 25px;
+  border-radius: 20px;
+  max-width: 90%;
+  max-height: 90vh;
+  width: 800px;
+  position: relative;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+  animation: popupEntrance 0.5s ease-out;
+  overflow-y: auto;
+}
+
+.modal-terminos-content h2 {
+  color: #7B8C6E;
+  margin: 0 0 20px 0;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.btn-cerrar-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #7B8C6E;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.btn-cerrar-modal:hover {
+  background: #6a7b5f;
+  transform: rotate(90deg);
+}
+
+.terminos-imagen-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.terminos-imagen {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
 /* ======== RULETA ======== */
 .ruleta-container {
   position: relative;
@@ -579,6 +675,21 @@ canvas:hover {
     padding: 10px 15px;
     font-size: 0.9rem;
   }
+
+  .modal-terminos-content {
+    padding: 20px 15px;
+    max-width: 95%;
+  }
+
+  .modal-terminos-content h2 {
+    font-size: 1.2rem;
+  }
+
+  .btn-cerrar-modal {
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+  }
 }
 
 /* Orientación portrait */
@@ -629,6 +740,10 @@ canvas:hover {
   .popup-content {
     padding: 40px;
     max-width: 500px;
+  }
+
+  .modal-terminos-content {
+    max-width: 700px;
   }
 }
 

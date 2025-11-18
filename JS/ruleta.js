@@ -14,8 +14,8 @@ const boton = document.getElementById("boton-central");
 
 // ✅ URL ÚNICA Y CONSISTENTE
 //url ganadores, lista de meseros etc
-const URL_GANADORES = 'https://script.google.com/macros/s/AKfycbzn3Njr-JNpmyCiGiGIQ9H9rSwh3FADBOu5i_QtvJPijhqDb_vHMSPCSgn5dv6h0ker/exec';
-const URL_PDF = "https://script.google.com/macros/s/AKfycbw3KS3KgXvgQc3VTkBf1z3_lQqJLIANZbGhSEKVxUZpo95gs8TECwjE3XrupuV_5VVnqQ/exec";
+const URL_GANADORES = 'https://script.google.com/macros/s/AKfycbwS7mNjfP3S2x6-WOPdRn1TDm1dXzZ8ddyzcdxgbvWblTLIp_aUZ6kRjSo1meOI-pGJKQ/exec';
+const URL_PDF = "https://script.google.com/macros/s/AKfycbxDHV9WApnQcpdzoBVSW916jW4kC5xHDGP5X8mpydDJ0Ty_x-_vQpkFfXl4VovyPAnV/exec";
 
 // ⏰ CONFIGURACIÓN DE AUTO-ELIMINACIÓN DE PDFs (en días)
 const DIAS_ANTES_ELIMINAR = 3;
@@ -45,49 +45,59 @@ function dibujarRuleta() {
     ctx.rotate(angle + arco / 2);
     ctx.fillStyle = "#fff";
     ctx.textAlign = "right";
-    ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
-    ctx.shadowBlur = 4;
+    ctx.shadowColor = "rgba(0, 0, 0, 0.9)";
+    ctx.shadowBlur = 5;
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
 
     const texto = premios[i];
-    let fontSize = 14;
-
-    if (texto.length > 20) fontSize = 10;
-    else if (texto.length > 15) fontSize = 11;
-    else if (texto.length > 10) fontSize = 12;
+    
+    // 🎯 MEJORADO: Ajuste dinámico del tamaño de fuente
+    let fontSize = 16;
+    if (texto.length > 25) fontSize = 9;
+    else if (texto.length > 20) fontSize = 10;
+    else if (texto.length > 15) fontSize = 12;
+    else if (texto.length > 10) fontSize = 13;
 
     ctx.font = `bold ${fontSize}px Arial`;
 
-    const maxChars = 18;
-    if (texto.length > maxChars) {
-      const palabras = texto.split(' ');
-      let linea1 = '', linea2 = '', lineaActual = linea1;
+    // 🎯 MEJORADO: División inteligente de texto en líneas
+    const maxWidth = radius - 35; // Espacio máximo para el texto
+    const palabras = texto.split(' ');
+    let lineas = [];
+    let lineaActual = '';
 
-      palabras.forEach(palabra => {
-        if ((lineaActual + palabra).length <= maxChars) {
-          lineaActual += (lineaActual ? ' ' : '') + palabra;
-        } else {
-          if (lineaActual === linea1) {
-            linea1 = lineaActual;
-            lineaActual = linea2 = palabra;
-          } else {
-            linea2 += (linea2 ? ' ' : '') + palabra;
-          }
-        }
-      });
-
-      if (lineaActual === linea1 || !linea2) linea1 = lineaActual;
-
-      if (linea2) {
-        ctx.fillText(linea1, radius - 20, 0);
-        ctx.fillText(linea2, radius - 20, fontSize + 4);
+    palabras.forEach(palabra => {
+      const testLine = lineaActual ? `${lineaActual} ${palabra}` : palabra;
+      const medida = ctx.measureText(testLine);
+      
+      if (medida.width > maxWidth && lineaActual) {
+        lineas.push(lineaActual);
+        lineaActual = palabra;
       } else {
-        ctx.fillText(linea1, radius - 20, fontSize / 2);
+        lineaActual = testLine;
       }
-    } else {
-      ctx.fillText(texto, radius - 20, fontSize / 2);
+    });
+    
+    if (lineaActual) {
+      lineas.push(lineaActual);
     }
+
+    // Limitar a máximo 3 líneas
+    if (lineas.length > 3) {
+      lineas = lineas.slice(0, 3);
+      lineas[2] = lineas[2].substring(0, 12) + '...';
+    }
+
+    // 🎯 MEJORADO: Dibujar texto centrado verticalmente
+    const lineHeight = fontSize + 3;
+    const totalHeight = lineas.length * lineHeight;
+    const startY = -(totalHeight / 2) + (lineHeight / 2);
+
+    lineas.forEach((linea, index) => {
+      const y = startY + (index * lineHeight);
+      ctx.fillText(linea, radius - 25, y);
+    });
 
     ctx.restore();
   }
@@ -166,10 +176,16 @@ function girarRuleta() {
     }
   }
 
+  // 🎲 MEJORADA: Mayor variabilidad en la velocidad y vueltas
   let giro = 0;
-  let velocidad = Math.random() * 0.3 + 0.25;
-  const desaceleracion = 0.995;
-  const vueltasMinimas = 5;
+  // Rango de velocidad más amplio: 0.2 a 0.6 (antes era 0.25 a 0.55)
+  let velocidad = Math.random() * 0.4 + 0.2;
+  // Desaceleración variable entre 0.992 y 0.997 (más natural)
+  const desaceleracion = 0.992 + Math.random() * 0.005;
+  // Vueltas mínimas variables entre 5 y 8 (antes era fijo en 5)
+  const vueltasMinimas = 5 + Math.floor(Math.random() * 4);
+  
+  console.log(`🎲 Giro: velocidad=${velocidad.toFixed(3)}, desaceleración=${desaceleracion.toFixed(4)}, vueltas=${vueltasMinimas}`);
 
   const animar = () => {
     giro += velocidad;

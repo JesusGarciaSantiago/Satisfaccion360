@@ -13,7 +13,7 @@ const videoContainer = document.querySelector('.video-container');
 const validarBtn = document.getElementById('validarBtn');
 const input = document.getElementById('codigoInput');
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzn3Njr-JNpmyCiGiGIQ9H9rSwh3FADBOu5i_QtvJPijhqDb_vHMSPCSgn5dv6h0ker/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwS7mNjfP3S2x6-WOPdRn1TDm1dXzZ8ddyzcdxgbvWblTLIp_aUZ6kRjSo1meOI-pGJKQ/exec";
 
 let scanning = false;
 let stream = null;

@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
     mostrarLoader(true);
 
     // === Envío a Google Apps Script ===  Encuestas URL
-    const url = "https://script.google.com/macros/s/AKfycbzf4CosjdQyeR_WDJ40wyGHXZJDbVt6vGzFL-aTNVZcg6A4NkhWZPbRT9-kUS-3IDdq/exec";
+    const url = "https://script.google.com/macros/s/AKfycbzW9mCbXFQpkkUEUT5vfdtTzCk2sT4ZfU6rUDWuH81ik8DZemLv287j4wzItqzUW037/exec";
 
     fetch(url, {
       method: "POST",

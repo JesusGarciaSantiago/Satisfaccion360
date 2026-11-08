@@ -14,7 +14,7 @@ const boton = document.getElementById("boton-central");
 
 // ✅ URL ÚNICA Y CONSISTENTE
 //url ganadores, lista de meseros etc
-const URL_GANADORES = 'https://script.google.com/macros/s/AKfycbwS7mNjfP3S2x6-WOPdRn1TDm1dXzZ8ddyzcdxgbvWblTLIp_aUZ6kRjSo1meOI-pGJKQ/exec';
+const URL_GANADORES = 'https://script.google.com/macros/s/AKfycbxkKZtbrslQZW1srwV6Ei8AWJTtQ0pWxgM4j3ihhQ0XNs-FwcVccXTzqYID7zXGXGRyzg/exec';
 const URL_PDF = "https://script.google.com/macros/s/AKfycbxDHV9WApnQcpdzoBVSW916jW4kC5xHDGP5X8mpydDJ0Ty_x-_vQpkFfXl4VovyPAnV/exec";
 
 // ⏰ CONFIGURACIÓN DE AUTO-ELIMINACIÓN DE PDFs (en días)

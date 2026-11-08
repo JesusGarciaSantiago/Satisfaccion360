@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // === 📌 Precargar premios desde Google Sheet ===
-  const URL_RULETA = "https://script.google.com/macros/s/AKfycbxkKZtbrslQZW1srwV6Ei8AWJTtQ0pWxgM4j3ihhQ0XNs-FwcVccXTzqYID7zXGXGRyzg/exec";
+  const URL_RULETA = "https://script.google.com/macros/s/AKfycbwA0qiFqUeYBbuj4Pwb58h0Bl2fs-etotLlmU-OHjXPpegcOiULcZcafzvIJ7uTaW0D/exec";
 
   async function precargarPremios() {
     try {
@@ -239,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function () {
     mostrarLoader(true);
 
     // === Envío a Google Apps Script ===  Encuestas URL
-    const url = "https://script.google.com/macros/s/AKfycbxkKZtbrslQZW1srwV6Ei8AWJTtQ0pWxgM4j3ihhQ0XNs-FwcVccXTzqYID7zXGXGRyzg/exec";
+    const url = "https://script.google.com/macros/s/AKfycbwA0qiFqUeYBbuj4Pwb58h0Bl2fs-etotLlmU-OHjXPpegcOiULcZcafzvIJ7uTaW0D/exec";
 
     fetch(url, {
       method: "POST",

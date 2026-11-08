@@ -1,5 +1,5 @@
 // URL de tu Google Apps Script //Encuestas URL
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxkKZtbrslQZW1srwV6Ei8AWJTtQ0pWxgM4j3ihhQ0XNs-FwcVccXTzqYID7zXGXGRyzg/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwA0qiFqUeYBbuj4Pwb58h0Bl2fs-etotLlmU-OHjXPpegcOiULcZcafzvIJ7uTaW0D/exec';
 
 const select = document.querySelector('.custom-select');
 const selected = select.querySelector('.select-selected');
